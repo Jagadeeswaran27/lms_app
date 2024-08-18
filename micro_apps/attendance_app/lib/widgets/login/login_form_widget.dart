@@ -19,6 +19,14 @@ class LoginFormWidget extends StatefulWidget {
 
 class _LoginFormWidgetState extends State<LoginFormWidget> {
   final _formKey = GlobalKey<FormState>();
+  bool isPasswordVisible = true;
+
+  void _revealPassword() {
+    setState(() {
+      isPasswordVisible = !isPasswordVisible;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,7 +40,16 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
           children: [
             const FormInput(text: Strings.enterYourEmailOrPhoneNo),
             const SizedBox(height: 20),
-            const FormInput(text: Strings.enterYourPassword),
+            FormInput(
+              text: Strings.enterYourPassword,
+              suffixIcon: InkWell(
+                onTap: _revealPassword,
+                child: isPasswordVisible
+                    ? const Icon(Icons.visibility_off_outlined)
+                    : const Icon(Icons.remove_red_eye_outlined),
+              ),
+              obscureText: isPasswordVisible,
+            ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
