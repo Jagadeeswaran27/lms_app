@@ -10,7 +10,12 @@ class ThemeColors {
   static final Color white = Pigment.fromString('#FFFFFF');
   static final Color authPrimary = Pigment.fromString('#FF8000');
   static final Color brown = Pigment.fromString('#624637');
+  static final Color titleBrown = Pigment.fromString('#57453C');
   static final Color buttonGradientLeft = Pigment.fromString('#FFAC71');
   static final Color buttonGradientRight = Pigment.fromString('#FF6929');
   static final Color buttonShadow = Pigment.fromString('#FFAD71');
+  static final Color iconButtonBorderColor = Pigment.fromString('#E9DEDE');
+  static final Color cardColor = Pigment.fromString('#FFF3ED');
+  static final Color cardBorderColor = Pigment.fromString('#B0B0B0');
+  static final Color circularProgressLightColor = Pigment.fromString('#FFE3D6');
 }

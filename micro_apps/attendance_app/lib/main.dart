@@ -13,6 +13,7 @@ class AttendanceApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: Themes.buildLightTheme(context),
       home: const SafeArea(
         child: Center(

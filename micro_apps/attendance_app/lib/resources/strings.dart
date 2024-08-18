@@ -12,4 +12,14 @@ class Strings {
       'Or login with your google account';
   static const String haveAnAccount = 'Don\'t have an account ?';
   static const String registerNow = 'Register now';
+  static const String attendance = 'Attendance';
+  static const String myCourses = 'My Courses';
+  static const String english = 'English';
+  static const String courseCode = 'Course code : ';
+  static const String duration = 'Duration : ';
+  static const String totalHours = 'Total hours : ';
+  static const String completedHours = 'Completed hours : ';
+  static const String continueTheCourse = 'Continue the Course';
+  static const String className = 'Class';
+  static const String enquire = 'Enquire';
 }

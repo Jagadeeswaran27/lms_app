@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:attendance_app/resources/images.dart';
 import 'package:attendance_app/themes/fonts.dart';
 import 'package:attendance_app/containers/auth/login/login_form_container.dart';
-import 'package:attendance_app/screens/auth/strings.dart';
+import 'package:attendance_app/resources/strings.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -36,7 +36,7 @@ class LoginScreen extends StatelessWidget {
                     const SizedBox(height: 10),
                     Text(
                       Strings.enterSignInDetails,
-                      style: Theme.of(context).textTheme.displaySmallSemiBold,
+                      style: Theme.of(context).textTheme.displayMediumSemiBold,
                     ),
                   ],
                 ),
