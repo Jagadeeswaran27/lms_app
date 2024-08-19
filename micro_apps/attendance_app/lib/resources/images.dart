@@ -5,4 +5,6 @@ class Images {
   static const String loginBackground = 'assets/images/login_background.svg';
   static const String loginBackgroundPng =
       'assets/images/login_background_png.png';
+  static const String welcomeBackground =
+      'assets/images/welcome_background.png';
 }
