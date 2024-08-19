@@ -12,8 +12,18 @@ class ThemeFonts {
   static TextTheme buildLightTextTheme(BuildContext context) {
     return baseTheme.textTheme
         .copyWith(
+          headlineLarge: baseTheme.textTheme.headlineLarge!.copyWith(
+            fontSize: 32,
+            fontWeight: FontWeight.w600,
+            color: ThemeColors.authPrimary,
+          ),
           headlineMedium: baseTheme.textTheme.headlineMedium!.copyWith(
             fontSize: 28,
+            fontWeight: FontWeight.w600,
+            color: ThemeColors.authPrimary,
+          ),
+          headlineSmall: baseTheme.textTheme.headlineSmall!.copyWith(
+            fontSize: 24,
             fontWeight: FontWeight.w600,
             color: ThemeColors.authPrimary,
           ),
@@ -39,7 +49,7 @@ class ThemeFonts {
           ),
           bodySmall: baseTheme.textTheme.bodySmall!.copyWith(
             fontSize: 12,
-            fontWeight: FontWeight.w300,
+            fontWeight: FontWeight.w400,
             color: ThemeColors.titleBrown,
           ),
           displayMedium: baseTheme.textTheme.displayMedium!.copyWith(

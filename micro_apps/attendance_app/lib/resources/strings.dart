@@ -22,4 +22,6 @@ class Strings {
   static const String continueTheCourse = 'Continue the Course';
   static const String className = 'Class';
   static const String enquire = 'Enquire';
+  static const String welcomeTo = 'Welcome To';
+  static const String getStarted = 'GET STARTED';
 }

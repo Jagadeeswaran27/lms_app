@@ -12,36 +12,41 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
 
-    return SingleChildScrollView(
-      child: Container(
-        height: screenSize.height,
-        width: screenSize.width,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(Images.loginBackgroundPng),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Center(
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
           child: Container(
-            margin: const EdgeInsets.only(top: 70),
-            child: Column(
-              children: [
-                Column(
+            height: screenSize.height,
+            width: screenSize.width,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(Images.loginBackgroundPng),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Center(
+              child: Container(
+                margin: const EdgeInsets.only(top: 70),
+                child: Column(
                   children: [
-                    Text(
-                      Strings.signIn,
-                      style: Theme.of(context).textTheme.headlineMedium,
+                    Column(
+                      children: [
+                        Text(
+                          Strings.signIn,
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          Strings.enterSignInDetails,
+                          style:
+                              Theme.of(context).textTheme.displayMediumSemiBold,
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 10),
-                    Text(
-                      Strings.enterSignInDetails,
-                      style: Theme.of(context).textTheme.displayMediumSemiBold,
-                    ),
+                    const LoginFormContainer(),
                   ],
                 ),
-                const LoginFormContainer(),
-              ],
+              ),
             ),
           ),
         ),
