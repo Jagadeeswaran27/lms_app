@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 
+import 'package:menu_app/screens/common/welcome_screen.dart';
+import 'package:menu_app/themes/themes.dart';
+
 void main() => runApp(const MenuApp());
 
 class MenuApp extends StatelessWidget {
   const MenuApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const Center(
-        child: Text("Menu App"),
+      debugShowCheckedModeBanner: false,
+      theme: Themes.buildLightTheme(context),
+      home: const SafeArea(
+        child: Center(
+          child: Scaffold(
+            body: WelcomeScreen(),
+          ),
+        ),
       ),
     );
   }
