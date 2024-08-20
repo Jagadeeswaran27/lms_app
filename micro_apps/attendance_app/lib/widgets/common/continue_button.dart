@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
+
 import 'package:attendance_app/resources/strings.dart';
 import 'package:attendance_app/themes/colors.dart';
-import 'package:flutter/material.dart';
 
 class ContinueButton extends StatelessWidget {
   const ContinueButton({super.key});

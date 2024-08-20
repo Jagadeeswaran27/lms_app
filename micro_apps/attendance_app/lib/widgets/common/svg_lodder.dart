@@ -17,18 +17,24 @@ class SVGLoader extends StatelessWidget {
   final String image;
   final Color? color;
   final BoxFit fit;
+  final double? width;
+  final double? height;
 
   const SVGLoader({
     super.key,
     required this.image,
     this.color,
     this.fit = BoxFit.contain,
+    this.height,
+    this.width,
   });
   @override
   Widget build(BuildContext context) {
     return SvgPicture.asset(
       image,
       fit: fit,
+      height: height,
+      width: width,
     );
   }
 }

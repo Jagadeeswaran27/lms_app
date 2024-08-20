@@ -1,7 +1,8 @@
-import 'package:attendance_app/screens/attendance/my_courses_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
+import 'package:attendance_app/screens/attendance/my_courses_screen.dart';
+import 'package:attendance_app/screens/auth/signup_screen.dart';
 import 'package:attendance_app/constants/enums/button_size.dart';
 import 'package:attendance_app/resources/images.dart';
 import 'package:attendance_app/widgets/common/custom_elevated_button.dart';
@@ -105,7 +106,14 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                   TextSpan(
                     text: Strings.registerNow,
                     style: Theme.of(context).textTheme.displayMediumBold,
-                    recognizer: TapGestureRecognizer()..onTap = () {},
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) => const SignupScreen(),
+                          ),
+                        );
+                      },
                   )
                 ],
               ),

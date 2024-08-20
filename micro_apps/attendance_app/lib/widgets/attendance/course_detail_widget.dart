@@ -1,7 +1,8 @@
+import 'package:flutter/material.dart';
+
 import 'package:attendance_app/resources/strings.dart';
 import 'package:attendance_app/themes/colors.dart';
 import 'package:attendance_app/themes/fonts.dart';
-import 'package:flutter/material.dart';
 
 class CourseDetailWidget extends StatelessWidget {
   const CourseDetailWidget({super.key});

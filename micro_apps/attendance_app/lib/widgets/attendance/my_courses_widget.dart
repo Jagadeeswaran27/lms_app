@@ -1,6 +1,7 @@
+import 'package:flutter/material.dart';
+
 import 'package:attendance_app/screens/attendance/attendance_screen.dart';
 import 'package:attendance_app/widgets/common/course_card.dart';
-import 'package:flutter/material.dart';
 
 class MyCoursesWidget extends StatelessWidget {
   const MyCoursesWidget({super.key});

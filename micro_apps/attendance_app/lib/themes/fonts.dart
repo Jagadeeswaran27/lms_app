@@ -58,9 +58,10 @@ class ThemeFonts {
             color: ThemeColors.brown,
           ),
           displaySmall: baseTheme.textTheme.displaySmall!.copyWith(
-              fontSize: 10,
-              fontWeight: FontWeight.w400,
-              color: ThemeColors.titleBrown),
+            fontSize: 10,
+            fontWeight: FontWeight.w400,
+            color: ThemeColors.titleBrown,
+          ),
         )
         .apply(
           fontFamily: poppins,
@@ -69,16 +70,26 @@ class ThemeFonts {
 }
 
 extension ThemeExtension on TextTheme {
+  TextStyle get titleSmallTitleBrown =>
+      titleSmall!.copyWith(color: ThemeColors.titleBrown);
   TextStyle get displayMediumPrimary =>
       displayMedium!.copyWith(color: ThemeColors.authPrimary);
+  TextStyle get displayMediumBlack =>
+      displayMedium!.copyWith(color: ThemeColors.black);
   TextStyle get displayMediumSemiBold => displayMedium!
       .copyWith(color: ThemeColors.brown, fontWeight: FontWeight.w500);
+  TextStyle get displayMediumSemiBoldWhite => displayMedium!
+      .copyWith(color: ThemeColors.white, fontWeight: FontWeight.w500);
   TextStyle get displayMediumTitleBrownSemiBold => displayMedium!
       .copyWith(color: ThemeColors.titleBrown, fontWeight: FontWeight.w500);
+  TextStyle get displayMediumBrownSemiBold => displayMedium!
+      .copyWith(color: ThemeColors.brown, fontWeight: FontWeight.w500);
   TextStyle get displayMediumPrimarySemiBold => displayMedium!
       .copyWith(color: ThemeColors.primary, fontWeight: FontWeight.w500);
   TextStyle get displayMediumBold => displayMedium!
       .copyWith(color: ThemeColors.authPrimary, fontWeight: FontWeight.w600);
+  TextStyle get displayMediumBoldBrown => displayMedium!
+      .copyWith(color: ThemeColors.brown, fontWeight: FontWeight.w600);
   TextStyle get bodyMediumPrimary =>
       bodyMedium!.copyWith(color: ThemeColors.primary);
   TextStyle get bodyMediumTitleBrown =>
@@ -87,4 +98,6 @@ extension ThemeExtension on TextTheme {
       .copyWith(color: ThemeColors.titleBrown, fontWeight: FontWeight.w500);
   TextStyle get bodyLargeTitleBrown =>
       bodyLarge!.copyWith(color: ThemeColors.titleBrown);
+  TextStyle get bodyLargeTitleBrownBold => bodyLarge!
+      .copyWith(color: ThemeColors.titleBrown, fontWeight: FontWeight.w600);
 }

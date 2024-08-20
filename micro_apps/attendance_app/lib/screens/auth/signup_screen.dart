@@ -1,33 +1,28 @@
 import 'package:flutter/material.dart';
 
-import 'package:attendance_app/containers/auth/login/login_form_container.dart';
+import 'package:attendance_app/containers/auth/signup/signup_form_container.dart';
 import 'package:attendance_app/resources/images.dart';
 import 'package:attendance_app/resources/strings.dart';
 import 'package:attendance_app/themes/fonts.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends StatelessWidget {
+  const SignupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    final EdgeInsets padding = MediaQuery.of(context).padding;
-    final double safeHeight = screenSize.height - padding.top - padding.bottom;
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
           child: Container(
-            height: safeHeight,
-            width: screenSize.width,
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(Images.loginBackgroundPng),
+                image: AssetImage(Images.signupBackground),
                 fit: BoxFit.cover,
               ),
             ),
             child: Center(
               child: Container(
-                margin: const EdgeInsets.only(top: 70),
+                margin: const EdgeInsets.only(top: 70, bottom: 50),
                 child: Column(
                   children: [
                     Column(
@@ -44,7 +39,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const LoginFormContainer(),
+                    const SignupFormContainer(),
                   ],
                 ),
               ),

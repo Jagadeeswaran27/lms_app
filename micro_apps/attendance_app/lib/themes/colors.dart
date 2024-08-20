@@ -18,4 +18,6 @@ class ThemeColors {
   static final Color cardColor = Pigment.fromString('#FFF3ED');
   static final Color cardBorderColor = Pigment.fromString('#B0B0B0');
   static final Color circularProgressLightColor = Pigment.fromString('#FFE3D6');
+  static final Color errorColor = Pigment.fromString('#FF1313');
+  static final Color primaryShadow = Pigment.fromString('#FF9F47');
 }

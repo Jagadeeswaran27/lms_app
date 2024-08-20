@@ -21,6 +21,7 @@ class AttendanceWidget extends StatelessWidget {
           SizedBox(
             width: screenWidth * 0.6,
             child: IconTextButton(
+              iconHorizontalPadding: 0,
               color: ThemeColors.cardColor,
               text: Strings.enquire,
               onPressed: () {},
