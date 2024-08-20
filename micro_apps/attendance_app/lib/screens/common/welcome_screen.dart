@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:attendance_app/constants/enums/button_size.dart';
 import 'package:attendance_app/resources/images.dart';
 import 'package:attendance_app/resources/strings.dart';
-import 'package:attendance_app/screens/auth/login_screen.dart';
+import 'package:attendance_app/screens/auth/options_screen.dart';
 import 'package:attendance_app/widgets/common/custom_elevated_button.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -12,9 +12,11 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
+    final EdgeInsets padding = MediaQuery.of(context).padding;
+    final double safeHeight = screenSize.height - padding.top - padding.bottom;
 
     return Container(
-      height: screenSize.height,
+      height: safeHeight,
       width: screenSize.width,
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -36,8 +38,8 @@ class WelcomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  Strings.attendance,
-                  style: Theme.of(context).textTheme.headlineSmall,
+                  Strings.courseMenu,
+                  style: Theme.of(context).textTheme.headlineLarge,
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(
@@ -59,7 +61,7 @@ class WelcomeScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (ctx) => const LoginScreen(),
+                          builder: (ctx) => const OptionsScreen(),
                         ),
                       );
                     },

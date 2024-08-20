@@ -1,5 +1,6 @@
-import 'package:attendance_app/widgets/attendance/attendance_widget.dart';
 import 'package:flutter/material.dart';
+
+import 'package:attendance_app/widgets/attendance/attendance_widget.dart';
 
 class AttendanceContainer extends StatelessWidget {
   const AttendanceContainer({super.key});
