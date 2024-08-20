@@ -12,7 +12,6 @@ class AttendanceApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: Themes.buildLightTheme(context),
       home: const SafeArea(
