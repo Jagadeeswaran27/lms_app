@@ -20,6 +20,9 @@ class FormInput extends StatelessWidget {
     this.initialValue,
     this.hintText,
     this.enabled,
+    this.fillColor,
+    this.borderWidth,
+    this.hasShadow = false, // Add this line for conditional shadow
   });
 
   final String text;
@@ -37,42 +40,68 @@ class FormInput extends StatelessWidget {
   final String? initialValue;
   final String? hintText;
   final bool? enabled;
+  final Color? fillColor;
+  final double? borderWidth;
+  final bool hasShadow; // Add this line for conditional shadow
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      keyboardType: keyboardType,
-      initialValue: initialValue,
-      obscureText: obscureText ?? false,
-      onTap: onTap,
-      onSaved: onSaved,
-      onChanged: onChanged,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(50.0),
-          borderSide: BorderSide(
-            color: borderColor != null ? borderColor! : ThemeColors.authPrimary,
+    return Container(
+      decoration: hasShadow
+          ? BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: ThemeColors.black.withOpacity(0.1),
+                  blurRadius: 9,
+                  offset: const Offset(1, 2.5),
+                  spreadRadius: 0,
+                ),
+              ],
+              borderRadius: BorderRadius.circular(50.0),
+            )
+          : null, // No shadow if hasShadow is false
+      child: TextFormField(
+        keyboardType: keyboardType,
+        initialValue: initialValue,
+        obscureText: obscureText ?? false,
+        onTap: onTap,
+        onSaved: onSaved,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          fillColor: fillColor,
+          filled: true,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(50.0),
           ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(50.0),
+            borderSide: BorderSide(
+              color: borderColor ?? ThemeColors.authPrimary,
+              width: borderWidth ?? 1,
+            ),
+          ),
+          prefixIcon: prefixIcon,
+          suffixIcon: Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: suffixIcon,
+          ),
+          label: text.isNotEmpty
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    text,
+                    style: Theme.of(context).textTheme.displaySmall,
+                  ),
+                )
+              : null, // Conditionally display the label if text is not null
+          labelStyle: Theme.of(context).textTheme.displaySmall,
+          hintText: hintText,
         ),
-        prefixIcon: prefixIcon,
-        suffixIcon: Padding(
-          padding: const EdgeInsets.only(right: 8.0),
-          child: suffixIcon,
-        ),
-        label: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(text),
-        ),
-        labelStyle: Theme.of(context).textTheme.displaySmall,
-        hintText: hintText,
+        validator: validator,
+        controller: controller,
+        readOnly: readOnly ?? false,
+        enabled: enabled ?? true,
       ),
-      validator: validator,
-      controller: controller,
-      readOnly: readOnly ?? false,
-      enabled: enabled ?? true,
     );
   }
 }

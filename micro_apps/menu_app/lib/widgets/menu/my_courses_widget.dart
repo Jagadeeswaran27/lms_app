@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:menu_app/screens/menu/course_detail_screen.dart';
 
+import 'package:menu_app/screens/menu/course_detail_screen.dart';
 import 'package:menu_app/widgets/common/course_card.dart';
 
 class MyCoursesWidget extends StatelessWidget {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:menu_app/resources/images.dart';
 import 'package:menu_app/resources/strings.dart';
-import 'package:menu_app/screens/menu/my_courses_screen.dart';
+import 'package:menu_app/screens/auth/login_screen.dart';
 import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
 import 'package:menu_app/widgets/common/icon_text_button.dart';
@@ -78,9 +78,9 @@ class VerificationSuccessfullScreen extends StatelessWidget {
                         child: IconTextButton(
                           text: Strings.ok,
                           onPressed: () {
-                            Navigator.of(context).push(
+                            Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                builder: (ctx) => const MyCoursesScreen(),
+                                builder: (ctx) => const LoginScreen(),
                               ),
                             );
                           },

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:menu_app/containers/menu/course_detail_container.dart';
+import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/widgets/menu/menu_layout.dart';
 
 class CourseDetailScreen extends StatelessWidget {
@@ -8,7 +10,7 @@ class CourseDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MenuLayout(
-      topBarText: "Item",
+      topBarText: Strings.item,
       child: CourseDetailContainer(),
     );
   }
