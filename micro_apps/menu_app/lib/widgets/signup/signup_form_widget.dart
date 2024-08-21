@@ -65,7 +65,7 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
   }
 
   void _handleSignup() {
-    Navigator.of(context).push(
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (ctx) => const VerificationSuccessfullScreen(),
       ),
@@ -148,7 +148,7 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
                 Container(
                   margin: const EdgeInsets.only(left: 10),
                   child: Text(
-                    "Register as",
+                    Strings.registerAs,
                     style:
                         Theme.of(context).textTheme.displayMediumBrownSemiBold,
                   ),

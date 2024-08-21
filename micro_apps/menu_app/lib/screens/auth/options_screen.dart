@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:menu_app/resources/images.dart';
 import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/screens/auth/login_screen.dart';
@@ -67,7 +68,7 @@ class OptionsScreen extends StatelessWidget {
                             child: CustomElevatedButton(
                               text: Strings.signIn,
                               onPressed: () {
-                                Navigator.of(context).push(
+                                Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
                                     builder: (ctx) => const LoginScreen(),
                                   ),
@@ -80,7 +81,7 @@ class OptionsScreen extends StatelessWidget {
                             child: CustomElevatedButton(
                               text: Strings.register,
                               onPressed: () {
-                                Navigator.of(context).push(
+                                Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
                                     builder: (ctx) => const SignupScreen(),
                                   ),

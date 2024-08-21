@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:menu_app/containers/auth/signup/signup_form_container.dart';
 import 'package:menu_app/resources/images.dart';
 import 'package:menu_app/resources/strings.dart';
@@ -27,12 +28,12 @@ class SignupScreen extends StatelessWidget {
                     Column(
                       children: [
                         Text(
-                          Strings.signIn,
+                          Strings.signUp,
                           style: Theme.of(context).textTheme.headlineMedium,
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          Strings.enterSignInDetails,
+                          Strings.registerDetails,
                           style:
                               Theme.of(context).textTheme.displayMediumSemiBold,
                         ),

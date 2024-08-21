@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:menu_app/constants/enums/button_size.dart';
 import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/widgets/common/svg_lodder.dart';
@@ -64,11 +65,14 @@ class IconTextButton extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: Text(
-                    text,
-                    textAlign: TextAlign.center,
-                    style: buttonTextStyle ??
-                        Theme.of(context).textTheme.bodyMedium,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 12),
+                    child: Text(
+                      text,
+                      textAlign: TextAlign.center,
+                      style: buttonTextStyle ??
+                          Theme.of(context).textTheme.bodyMedium,
+                    ),
                   ),
                 ),
                 if (icon != null || svgIcon != null)
@@ -83,8 +87,8 @@ class IconTextButton extends StatelessWidget {
                           )
                         : SVGLoader(
                             image: svgIcon!,
-                            width: 20,
-                            height: 20,
+                            width: 25,
+                            height: 25,
                           ),
                   ),
               ],

@@ -4,8 +4,9 @@ import 'package:flutter/gestures.dart';
 import 'package:menu_app/constants/enums/button_size.dart';
 import 'package:menu_app/resources/images.dart';
 import 'package:menu_app/resources/strings.dart';
+import 'package:menu_app/screens/admin/admin_app.dart';
 import 'package:menu_app/screens/auth/signup_screen.dart';
-import 'package:menu_app/screens/menu/my_courses_screen.dart';
+import 'package:menu_app/screens/menu/student_teacher_app.dart';
 import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
 import 'package:menu_app/widgets/common/custom_elevated_button.dart';
@@ -72,8 +73,8 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 text: Strings.login,
                 buttonSize: ButtonSize.large,
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => const MyCoursesScreen(),
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (ctx) => const AdminApp(),
                   ));
                 },
               ),
