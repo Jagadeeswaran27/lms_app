@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
-import 'package:attendance_app/screens/attendance/my_courses_screen.dart';
+import 'package:attendance_app/screens/attendance/app.dart';
 import 'package:attendance_app/screens/auth/signup_screen.dart';
 import 'package:attendance_app/constants/enums/button_size.dart';
 import 'package:attendance_app/resources/images.dart';
@@ -72,9 +72,9 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 text: Strings.login,
                 buttonSize: ButtonSize.large,
                 onPressed: () {
-                  Navigator.of(context).push(
+                  Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (ctx) => const MyCoursesScreen(),
+                      builder: (ctx) => const StudentTeacherAttencanceApp(),
                     ),
                   );
                 },

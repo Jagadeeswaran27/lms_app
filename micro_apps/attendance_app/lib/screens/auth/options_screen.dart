@@ -68,7 +68,7 @@ class OptionsScreen extends StatelessWidget {
                             child: CustomElevatedButton(
                               text: Strings.signIn,
                               onPressed: () {
-                                Navigator.of(context).push(
+                                Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
                                     builder: (ctx) => const LoginScreen(),
                                   ),
@@ -81,7 +81,7 @@ class OptionsScreen extends StatelessWidget {
                             child: CustomElevatedButton(
                               text: Strings.register,
                               onPressed: () {
-                                Navigator.of(context).push(
+                                Navigator.of(context).pushReplacement(
                                   MaterialPageRoute(
                                     builder: (ctx) => const SignupScreen(),
                                   ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:attendance_app/screens/attendance/my_courses_screen.dart';
+import 'package:attendance_app/screens/auth/login_screen.dart';
 import 'package:attendance_app/widgets/common/icon_text_button.dart';
 import 'package:attendance_app/resources/icons.dart' as icons;
 import 'package:attendance_app/resources/images.dart';
@@ -78,9 +78,9 @@ class VerificationSuccessfullScreen extends StatelessWidget {
                         child: IconTextButton(
                           text: Strings.ok,
                           onPressed: () {
-                            Navigator.of(context).push(
+                            Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                builder: (ctx) => const MyCoursesScreen(),
+                                builder: (ctx) => const LoginScreen(),
                               ),
                             );
                           },

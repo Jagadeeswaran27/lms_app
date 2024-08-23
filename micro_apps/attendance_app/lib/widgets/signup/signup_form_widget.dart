@@ -64,7 +64,7 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
   }
 
   void _handleSignup() {
-    Navigator.of(context).push(
+    Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (ctx) => const VerificationSuccessfullScreen(),
       ),
