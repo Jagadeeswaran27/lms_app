@@ -21,10 +21,15 @@ class ScreenLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Detect the height of the keyboard
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: true, // Resize to avoid the keyboard
         body: Column(
           children: [
+            // Top Bar
             Container(
               width: double.infinity,
               height: 50,
@@ -89,31 +94,29 @@ class ScreenLayout extends StatelessWidget {
                 ],
               ),
             ),
+            // Main content area
             Expanded(
-              child: NotificationListener<ScrollNotification>(
-                onNotification: (scrollNotification) {
-                  if (scrollNotification is ScrollUpdateNotification) {
-                    // You can add custom behavior here if needed
-                  }
-                  return false;
-                },
-                child: child,
-              ),
+              child: child,
             ),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: ThemeColors.primary,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0),
+            // Bottom container
+            Visibility(
+              visible: bottomInset ==
+                  0, // Hide the bottom container when the keyboard is open
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: ThemeColors.primary,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
+                  ),
                 ),
-              ),
-              child: Center(
-                child: Text(
-                  bottomText != null ? bottomText! : '',
-                  style: Theme.of(context).textTheme.titleLarge,
+                child: Center(
+                  child: Text(
+                    bottomText ?? '',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 ),
               ),
             ),
