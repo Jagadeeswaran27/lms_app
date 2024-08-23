@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'package:registration_app/resources/strings.dart';
-import 'package:registration_app/themes/colors.dart';
-import 'package:registration_app/themes/fonts.dart';
-import 'package:registration_app/widgets/common/icon_text_button.dart';
-import 'package:registration_app/widgets/common/svg_lodder.dart';
-import 'package:registration_app/resources/icons.dart' as icons;
+import 'package:location_app/resources/icons.dart' as icons;
+import 'package:location_app/resources/strings.dart';
+import 'package:location_app/themes/colors.dart';
+import 'package:location_app/themes/fonts.dart';
+import 'package:location_app/widgets/common/icon_text_button.dart';
+import 'package:location_app/widgets/common/svg_lodder.dart';
 
 class SuccessCard extends StatelessWidget {
   const SuccessCard(

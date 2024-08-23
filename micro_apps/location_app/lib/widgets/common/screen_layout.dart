@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:enquiry_app/themes/colors.dart';
-import 'package:enquiry_app/themes/fonts.dart';
+import 'package:location_app/themes/colors.dart';
+import 'package:location_app/themes/fonts.dart';
 
 class ScreenLayout extends StatelessWidget {
   const ScreenLayout({

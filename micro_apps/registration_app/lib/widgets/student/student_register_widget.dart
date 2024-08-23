@@ -113,7 +113,7 @@ class _StudentRegisterWidgetState extends State<StudentRegisterWidget> {
                   onPressed: () {
                     showSuccessModal(context, Strings.verifiedText2, () {
                       Navigator.of(context).pushNamed(StudentRoutes.enrollment);
-                    }, []);
+                    }, null);
                   },
                   color: ThemeColors.primary,
                   buttonTextStyle: Theme.of(context).textTheme.bodyMedium,

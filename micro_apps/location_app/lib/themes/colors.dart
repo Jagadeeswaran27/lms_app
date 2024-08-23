@@ -21,4 +21,5 @@ class ThemeColors {
   static final Color errorColor = Pigment.fromString('#FF1313');
   static final Color primaryShadow = Pigment.fromString('#FF9F47');
   static final Color border2 = Pigment.fromString('#FFC1A6');
+  static final Color successCardShadow = Pigment.fromString('#FFD9C6');
 }
