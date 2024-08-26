@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
+import 'package:attendance_app/screens/attendance/app.dart';
+import 'package:attendance_app/screens/auth/signup_screen.dart';
 import 'package:attendance_app/constants/enums/button_size.dart';
 import 'package:attendance_app/resources/images.dart';
 import 'package:attendance_app/widgets/common/custom_elevated_button.dart';
 import 'package:attendance_app/widgets/common/svg_lodder.dart';
-import 'package:attendance_app/screens/auth/strings.dart';
+import 'package:attendance_app/resources/strings.dart';
 import 'package:attendance_app/themes/colors.dart';
 import 'package:attendance_app/themes/fonts.dart';
 import 'package:attendance_app/widgets/common/form_input.dart';
@@ -19,6 +21,14 @@ class LoginFormWidget extends StatefulWidget {
 
 class _LoginFormWidgetState extends State<LoginFormWidget> {
   final _formKey = GlobalKey<FormState>();
+  bool isPasswordVisible = true;
+
+  void _revealPassword() {
+    setState(() {
+      isPasswordVisible = !isPasswordVisible;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,7 +42,16 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
           children: [
             const FormInput(text: Strings.enterYourEmailOrPhoneNo),
             const SizedBox(height: 20),
-            const FormInput(text: Strings.enterYourPassword),
+            FormInput(
+              text: Strings.enterYourPassword,
+              suffixIcon: InkWell(
+                onTap: _revealPassword,
+                child: isPasswordVisible
+                    ? const Icon(Icons.visibility_off_outlined)
+                    : const Icon(Icons.remove_red_eye_outlined),
+              ),
+              obscureText: isPasswordVisible,
+            ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -41,7 +60,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                   onTap: () {},
                   child: Text(
                     Strings.forgetYourPassword,
-                    style: Theme.of(context).textTheme.displaySmallPrimary,
+                    style: Theme.of(context).textTheme.displayMediumPrimary,
                   ),
                 )
               ],
@@ -52,13 +71,19 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               child: CustomElevatedButton(
                 text: Strings.login,
                 buttonSize: ButtonSize.large,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (ctx) => const StudentTeacherAttencanceApp(),
+                    ),
+                  );
+                },
               ),
             ),
             const SizedBox(height: 20),
             Text(
               Strings.orLoginWithGoogleAccount,
-              style: Theme.of(context).textTheme.displaySmall,
+              style: Theme.of(context).textTheme.displayMedium,
             ),
             const SizedBox(height: 20),
             InkWell(
@@ -73,15 +98,22 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 children: [
                   TextSpan(
                     text: Strings.haveAnAccount,
-                    style: Theme.of(context).textTheme.displaySmall,
+                    style: Theme.of(context).textTheme.displayMedium,
                   ),
                   const WidgetSpan(
                     child: SizedBox(width: 5),
                   ),
                   TextSpan(
                     text: Strings.registerNow,
-                    style: Theme.of(context).textTheme.displaySmallBold,
-                    recognizer: TapGestureRecognizer()..onTap = () {},
+                    style: Theme.of(context).textTheme.displayMediumBold,
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) => const SignupScreen(),
+                          ),
+                        );
+                      },
                   )
                 ],
               ),
