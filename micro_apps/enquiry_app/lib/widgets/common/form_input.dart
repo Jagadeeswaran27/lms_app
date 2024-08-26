@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:enquiry_app/themes/colors.dart';
-import 'package:enquiry_app/themes/fonts.dart';
 
 class FormInput extends StatelessWidget {
   const FormInput({
@@ -24,8 +23,6 @@ class FormInput extends StatelessWidget {
     this.fillColor,
     this.borderWidth,
     this.hasShadow = false,
-    this.hasOfferTag = false, // Property to control offer tag
-    this.offer = '10',
     this.isDescription = false,
   });
 
@@ -47,13 +44,10 @@ class FormInput extends StatelessWidget {
   final Color? fillColor;
   final double? borderWidth;
   final bool hasShadow;
-  final bool hasOfferTag; // Property to control offer tag
-  final String offer;
   final bool isDescription;
 
   @override
   Widget build(BuildContext context) {
-    final double contentPadding = hasOfferTag ? 0 : 15;
     return Container(
       height: isDescription ? 200 : null,
       decoration: hasShadow
@@ -68,12 +62,11 @@ class FormInput extends StatelessWidget {
               ],
               borderRadius: BorderRadius.circular(50.0),
             )
-          : null,
+          : null, // No shadow if hasShadow is false
       child: TextFormField(
         expands: isDescription ? true : false,
         minLines: isDescription ? null : 1,
         maxLines: isDescription ? null : 1,
-        textAlignVertical: TextAlignVertical.top,
         keyboardType: keyboardType,
         initialValue: initialValue,
         obscureText: obscureText ?? false,
@@ -93,50 +86,29 @@ class FormInput extends StatelessWidget {
               width: borderWidth ?? 1,
             ),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(50.0),
-            borderSide: BorderSide(
-              color: borderColor ??
-                  ThemeColors
-                      .authPrimary, // Maintain the same color as enabledBorder
-              width: borderWidth ?? 1, // Keep the same border width
-            ),
-          ),
           prefixIcon: prefixIcon,
-          suffixIcon: hasOfferTag
-              ? Container(
-                  decoration: BoxDecoration(
-                    color: ThemeColors.authPrimary,
-                    borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(50.0),
-                      bottomRight: Radius.circular(50.0),
-                    ),
-                  ),
-                  alignment: Alignment.center,
-                  width: 70,
+          suffixIcon: Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: suffixIcon,
+          ),
+          label: text.isNotEmpty
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    '$offer% off',
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
+                    text,
+                    style: Theme.of(context)
+                        .textTheme
+                        .displaySmall!
+                        .copyWith(fontSize: 14.0),
                   ),
                 )
-              : suffixIcon,
+              : null, // Conditionally display the label if text is not null
+          labelStyle: Theme.of(context).textTheme.displaySmall,
           hintText: hintText,
-          hintStyle: Theme.of(context).textTheme.titleSmallTitleBrown,
-          label: hasOfferTag
-              ? null
-              : text.isNotEmpty
-                  ? Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        text,
-                        style: Theme.of(context).textTheme.displaySmall,
-                      ),
-                    )
-                  : null,
-          contentPadding:
-              EdgeInsets.symmetric(vertical: contentPadding, horizontal: 20.0),
+          errorStyle: Theme.of(context)
+              .textTheme
+              .bodySmall!
+              .copyWith(color: ThemeColors.primary),
         ),
         validator: validator,
         controller: controller,

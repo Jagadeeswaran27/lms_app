@@ -10,38 +10,41 @@ class SignupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(Images.signupBackground),
-                fit: BoxFit.cover,
-              ),
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(Images.signupBackground),
+              fit: BoxFit.cover,
             ),
-            child: Center(
-              child: Container(
-                margin: const EdgeInsets.only(top: 70, bottom: 50),
-                child: Column(
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          Strings.signUp,
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          Strings.registerDetails,
-                          style:
-                              Theme.of(context).textTheme.displayMediumSemiBold,
-                        ),
-                      ],
-                    ),
-                    const SignupFormContainer(),
-                  ],
-                ),
+          ),
+          child: Center(
+            child: Container(
+              margin: const EdgeInsets.only(top: 70, bottom: 100),
+              child: Column(
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        Strings.signUp,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(fontSize: 32.0),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        Strings.registerDetails,
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayMediumSemiBold
+                            .copyWith(fontSize: 15.0),
+                      ),
+                    ],
+                  ),
+                  const SignupFormContainer(),
+                ],
               ),
             ),
           ),

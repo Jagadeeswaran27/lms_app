@@ -116,4 +116,10 @@ class Strings {
   static const String supportedFiles = 'Supported files : jpg,svg,png.....';
   static const String chooseFile = 'Choose file';
   static const String required = '(required)';
+  static const String anErrorOccurred = 'An error occurred';
+  static const String invalidCredentials = 'Invalid credentials';
+  static const String pleaseVerifyYourEmail = 'Please verify your email';
+  static const String invalidEmailOrPhone = 'Invalid email or phone number';
+  static const String invalidPassword = 'Invalid password';
+  static const String verifyYourEmail = 'Verify your email';
 }
