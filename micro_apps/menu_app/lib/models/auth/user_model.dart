@@ -9,6 +9,7 @@ class UserModel {
   final String? city;
   final String? profileUrl;
   final String? state;
+  final List<String> registeredCourses;
 
   UserModel({
     required this.uid,
@@ -21,6 +22,7 @@ class UserModel {
     this.address,
     this.state,
     this.city,
+    this.registeredCourses = const [],
   });
 
   factory UserModel.fromMap(Map<String, dynamic> data) {
@@ -35,6 +37,7 @@ class UserModel {
       state: data['state'] ?? '',
       profileUrl: data['profileUrl'] ?? '',
       institute: List<String>.from(data['institute'] ?? []),
+      registeredCourses: List<String>.from(data['registeredCourses'] ?? []),
     );
   }
 
@@ -50,6 +53,7 @@ class UserModel {
       address: '',
       profileUrl: '',
       institute: [],
+      registeredCourses: [],
     );
   }
 
@@ -65,6 +69,7 @@ class UserModel {
       'city': city,
       'state': state,
       'profileUrl': profileUrl,
+      'registeredCourses': registeredCourses,
     };
   }
 }

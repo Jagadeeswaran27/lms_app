@@ -4,7 +4,6 @@ import 'package:flutter/gestures.dart';
 import 'package:menu_app/constants/enums/button_size.dart';
 import 'package:menu_app/resources/images.dart';
 import 'package:menu_app/resources/strings.dart';
-import 'package:menu_app/screens/admin/admin_app.dart';
 import 'package:menu_app/screens/auth/signup_screen.dart';
 import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
