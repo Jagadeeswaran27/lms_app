@@ -1,3 +1,4 @@
+import 'package:enquiry_app/themes/fonts.dart';
 import 'package:flutter/material.dart';
 
 import 'package:enquiry_app/themes/colors.dart';
@@ -17,6 +18,7 @@ class FormInput extends StatelessWidget {
     this.onTap,
     this.prefixIcon,
     this.suffixIcon,
+    this.hintTextStyle,
     this.initialValue,
     this.hintText,
     this.enabled,
@@ -34,6 +36,7 @@ class FormInput extends StatelessWidget {
   final TextEditingController? controller;
   final void Function(String)? onChanged;
   final bool? readOnly;
+  final TextStyle? hintTextStyle;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final Color? borderColor;
@@ -67,12 +70,14 @@ class FormInput extends StatelessWidget {
         expands: isDescription ? true : false,
         minLines: isDescription ? null : 1,
         maxLines: isDescription ? null : 1,
+        textAlignVertical: TextAlignVertical.top,
         keyboardType: keyboardType,
         initialValue: initialValue,
         obscureText: obscureText ?? false,
         onTap: onTap,
         onSaved: onSaved,
         onChanged: onChanged,
+        style: Theme.of(context).textTheme.titleSmallTitleBrown,
         decoration: InputDecoration(
           fillColor: fillColor,
           filled: true,
@@ -105,6 +110,7 @@ class FormInput extends StatelessWidget {
               : null, // Conditionally display the label if text is not null
           labelStyle: Theme.of(context).textTheme.displaySmall,
           hintText: hintText,
+          hintStyle: hintTextStyle,
           errorStyle: Theme.of(context)
               .textTheme
               .bodySmall!

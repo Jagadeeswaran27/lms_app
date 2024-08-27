@@ -110,7 +110,7 @@ class Strings {
   static const String hospitalityEnquiry = 'Hospital Enquiry';
   static const String whatAreYouFacingIssueWith =
       'What are you facing issue with ? ';
-  static const String subject = 'Subject ';
+  static const String subject = 'Subject : ';
   static const String describeTheIssue = 'Describe the issue ';
   static const String file = 'File';
   static const String supportedFiles = 'Supported files : jpg,svg,png.....';
@@ -122,4 +122,15 @@ class Strings {
   static const String invalidEmailOrPhone = 'Invalid email or phone number';
   static const String invalidPassword = 'Invalid password';
   static const String verifyYourEmail = 'Verify your email';
+  static const String ticketCreatedSuccessfully = 'Ticket created successfully';
+  static const String ticketCreationFailed = 'Ticket creation failed';
+  static const String ticketNo = 'Ticket no : ';
+  static const String myTicket = 'My Ticket';
+  static const String facingIssue = 'Facing issue : ';
+  static const String describedIssue = 'Described issue : ';
+  static const String view = 'View';
+  static const String acknowledged = 'Acknowledged';
+  static const String toAcknowledge = 'To Acknowledge';
+  static const String resolved = 'Resolved';
+  static const String toResolve = 'To Resolve';
 }
