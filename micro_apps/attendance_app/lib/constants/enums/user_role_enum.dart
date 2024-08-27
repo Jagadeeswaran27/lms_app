@@ -1,4 +1,4 @@
-enum UserRoleEnum { student, teacher }
+enum UserRoleEnum { student, teacher, institute }
 
 extension UserRoleEnumExtension on UserRoleEnum {
   String get roleName {
@@ -7,6 +7,8 @@ extension UserRoleEnumExtension on UserRoleEnum {
         return 'Student';
       case UserRoleEnum.teacher:
         return 'Teacher';
+      case UserRoleEnum.institute:
+        return 'Institute';
       default:
         return '';
     }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:attendance_app/constants/enums/button_size.dart';
 import 'package:attendance_app/themes/colors.dart';
 import 'package:attendance_app/utils/widgets/get_elevated_button_padding.dart';
-import 'package:attendance_app/constants/enums/button_size.dart';
 
 class CustomElevatedButton extends StatelessWidget {
   const CustomElevatedButton({
