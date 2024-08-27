@@ -1,3 +1,4 @@
+import 'package:attendance_app/models/courses/course_model.dart';
 import 'package:flutter/material.dart';
 
 import 'package:attendance_app/resources/strings.dart';
@@ -5,7 +6,12 @@ import 'package:attendance_app/themes/colors.dart';
 import 'package:attendance_app/themes/fonts.dart';
 
 class CourseDetailWidget extends StatelessWidget {
-  const CourseDetailWidget({super.key});
+  const CourseDetailWidget({
+    super.key,
+    required this.course,
+  });
+
+  final CourseModel course;
 
   @override
   Widget build(BuildContext context) {
@@ -39,61 +45,67 @@ class CourseDetailWidget extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(50.0),
                     child: Image.network(
-                      'https://via.placeholder.com/100',
+                      course.imageUrl,
                       height: 80,
                       width: 80,
                       fit: BoxFit.cover,
                     ),
                   ),
                   const SizedBox(width: 20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        Strings.english,
-                        style: Theme.of(context).textTheme.bodyLargeTitleBrown,
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Text(
-                            Strings.courseCode,
-                            style: Theme.of(context)
-                                .textTheme
-                                .displayMediumTitleBrownSemiBold,
-                          ),
-                          Text(
-                            '3245',
-                            style: Theme.of(context)
-                                .textTheme
-                                .displayMediumPrimarySemiBold,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 5),
-                      Row(
-                        children: [
-                          Text(
-                            Strings.duration,
-                            style: Theme.of(context)
-                                .textTheme
-                                .displayMediumTitleBrownSemiBold,
-                          ),
-                          Text(
-                            '64 Hours',
-                            style: Theme.of(context)
-                                .textTheme
-                                .displayMediumPrimarySemiBold,
-                          ),
-                        ],
-                      ),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          course.courseTitle,
+                          style:
+                              Theme.of(context).textTheme.bodyLargeTitleBrown,
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Text(
+                              Strings.courseCode,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displayMediumTitleBrownSemiBold,
+                            ),
+                            Flexible(
+                              child: Text(
+                                course.courseId,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .displayMediumPrimarySemiBold,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 5),
+                        Row(
+                          children: [
+                            Text(
+                              Strings.duration,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displayMediumTitleBrownSemiBold,
+                            ),
+                            Text(
+                              '64 Hours',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displayMediumPrimarySemiBold,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 20),
               Text(
-                'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type',
+                course.aboutDescription,
                 style: Theme.of(context).textTheme.displaySmall,
               ),
             ],

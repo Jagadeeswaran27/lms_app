@@ -8,8 +8,8 @@ import 'package:location_app/widgets/common/icon_text_button.dart';
 import 'package:location_app/resources/icons.dart' as icons;
 import 'package:location_app/widgets/common/svg_lodder.dart';
 
-class StudentLocationWidget extends StatelessWidget {
-  const StudentLocationWidget({super.key});
+class StudentTeacherLocationWidget extends StatelessWidget {
+  const StudentTeacherLocationWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

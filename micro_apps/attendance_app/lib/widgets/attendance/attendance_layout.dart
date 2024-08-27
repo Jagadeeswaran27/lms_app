@@ -1,76 +1,112 @@
-import 'package:flutter/material.dart';
-
 import 'package:attendance_app/themes/colors.dart';
 import 'package:attendance_app/themes/fonts.dart';
+import 'package:flutter/material.dart';
 
 class AttendanceLayout extends StatelessWidget {
   const AttendanceLayout({
     super.key,
     required this.child,
-    required this.bottomText,
     required this.topBarText,
+    this.bottomText,
+    this.icon,
+    this.onIconTap,
+    this.showBackButton = true,
+    this.showBottomBar = true,
   });
 
   final Widget child;
   final String topBarText;
-  final String bottomText;
+  final String? bottomText;
+  final Widget? icon;
+  final void Function()? onIconTap;
+  final bool? showBackButton;
+  final bool showBottomBar;
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16.0),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    offset: Offset(0, 2),
-                    blurRadius: 5,
+    // Detect the height of the keyboard
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    final topInset = MediaQuery.of(context).viewPadding.top + 20;
+
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      body: Column(
+        children: [
+          // Top Bar
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.only(top: topInset, bottom: 20),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  offset: Offset(0, 2),
+                  blurRadius: 5,
+                ),
+              ],
+            ),
+            child: Stack(
+              children: [
+                if (showBackButton == true)
+                  Positioned(
+                    left: 10,
+                    top: -5,
+                    bottom: 0,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.arrow_back_ios,
+                        color: ThemeColors.primary,
+                        size: 20,
+                      ),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
                   ),
-                ],
-              ),
-              child: Center(
-                child: Text(
-                  topBarText,
-                  style: Theme.of(context).textTheme.bodyMediumPrimary,
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    topBarText,
+                    style: Theme.of(context).textTheme.bodyMediumPrimary,
+                  ),
+                ),
+                if (icon != null)
+                  Positioned(
+                    top: 0,
+                    bottom: 0,
+                    right: 14,
+                    child: InkWell(
+                      onTap: onIconTap,
+                      child: icon!,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          // Main content area
+          Expanded(child: child),
+          // Bottom container
+          if (showBottomBar)
+            Visibility(
+              visible: bottomInset == 0,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: ThemeColors.primary,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
+                  ),
+                ),
+                child: Center(
+                  child: Text(
+                    bottomText ?? '',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 ),
               ),
             ),
-            Expanded(
-              child: NotificationListener<ScrollNotification>(
-                onNotification: (scrollNotification) {
-                  if (scrollNotification is ScrollUpdateNotification) {
-                    // You can add custom behavior here if needed
-                  }
-                  return false;
-                },
-                child: child,
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: ThemeColors.primary,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0),
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  bottomText,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
-            ),
-          ],
-        ),
+        ],
       ),
     );
   }

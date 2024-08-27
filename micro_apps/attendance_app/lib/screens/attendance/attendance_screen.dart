@@ -1,3 +1,4 @@
+import 'package:attendance_app/models/courses/course_model.dart';
 import 'package:flutter/material.dart';
 
 import 'package:attendance_app/containers/attendance/attendance_container.dart';
@@ -8,10 +9,13 @@ class AttendanceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AttendanceLayout(
+    final CourseModel course =
+        ModalRoute.of(context)!.settings.arguments as CourseModel;
+
+    return AttendanceLayout(
       bottomText: "Course",
       topBarText: "Attendance",
-      child: AttendanceContainer(),
+      child: AttendanceContainer(course: course),
     );
   }
 }
