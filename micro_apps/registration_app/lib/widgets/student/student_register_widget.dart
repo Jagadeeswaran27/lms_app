@@ -3,9 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:registration_app/providers/auth_provider.dart';
 
 import 'package:registration_app/resources/strings.dart';
-import 'package:registration_app/routes/student_routes.dart';
 import 'package:registration_app/themes/colors.dart';
-import 'package:registration_app/utils/widgets/show_success_modal.dart';
 import 'package:registration_app/widgets/common/batch_offered_card.dart';
 import 'package:registration_app/widgets/common/form_input.dart';
 import 'package:registration_app/widgets/common/icon_text_button.dart';
@@ -13,7 +11,12 @@ import 'package:registration_app/widgets/common/radio_button.dart';
 import 'package:registration_app/resources/icons.dart' as icons;
 
 class StudentRegisterWidget extends StatefulWidget {
-  const StudentRegisterWidget({super.key});
+  final Function(String, String, String, String) registerStudent;
+
+  const StudentRegisterWidget({
+    super.key,
+    required this.registerStudent,
+  });
 
   @override
   State<StudentRegisterWidget> createState() => _StudentRegisterWidgetState();
@@ -30,9 +33,7 @@ class _StudentRegisterWidgetState extends State<StudentRegisterWidget> {
     if (formKey.currentState!.validate()) {
       formKey.currentState?.save();
     }
-    // showSuccessModal(context, Strings.verifiedText2, () {
-    //   Navigator.of(context).pushNamed(StudentRoutes.enrollment);
-    // }, null);
+    widget.registerStudent(_email, _userName, _mobileNumber, selectedOption!);
   }
 
   @override

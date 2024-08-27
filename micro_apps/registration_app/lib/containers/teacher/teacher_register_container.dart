@@ -27,8 +27,7 @@ class TeacherRegisterContainer extends StatefulWidget {
 
 class _TeacherRegisterContainerState extends State<TeacherRegisterContainer> {
   bool isLoading = false;
-  final TeacherRegistrationService _teacherRegistrationService =
-      TeacherRegistrationService();
+  final RegistrationService _registrationService = RegistrationService();
 
   Future<void> registerCourseForTeacher(
     String batchDay,
@@ -38,7 +37,7 @@ class _TeacherRegisterContainerState extends State<TeacherRegisterContainer> {
       isLoading = true;
     });
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final registrationId = await _teacherRegistrationService.registerTeacher(
+    final registrationId = await _registrationService.registerTeacher(
       course: widget.course,
       selectedBatchDay: widget.selectedBatchDay,
       selectedBatchTime: widget.selectedBatchTime,
