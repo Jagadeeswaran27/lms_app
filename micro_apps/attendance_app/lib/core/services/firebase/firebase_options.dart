@@ -26,10 +26,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -54,9 +51,20 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAd1AIJkDOZYK_XaOKfTCLhMMaaOoeOgMs',
-    appId: '1:400364342771:android:e140cff381de41d6135686',
+    appId: '1:400364342771:android:b6ea7331c7e28789135686',
     messagingSenderId: '400364342771',
     projectId: 'ultrasonic-clinic',
     storageBucket: 'ultrasonic-clinic.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyDg7abaiHghYTHyV9ElCcdkRj-0DKdA68Y',
+    appId: '1:400364342771:ios:d4dc6658bf280f80135686',
+    messagingSenderId: '400364342771',
+    projectId: 'ultrasonic-clinic',
+    storageBucket: 'ultrasonic-clinic.appspot.com',
+    androidClientId: '400364342771-3m908fk37243b36jf3n7angchjqr66uv.apps.googleusercontent.com',
+    iosClientId: '400364342771-1vm7568gd7ojjeukinc796fi6ib9b3ho.apps.googleusercontent.com',
+    iosBundleId: 'com.lms.attendance.app',
   );
 }
