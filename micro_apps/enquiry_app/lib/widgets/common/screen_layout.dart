@@ -12,6 +12,7 @@ class ScreenLayout extends StatelessWidget {
     this.icon,
     this.onIconTap,
     this.showBackButton = true,
+    this.showBottomBar = true,
   });
 
   final Widget child;
@@ -20,12 +21,13 @@ class ScreenLayout extends StatelessWidget {
   final Widget? icon;
   final void Function()? onIconTap;
   final bool? showBackButton;
+  final bool showBottomBar;
 
   @override
   Widget build(BuildContext context) {
     // Detect the height of the keyboard
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-    final topInset = MediaQuery.of(context).viewPadding.top;
+    final topInset = MediaQuery.of(context).viewPadding.top + 20;
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -84,26 +86,27 @@ class ScreenLayout extends StatelessWidget {
           // Main content area
           Expanded(child: child),
           // Bottom container
-          Visibility(
-            visible: bottomInset == 0,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: ThemeColors.primary,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  topRight: Radius.circular(20.0),
+          if (showBottomBar)
+            Visibility(
+              visible: bottomInset == 0,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: ThemeColors.primary,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
+                  ),
                 ),
-              ),
-              child: Center(
-                child: Text(
-                  bottomText ?? '',
-                  style: Theme.of(context).textTheme.titleLarge,
+                child: Center(
+                  child: Text(
+                    bottomText ?? '',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );
