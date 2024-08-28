@@ -9,4 +9,5 @@ class Icons {
   static const String enquiry = 'assets/icon/enquiry.svg';
   static const String closeRed = 'assets/icon/close_red.svg';
   static const String addFile = 'assets/icon/add_file.svg';
+  static const String resolve = 'assets/icon/resolve.svg';
 }

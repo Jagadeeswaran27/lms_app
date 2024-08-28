@@ -49,7 +49,7 @@ class _EnquiryReceptionContainerState extends State<EnquiryReceptionContainer> {
   ) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     String userId = authProvider.currentUser!.uid;
-    String instituteId = authProvider.currentUser!.institute[0];
+    String instituteId = '1234';
 
     final response = await _enquiryService.createEnquiry(
       issue,

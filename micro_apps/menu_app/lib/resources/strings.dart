@@ -85,4 +85,19 @@ class Strings {
   static const String invalidShortDescription = 'Invalid short description';
   static const String invalidAboutDescription = 'Invalid about description';
   static const String invalidAmountDetails = 'Invalid amount details';
+  static const String ticketNo = 'Ticket no : ';
+  static const String myTicket = 'My Ticket';
+  static const String facingIssue = 'Facing issue : ';
+  static const String describedIssue = 'Described issue : ';
+  static const String view = 'View';
+  static const String acknowledged = 'Acknowledged';
+  static const String toAcknowledge = 'To Acknowledge';
+  static const String resolved = 'Resolved';
+  static const String toResolve = 'To Resolve';
+  static const String url =
+      'https://media.istockphoto.com/id/1399611777/photo/portrait-of-a-smiling-little-brown-haired-boy-looking-at-the-camera-happy-kid-with-good.jpg?s=612x612&w=0&k=20&c=qZ63xODwrnc81wKK0dwc3tOEf2lghkQQKmotbF11q7Q=';
+  static const String subject = 'Subject : ';
+  static const String file = 'File';
+  static const String status = 'Status : ';
+  static const String resolve = 'Resolve';
 }

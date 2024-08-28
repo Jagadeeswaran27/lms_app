@@ -62,47 +62,49 @@ class IconTextButton extends StatelessWidget {
               horizontal: iconHorizontalPadding,
             ),
             alignment: Alignment.center,
-            child: isLoading == true
-                ? Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        color: ThemeColors.white,
-                        strokeWidth: 2,
-                      ),
-                    ),
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Text(
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: (isLoading != null && isLoading == true)
+                      ? Center(
+                          child: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: CircularProgressIndicator(
+                            color: ThemeColors.white,
+                          ),
+                        ))
+                      : Text(
                           text,
                           textAlign: TextAlign.center,
                           style: buttonTextStyle ??
                               Theme.of(context).textTheme.bodyMedium,
                         ),
-                      ),
-                      if (icon != null || svgIcon != null)
-                        CircleAvatar(
-                          radius: radius,
-                          backgroundColor: ThemeColors.white,
-                          child: icon != null
-                              ? Icon(
-                                  icon,
-                                  color: iconColor,
-                                  size: 20,
-                                )
-                              : SVGLoader(
-                                  image: svgIcon!,
-                                  width: 25,
-                                  height: 25,
-                                ),
-                        ),
-                    ],
+                ),
+                if (icon != null || svgIcon != null)
+                  Positioned(
+                    top: 0,
+                    bottom: 0,
+                    right: 0,
+                    child: CircleAvatar(
+                      radius: radius,
+                      backgroundColor: ThemeColors.white,
+                      child: icon != null
+                          ? Icon(
+                              icon,
+                              color: iconColor,
+                              size: 20,
+                            )
+                          : SVGLoader(
+                              image: svgIcon!,
+                              width: 20,
+                              height: 20,
+                            ),
+                    ),
                   ),
+              ],
+            ),
           ),
         ),
       ),

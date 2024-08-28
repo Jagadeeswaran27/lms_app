@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:enquiry_app/core/services/firebase/firebase_storage_service.dart';
-import 'package:enquiry_app/models/enquiry/enquiry_model.dart';
-import 'package:enquiry_app/utils/logger/logger.dart';
+import 'package:menu_app/core/services/firebase/firebase_storage_service.dart';
+import 'package:menu_app/models/enquiry/enquiry_model.dart';
+import 'package:menu_app/utils/logger/logger.dart';
 
 class EnquiryService {
   EnquiryService._privateConstructor();
@@ -82,7 +82,7 @@ class EnquiryService {
     }
   }
 
-  Future<List<EnquiryModel>> getMyEnquiries(
+  Future<List<EnquiryModel>> getEnquiries(
     String userId,
     String instId,
   ) async {
@@ -99,7 +99,7 @@ class EnquiryService {
           .collection('institutes')
           .doc(instituteId)
           .collection('enquiries')
-          .where('userId', isEqualTo: userId)
+          .where("status", isNotEqualTo: "resolved")
           .get();
 
       // Convert each document to EnquiryModel and return as a list

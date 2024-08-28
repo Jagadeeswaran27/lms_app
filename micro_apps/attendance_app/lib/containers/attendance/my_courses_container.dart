@@ -26,7 +26,7 @@ class _MyCoursesContainerState extends State<MyCoursesContainer> {
   Future<void> _fetchCourses() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     String userId = authProvider.currentUser!.uid;
-    String instituteId = authProvider.currentUser!.institute[0];
+    String instituteId = '12345';
     List<CourseModel> fetchedCourses =
         await attendanceService.getCourses(userId, instituteId);
     setState(() {

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:menu_app/models/courses/course_model.dart';
 
+import 'package:menu_app/models/courses/course_model.dart';
 import 'package:menu_app/resources/icons.dart' as icons;
 import 'package:menu_app/resources/strings.dart';
+import 'package:menu_app/routes/admin_routes.dart';
 import 'package:menu_app/screens/admin/add_item_screen.dart';
 import 'package:menu_app/screens/common/course_detail_screen.dart';
 import 'package:menu_app/themes/colors.dart';
@@ -48,13 +49,15 @@ class ItemListWidget extends StatelessWidget {
           Align(
             alignment: Alignment.centerRight,
             child: SizedBox(
-              width: screenSize.width * 0.55,
+              width: screenSize.width * 0.7,
               height: 50,
               child: IconTextButton(
-                iconHorizontalPadding: 7,
+                iconHorizontalPadding: 5,
                 radius: 20,
                 text: Strings.receptionEnquiry,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed(AdminRoutes.receptionEnquiry);
+                },
                 color: ThemeColors.primary,
                 buttonTextStyle: Theme.of(context).textTheme.bodyMedium,
                 svgIcon: icons.Icons.enquiry,
