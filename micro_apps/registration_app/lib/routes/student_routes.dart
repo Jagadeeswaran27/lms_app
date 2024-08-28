@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:registration_app/screens/student/cart_screen.dart';
+import 'package:registration_app/screens/student/kid_registration_screen.dart';
 import 'package:registration_app/screens/student/student_enrollment_screen.dart';
 import 'package:registration_app/screens/student/student_item_detail_screen.dart';
 import 'package:registration_app/screens/student/student_item_list_screen.dart';
@@ -14,6 +15,7 @@ class StudentRoutes {
   static const String cart = '/cart';
   static const String register = '/register';
   static const String enrollment = '/enrollment';
+  static const String kidRegistration = '/kid-registration';
 
   static Map<String, WidgetBuilder> get buildStudentRoutes {
     return {
@@ -22,6 +24,7 @@ class StudentRoutes {
       cart: (context) => const CartScreen(),
       register: (context) => const StudentRegisterScreen(),
       enrollment: (context) => const StudentEnrollmentScreen(),
+      kidRegistration: (context) => const KidRegistrationScreen(),
     };
   }
 

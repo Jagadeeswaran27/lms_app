@@ -336,4 +336,19 @@ class AuthProvider with ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> isEmailAlreadyRegistered(String email) async {
+    try {
+      final QuerySnapshot result = await FirebaseFirestore.instance
+          .collection('lms-users')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
+
+      return result.docs.isNotEmpty;
+    } catch (e) {
+      log.e('Error checking email existence: $e');
+      return true;
+    }
+  }
 }

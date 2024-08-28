@@ -37,15 +37,15 @@ class _StudentRegisterWidgetState extends State<StudentRegisterWidget> {
   void _handleRegister() {
     if (formKey.currentState!.validate()) {
       formKey.currentState?.save();
+      widget.registerStudent(
+        _email,
+        _userName,
+        _mobileNumber,
+        selectedOption!,
+        batchDay,
+        batchTime,
+      );
     }
-    widget.registerStudent(
-      _email,
-      _userName,
-      _mobileNumber,
-      selectedOption!,
-      batchDay,
-      batchTime,
-    );
   }
 
   @override

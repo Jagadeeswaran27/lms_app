@@ -58,6 +58,16 @@ class _StudentRegisterContainerState extends State<StudentRegisterContainer> {
       setState(() {
         isLoading = false;
       });
+    } else if (selectedOption == 'For kid') {
+      Navigator.of(context)
+          .pushNamed(StudentRoutes.kidRegistration, arguments: {
+        'courses': authProvider.cart,
+        'batchDay': batchDay,
+        'batchTime': batchTime,
+        'email': email,
+        'userName': userName,
+        'mobileNumber': mobileNumber,
+      });
     }
   }
 
