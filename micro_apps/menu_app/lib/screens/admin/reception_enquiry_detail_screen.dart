@@ -6,25 +6,16 @@ import 'package:menu_app/widgets/admin/reception_enquiry_detail_widget.dart';
 import 'package:menu_app/widgets/menu/menu_layout.dart';
 
 class ReceptionEnquiryDetailScreen extends StatelessWidget {
-  const ReceptionEnquiryDetailScreen({
-    super.key,
-  });
+  const ReceptionEnquiryDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final enquiry = ModalRoute.of(context)!.settings.arguments as EnquiryModel;
+
     return MenuLayout(
       topBarText: Strings.receptionEnquiry,
       child: ReceptionEnquiryDetailWidget(
-        enquiry: EnquiryModel(
-          description: 'saguwdg',
-          enquiryId: '123',
-          issue: 'fdsewfwe',
-          priority: 'low',
-          status: 'acknowledged',
-          subject: 'English',
-          type: 'Reception',
-          userId: '123',
-        ),
+        enquiry: enquiry,
       ),
     );
   }

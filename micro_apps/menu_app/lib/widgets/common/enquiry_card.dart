@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:menu_app/models/enquiry/enquiry_model.dart';
 
 import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/themes/colors.dart';
@@ -7,16 +8,12 @@ import 'package:menu_app/themes/fonts.dart';
 class EnquiryCard extends StatelessWidget {
   const EnquiryCard({
     super.key,
-    required this.ticketNo,
-    required this.subject,
+    required this.enquiry,
     required this.onTap,
-    this.imageUrl,
   });
 
-  final String ticketNo;
-  final String subject;
+  final EnquiryModel enquiry;
   final void Function() onTap;
-  final String? imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +44,7 @@ class EnquiryCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(50.0),
               child: Image.network(
-                imageUrl ?? Strings.url,
+                enquiry.fileUrl ?? Strings.url,
                 width: 80,
                 height: 80,
                 fit: BoxFit.cover,
@@ -59,7 +56,7 @@ class EnquiryCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "XXXXXX",
+                  enquiry.enquiryId,
                   style:
                       Theme.of(context).textTheme.bodyMediumTitleBrownSemiBold,
                 ),
@@ -75,7 +72,7 @@ class EnquiryCard extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleSmallTitleBrown,
                     ),
                     Text(
-                      ticketNo,
+                      enquiry.enquiryId,
                       style: Theme.of(context)
                           .textTheme
                           .displaySmallPrimarySemiBold,

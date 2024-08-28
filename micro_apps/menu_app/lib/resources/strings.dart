@@ -100,4 +100,5 @@ class Strings {
   static const String file = 'File';
   static const String status = 'Status : ';
   static const String resolve = 'Resolve';
+  static const String noEnquiriesFound = 'No enquiries found';
 }

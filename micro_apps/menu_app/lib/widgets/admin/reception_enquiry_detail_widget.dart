@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:menu_app/core/services/enquiry/enquiry_service.dart';
 
 import 'package:menu_app/models/enquiry/enquiry_model.dart';
 import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
+import 'package:menu_app/utils/show_snackbar.dart';
 import 'package:menu_app/widgets/common/choose_file_button.dart';
 import 'package:menu_app/widgets/common/enquiry_reception_title_card.dart';
 import 'package:menu_app/widgets/common/form_input.dart';
@@ -12,7 +14,7 @@ import 'package:menu_app/widgets/common/icon_text_button.dart';
 import 'package:menu_app/widgets/common/status_progress_indicator.dart';
 import 'package:menu_app/resources/icons.dart' as icons;
 
-class ReceptionEnquiryDetailWidget extends StatelessWidget {
+class ReceptionEnquiryDetailWidget extends StatefulWidget {
   const ReceptionEnquiryDetailWidget({
     super.key,
     required this.enquiry,
@@ -21,17 +23,44 @@ class ReceptionEnquiryDetailWidget extends StatelessWidget {
   final EnquiryModel enquiry;
 
   @override
+  State<ReceptionEnquiryDetailWidget> createState() =>
+      _ReceptionEnquiryDetailWidgetState();
+}
+
+class _ReceptionEnquiryDetailWidgetState
+    extends State<ReceptionEnquiryDetailWidget> {
+  @override
   Widget build(BuildContext context) {
-    final isAcknowledged = enquiry.status == 'acknowledged';
-    final isResolved = enquiry.status == 'resolved';
+    final enquiryService = EnquiryService();
+    bool _isLoading = false;
+    final isAcknowledged = widget.enquiry.status == 'acknowledged';
+    final isResolved = widget.enquiry.status == 'resolved';
     final Size screenSize = MediaQuery.of(context).size;
+
+    void onResolveEnquiry() async {
+      setState(() {
+        _isLoading = true;
+      });
+      final status =
+          await enquiryService.resolveEnquiry(widget.enquiry.enquiryId);
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (status) {
+        showSnackbar(context, 'Enquiry resolved successfully');
+        Navigator.of(context).pop();
+      } else {
+        showSnackbar(context, 'Failed to resolve enquiry');
+      }
+    }
 
     return Column(
       children: [
         EnquiryReceptionTitleCard(
-          name: enquiry.enquiryId,
+          name: widget.enquiry.enquiryId,
           isTicket: true,
-          priority: enquiry.priority,
+          priority: widget.enquiry.priority,
         ),
         Expanded(
           child: SizedBox(
@@ -52,7 +81,7 @@ class ReceptionEnquiryDetailWidget extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        enquiry.issue,
+                        widget.enquiry.issue,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
@@ -70,7 +99,7 @@ class ReceptionEnquiryDetailWidget extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        enquiry.subject,
+                        widget.enquiry.subject,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
@@ -88,7 +117,7 @@ class ReceptionEnquiryDetailWidget extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        enquiry.description,
+                        widget.enquiry.description,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
@@ -106,11 +135,11 @@ class ReceptionEnquiryDetailWidget extends StatelessWidget {
                         width: 70,
                         child: ChooseFileButton(
                           onTap: () {
-                            enquiry.fileUrl != null
+                            widget.enquiry.fileUrl != null
                                 ? Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (ctx) => FullScreenImageViewer(
-                                        imageUrl: enquiry.fileUrl!,
+                                        imageUrl: widget.enquiry.fileUrl!,
                                       ),
                                     ),
                                   )
@@ -121,7 +150,7 @@ class ReceptionEnquiryDetailWidget extends StatelessWidget {
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        enquiry.fileUrl != null ? '1 file' : 'no file',
+                        widget.enquiry.fileUrl != null ? '1 file' : 'no file',
                         style: Theme.of(context).textTheme.titleSmall,
                       )
                     ],
@@ -132,11 +161,12 @@ class ReceptionEnquiryDetailWidget extends StatelessWidget {
                     width: screenSize.width * 0.7,
                     child: IconTextButton(
                       text: Strings.resolve,
-                      onPressed: () {},
+                      onPressed: onResolveEnquiry,
                       color: ThemeColors.primary,
                       iconHorizontalPadding: 5,
                       svgIcon: icons.Icons.resolve,
                       iconColor: ThemeColors.white,
+                      isLoading: _isLoading,
                     ),
                   ),
                   const SizedBox(height: 30),

@@ -21,96 +21,57 @@ class EnquiryService {
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<String?> createEnquiry(
-    String issue,
-    String subject,
-    String description,
-    String priority,
-    String userId,
-    String instId,
-    String type,
-    File? file,
-  ) async {
+  Stream<List<EnquiryModel>> getEnquiries(String userId) async* {
     try {
-      QuerySnapshot snapshot = await _firestore
-          .collection('institutes')
-          .limit(1) // Limit the query to get only the first document
-          .get();
+      // Get the first institute document
+      QuerySnapshot snapshot =
+          await _firestore.collection('institutes').limit(1).get();
 
       String instituteId = snapshot.docs.first.id;
 
-      String enquiryId = _firestore
+      // Create a stream of enquiries
+      Stream<QuerySnapshot> enquiriesStream = _firestore
           .collection('institutes')
-          .doc(snapshot.docs.first.id)
+          .doc(instituteId)
           .collection('enquiries')
-          .doc()
-          .id;
+          .where("status", isNotEqualTo: "resolved")
+          .snapshots();
 
-      String? imageUrl;
+      // Yield enquiries as they come in
+      await for (QuerySnapshot querySnapshot in enquiriesStream) {
+        List<EnquiryModel> enquiries = querySnapshot.docs.map((doc) {
+          return EnquiryModel.fromJson(doc.data() as Map<String, dynamic>);
+        }).toList();
 
-      if (file != null) {
-        imageUrl = await _firebaseStorage.uploadFile(
-            file, 'institutes/$instituteId/enquiries/', enquiryId);
+        yield enquiries;
       }
+    } catch (e) {
+      log.e('Error fetching user enquiries: $e');
+      yield [];
+    }
+  }
 
-      EnquiryModel enquiryModel = EnquiryModel(
-        description: description,
-        status: 'created',
-        enquiryId: enquiryId,
-        issue: issue,
-        priority: priority,
-        subject: subject,
-        type: type,
-        userId: userId,
-        fileUrl: imageUrl,
-      );
+  Future<bool> resolveEnquiry(String enquiryId) async {
+    try {
+      // Get the first institute document
+      QuerySnapshot snapshot =
+          await _firestore.collection('institutes').limit(1).get();
 
+      String instituteId = snapshot.docs.first.id;
+
+      // Update the enquiry status to "resolved"
       await _firestore
           .collection('institutes')
           .doc(instituteId)
           .collection('enquiries')
           .doc(enquiryId)
-          .set(
-        {
-          ...enquiryModel.toJson(),
-        },
-      );
-      return enquiryId;
+          .update({'status': 'resolved'});
+
+      log.i('Enquiry $enquiryId resolved successfully');
+      return true;
     } catch (e) {
-      log.e('Error creating ticket: $e');
-      return null;
-    }
-  }
-
-  Future<List<EnquiryModel>> getEnquiries(
-    String userId,
-    String instId,
-  ) async {
-    try {
-      QuerySnapshot snapshot = await _firestore
-          .collection('institutes')
-          .limit(1) // Limit the query to get only the first document
-          .get();
-
-      String instituteId = snapshot.docs.first.id;
-
-      // Query Firestore for enquiries with the matching userId
-      QuerySnapshot querySnapshot = await _firestore
-          .collection('institutes')
-          .doc(instituteId)
-          .collection('enquiries')
-          .where("status", isNotEqualTo: "resolved")
-          .get();
-
-      // Convert each document to EnquiryModel and return as a list
-      List<EnquiryModel> enquiries = querySnapshot.docs.map((doc) {
-        return EnquiryModel.fromJson(doc.data() as Map<String, dynamic>);
-      }).toList();
-
-      return enquiries;
-    } catch (e) {
-      log.e('Error fetching user enquiries: $e');
-      return [];
+      log.e('Error resolving enquiry: $e');
+      return false;
     }
   }
 }

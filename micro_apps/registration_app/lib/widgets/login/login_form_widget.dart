@@ -105,6 +105,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               child: CustomElevatedButton(
                 text: Strings.login,
                 buttonSize: ButtonSize.large,
+                isLoading: widget.isLoading,
                 onPressed: _handleSignIn,
               ),
             ),
