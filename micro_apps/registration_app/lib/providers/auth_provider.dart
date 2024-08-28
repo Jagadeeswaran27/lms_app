@@ -46,6 +46,11 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateRegisteredCoursesList(List<String> courseIds) {
+    _currentUser!.registeredCourses.addAll(courseIds);
+    notifyListeners();
+  }
+
   void addToCart(CourseModel course) {
     _cart.add(course);
     notifyListeners();

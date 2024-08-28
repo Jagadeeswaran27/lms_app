@@ -7,6 +7,11 @@ class StudentRegistrationModel {
   final String paymentStatus;
   final String imageUrl;
   final String registeredFor;
+  final String batchDay;
+  final String batchTime;
+  final String email;
+  final String userName;
+  final String mobileNumber;
 
   StudentRegistrationModel({
     required this.courseName,
@@ -17,6 +22,11 @@ class StudentRegistrationModel {
     required this.paymentStatus,
     required this.imageUrl,
     required this.registeredFor,
+    required this.batchDay,
+    required this.batchTime,
+    required this.email,
+    required this.userName,
+    required this.mobileNumber,
   });
 
   factory StudentRegistrationModel.fromJson(Map<String, dynamic> json) {
@@ -29,6 +39,11 @@ class StudentRegistrationModel {
       paymentStatus: json['paymentStatus'] as String,
       imageUrl: json['imageUrl'] as String,
       registeredFor: json['registeredFor'] as String,
+      batchDay: json['batchDay'] as String,
+      batchTime: json['batchTime'] as String,
+      email: json['email'] as String,
+      userName: json['userName'] as String,
+      mobileNumber: json['mobileNumber'] as String,
     );
   }
 
@@ -42,6 +57,11 @@ class StudentRegistrationModel {
       'paymentStatus': paymentStatus,
       'imageUrl': imageUrl,
       'registeredFor': registeredFor,
+      'batchDay': batchDay,
+      'batchTime': batchTime,
+      'email': email,
+      'userName': userName,
+      'mobileNumber': mobileNumber,
     };
   }
 
@@ -57,7 +77,12 @@ class StudentRegistrationModel {
           status == other.status &&
           paymentStatus == other.paymentStatus &&
           imageUrl == other.imageUrl &&
-          registeredFor == other.registeredFor;
+          registeredFor == other.registeredFor &&
+          batchDay == other.batchDay &&
+          batchTime == other.batchTime &&
+          email == other.email &&
+          userName == other.userName &&
+          mobileNumber == other.mobileNumber;
 
   @override
   int get hashCode => Object.hash(
@@ -69,6 +94,11 @@ class StudentRegistrationModel {
         paymentStatus,
         imageUrl,
         registeredFor,
+        batchDay,
+        batchTime,
+        email,
+        userName,
+        mobileNumber,
       );
 
   StudentRegistrationModel copyWith({
@@ -80,6 +110,11 @@ class StudentRegistrationModel {
     String? paymentStatus,
     String? imageUrl,
     String? registeredFor,
+    String? batchDay,
+    String? batchTime,
+    String? email,
+    String? userName,
+    String? mobileNumber,
   }) {
     return StudentRegistrationModel(
       courseName: courseName ?? this.courseName,
@@ -90,6 +125,11 @@ class StudentRegistrationModel {
       paymentStatus: paymentStatus ?? this.paymentStatus,
       imageUrl: imageUrl ?? this.imageUrl,
       registeredFor: registeredFor ?? this.registeredFor,
+      batchDay: batchDay ?? this.batchDay,
+      batchTime: batchTime ?? this.batchTime,
+      email: email ?? this.email,
+      userName: userName ?? this.userName,
+      mobileNumber: mobileNumber ?? this.mobileNumber,
     );
   }
 }

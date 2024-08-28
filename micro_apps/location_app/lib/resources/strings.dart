@@ -145,4 +145,5 @@ class Strings {
   static const String saveLocation = 'Save Location';
   static const String centerName = 'Center Name : ';
   static const String yourLocationSaved = 'Your Location Saved';
+  static const String institute = 'Institute';
 }

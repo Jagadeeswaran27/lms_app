@@ -13,4 +13,9 @@ final List<RoleModel> userRoles = [
     roleName: Strings.teacher,
     roleConstant: UserRoleEnum.teacher.roleName,
   ),
+  RoleModel(
+    roleId: 3,
+    roleName: Strings.institute,
+    roleConstant: UserRoleEnum.institute.roleName,
+  ),
 ];

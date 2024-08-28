@@ -9,9 +9,17 @@ class StudentEnrollmentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ScreenLayout(
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final registrationIds = args['registrationIds'];
+    final courses = args['courses'];
+
+    return ScreenLayout(
       topBarText: Strings.enrollmentInitiated,
-      child: StudentEnrollmentContainer(),
+      child: StudentEnrollmentContainer(
+        registrationIds: registrationIds,
+        courses: courses,
+      ),
     );
   }
 }

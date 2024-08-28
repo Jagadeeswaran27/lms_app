@@ -11,11 +11,14 @@ import 'package:registration_app/widgets/common/radio_button.dart';
 import 'package:registration_app/resources/icons.dart' as icons;
 
 class StudentRegisterWidget extends StatefulWidget {
-  final Function(String, String, String, String) registerStudent;
+  final bool isLoading;
+  final Function(String, String, String, String, String, String)
+      registerStudent;
 
   const StudentRegisterWidget({
     super.key,
     required this.registerStudent,
+    required this.isLoading,
   });
 
   @override
@@ -28,12 +31,21 @@ class _StudentRegisterWidgetState extends State<StudentRegisterWidget> {
   String _userName = '';
   String _mobileNumber = '';
   String? selectedOption = 'Self';
+  String batchDay = 'Weekend';
+  String batchTime = 'Morning';
 
   void _handleRegister() {
     if (formKey.currentState!.validate()) {
       formKey.currentState?.save();
     }
-    widget.registerStudent(_email, _userName, _mobileNumber, selectedOption!);
+    widget.registerStudent(
+      _email,
+      _userName,
+      _mobileNumber,
+      selectedOption!,
+      batchDay,
+      batchTime,
+    );
   }
 
   @override
@@ -41,6 +53,18 @@ class _StudentRegisterWidgetState extends State<StudentRegisterWidget> {
     final Size screenSize = MediaQuery.of(context).size;
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final courses = authProvider.cart;
+
+    void onBatchDayChanged(String value) {
+      setState(() {
+        batchDay = value;
+      });
+    }
+
+    void onBatchTimeChanged(String value) {
+      setState(() {
+        batchTime = value;
+      });
+    }
 
     return SingleChildScrollView(
       child: Container(
@@ -97,10 +121,10 @@ class _StudentRegisterWidgetState extends State<StudentRegisterWidget> {
                 ),
               ),
               BatchOfferedCard(
-                selectedBatchDay: 'Weekend',
-                selectedBatchTime: 'Morning',
-                onBatchDayChanged: (value) {},
-                onBatchTimeChanged: (value) {},
+                selectedBatchDay: batchDay,
+                selectedBatchTime: batchTime,
+                onBatchDayChanged: onBatchDayChanged,
+                onBatchTimeChanged: onBatchTimeChanged,
               ),
               const SizedBox(height: 20),
               Row(
@@ -132,6 +156,7 @@ class _StudentRegisterWidgetState extends State<StudentRegisterWidget> {
                 width: screenSize.width * 0.7,
                 height: 50,
                 child: IconTextButton(
+                  isLoading: widget.isLoading,
                   iconHorizontalPadding: 7,
                   radius: 20,
                   text: Strings.register,
