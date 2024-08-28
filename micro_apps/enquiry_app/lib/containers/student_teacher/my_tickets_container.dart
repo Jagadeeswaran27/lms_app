@@ -1,3 +1,4 @@
+import 'package:enquiry_app/themes/fonts.dart';
 import 'package:flutter/material.dart';
 
 import 'package:enquiry_app/core/services/enquiry/enquiry_service.dart';
@@ -45,6 +46,15 @@ class _MyTicketsContainerState extends State<MyTicketsContainer> {
     if (_isLoading) {
       return const Center(
         child: CircularProgressIndicator(),
+      );
+    }
+
+    if (_myEnquiries.isEmpty) {
+      return Center(
+        child: Text(
+          "No tickets",
+          style: Theme.of(context).textTheme.bodyMediumPrimary,
+        ),
       );
     }
 

@@ -1,5 +1,6 @@
 import 'package:attendance_app/core/services/attendance/attendance_service.dart';
 import 'package:attendance_app/providers/auth_provider.dart';
+import 'package:attendance_app/themes/fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance_app/models/courses/course_model.dart';
 import 'package:attendance_app/widgets/attendance/my_courses_widget.dart';
@@ -37,6 +38,14 @@ class _MyCoursesContainerState extends State<MyCoursesContainer> {
 
   @override
   Widget build(BuildContext context) {
+    if (myCourses.isEmpty) {
+      return Center(
+        child: Text(
+          "Buy Some Courses",
+          style: Theme.of(context).textTheme.bodyMediumPrimary,
+        ),
+      );
+    }
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(),

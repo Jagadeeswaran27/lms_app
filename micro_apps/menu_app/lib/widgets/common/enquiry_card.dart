@@ -21,7 +21,7 @@ class EnquiryCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10),
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
         decoration: BoxDecoration(
           color: ThemeColors.cardColor,
           borderRadius: BorderRadius.circular(8.0),
@@ -57,6 +57,7 @@ class EnquiryCard extends StatelessWidget {
               children: [
                 Text(
                   enquiry.enquiryId,
+                  overflow: TextOverflow.ellipsis,
                   style:
                       Theme.of(context).textTheme.bodyMediumTitleBrownSemiBold,
                 ),
