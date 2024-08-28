@@ -20,7 +20,7 @@ class RegistrationListWidget extends StatelessWidget {
           Row(
             children: [
               Text(
-                '${Strings.student} : ',
+                Strings.student,
                 style: Theme.of(context).textTheme.titleLargePrimary.copyWith(
                       fontSize: 20,
                     ),
@@ -40,7 +40,7 @@ class RegistrationListWidget extends StatelessWidget {
           Row(
             children: [
               Text(
-                '${Strings.teacher} : ',
+                Strings.teacher,
                 style: Theme.of(context).textTheme.titleLargePrimary.copyWith(
                       fontSize: 20,
                     ),

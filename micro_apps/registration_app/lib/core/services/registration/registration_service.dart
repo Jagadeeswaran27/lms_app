@@ -11,6 +11,7 @@ class RegistrationService {
     required String selectedBatchDay,
     required String selectedBatchTime,
     required String registeredBy,
+    required String userName,
   }) async {
     try {
       // Get the first institute ID
@@ -40,6 +41,7 @@ class RegistrationService {
         paymentStatus: 'Unpaid',
         imageUrl: course.imageUrl,
         registeredFor: 'self',
+        userName: userName,
       );
 
       // Store the registration in Firestore
@@ -204,6 +206,46 @@ class RegistrationService {
     } catch (e) {
       print('Error registering student: $e');
       throw Exception('Failed to register student');
+    }
+  }
+
+  Future<List<StudentRegistrationModel>> getStudentRegistrationList() async {
+    try {
+      final QuerySnapshot instituteSnapshot =
+          await _firestore.collection('institutes').limit(1).get();
+      final String instituteId = instituteSnapshot.docs.first.id;
+      final QuerySnapshot snapshot = await _firestore
+          .collection('institutes')
+          .doc(instituteId)
+          .collection('students-registrations')
+          .get();
+      return snapshot.docs
+          .map((doc) => StudentRegistrationModel.fromJson(
+              doc.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print('Error fetching student registration list: $e');
+      throw Exception('Failed to fetch student registration list');
+    }
+  }
+
+  Future<List<TeacherRegistrationModel>> getTeacherRegistrationList() async {
+    try {
+      final QuerySnapshot instituteSnapshot =
+          await _firestore.collection('institutes').limit(1).get();
+      final String instituteId = instituteSnapshot.docs.first.id;
+      final QuerySnapshot snapshot = await _firestore
+          .collection('institutes')
+          .doc(instituteId)
+          .collection('teachers-registrations')
+          .get();
+      return snapshot.docs
+          .map((doc) => TeacherRegistrationModel.fromJson(
+              doc.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print('Error fetching teacher registration list: $e');
+      throw Exception('Failed to fetch teacher registration list');
     }
   }
 }

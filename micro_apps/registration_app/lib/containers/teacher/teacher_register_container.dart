@@ -42,6 +42,7 @@ class _TeacherRegisterContainerState extends State<TeacherRegisterContainer> {
       selectedBatchDay: widget.selectedBatchDay,
       selectedBatchTime: widget.selectedBatchTime,
       registeredBy: authProvider.currentUser!.uid,
+      userName: authProvider.currentUser!.name,
     );
     if (registrationId.isNotEmpty) {
       authProvider.updateRegisteredCourses(widget.course.courseId);

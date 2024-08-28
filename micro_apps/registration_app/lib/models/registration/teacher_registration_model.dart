@@ -7,6 +7,7 @@ class TeacherRegistrationModel {
   final String paymentStatus;
   final String imageUrl;
   final String registeredFor;
+  final String userName;
 
   TeacherRegistrationModel({
     required this.courseName,
@@ -17,6 +18,7 @@ class TeacherRegistrationModel {
     required this.paymentStatus,
     required this.imageUrl,
     required this.registeredFor,
+    required this.userName,
   });
 
   factory TeacherRegistrationModel.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,7 @@ class TeacherRegistrationModel {
       paymentStatus: json['paymentStatus'] as String,
       imageUrl: json['imageUrl'] as String,
       registeredFor: json['registeredFor'] as String,
+      userName: json['userName'] as String,
     );
   }
 
@@ -42,6 +45,7 @@ class TeacherRegistrationModel {
       'paymentStatus': paymentStatus,
       'imageUrl': imageUrl,
       'registeredFor': registeredFor,
+      'userName': userName,
     };
   }
 
@@ -57,7 +61,8 @@ class TeacherRegistrationModel {
           status == other.status &&
           paymentStatus == other.paymentStatus &&
           imageUrl == other.imageUrl &&
-          registeredFor == other.registeredFor;
+          registeredFor == other.registeredFor &&
+          userName == other.userName;
 
   @override
   int get hashCode => Object.hash(
@@ -80,6 +85,7 @@ class TeacherRegistrationModel {
     String? paymentStatus,
     String? imageUrl,
     String? registeredFor,
+    String? userName,
   }) {
     return TeacherRegistrationModel(
       courseName: courseName ?? this.courseName,
@@ -90,6 +96,7 @@ class TeacherRegistrationModel {
       paymentStatus: paymentStatus ?? this.paymentStatus,
       imageUrl: imageUrl ?? this.imageUrl,
       registeredFor: registeredFor ?? this.registeredFor,
+      userName: userName ?? this.userName,
     );
   }
 }
