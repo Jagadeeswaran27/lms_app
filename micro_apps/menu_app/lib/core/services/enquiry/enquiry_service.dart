@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:menu_app/core/services/firebase/firebase_storage_service.dart';
 import 'package:menu_app/models/enquiry/enquiry_model.dart';
 import 'package:menu_app/utils/logger/logger.dart';
 
@@ -11,8 +8,6 @@ class EnquiryService {
 
   // Static instance of the class
   static final EnquiryService _instance = EnquiryService._privateConstructor();
-  static final FirebaseStorageService _firebaseStorage =
-      FirebaseStorageService();
 
   // Factory constructor to return the static instance
   factory EnquiryService() {
