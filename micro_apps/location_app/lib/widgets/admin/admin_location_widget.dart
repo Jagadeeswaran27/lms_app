@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_places_flutter/model/prediction.dart';
 import 'package:location_app/constants/constants.dart';
 import 'package:location_app/models/location_model.dart';
-
+import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 import 'package:location_app/resources/strings.dart';
 import 'package:location_app/themes/colors.dart';
 import 'package:location_app/themes/fonts.dart';
@@ -10,6 +12,7 @@ import 'package:location_app/widgets/common/form_input.dart';
 import 'package:location_app/widgets/common/icon_text_button.dart';
 import 'package:location_app/resources/icons.dart' as icons;
 import 'package:google_places_flutter/google_places_flutter.dart';
+import 'dart:convert';
 
 class AdminLocationWidget extends StatefulWidget {
   final Function(LocationModel) storeLocation;
@@ -27,7 +30,91 @@ class AdminLocationWidget extends StatefulWidget {
 
 class _AdminLocationWidgetState extends State<AdminLocationWidget> {
   TextEditingController controller = TextEditingController();
+  TextEditingController urlController = TextEditingController();
   LocationModel? locationData;
+
+  Future<void> _extractFromGoogleMapsLink() async {
+    String url =
+        "https://www.google.com/maps/place/Asha+Tiffins/@12.9614549,77.7108679,15z/data=!4m6!3m5!1s0x3bae122463d8d8b3:0x572809340116f59d!8m2!3d12.9645397!4d77.7144272!16s%2Fg%2F11hcysbb83?entry=ttu&g_ep=EgoyMDI0MDgyNi4wIKXMDSoASAFQAw%3D%3D";
+
+    RegExp regex = RegExp(r'!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)');
+    Match? match = regex.firstMatch(url);
+
+    if (match != null) {
+      double lat = double.parse(match.group(1)!);
+      double lng = double.parse(match.group(2)!);
+
+      final response = await http.get(Uri.parse(
+          'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$lng&key=${constants.apiKey}'));
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['results'].isNotEmpty) {
+          final address = data['results'][0]['formatted_address'];
+          final placeId = data['results'][0]['place_id'];
+
+          setState(() {
+            locationData = LocationModel(
+              name: address,
+              placeId: placeId,
+              latitude: lat,
+              longitude: lng,
+            );
+            controller.text = address;
+          });
+        }
+      }
+    } else {
+      print('Invalid Google Maps link format');
+    }
+  }
+
+  Future<void> _useMyLocation() async {
+    await _extractFromGoogleMapsLink();
+    try {
+      // Check location permission
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          // Handle permission denied
+          return;
+        }
+      }
+
+      // Get current position
+      Position position = await Geolocator.getCurrentPosition();
+      // Use Google Geocoding API to get address details
+      final response = await http.get(
+        Uri.parse(
+            'https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&key=${constants.apiKey}'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['results'].isNotEmpty) {
+          final address = data['results'][0]['formatted_address'];
+          final placeId = data['results'][0]['place_id'];
+
+          // Update locationData
+          setState(() {
+            locationData = LocationModel(
+              name: address,
+              placeId: placeId,
+              latitude: position.latitude,
+              longitude: position.longitude,
+            );
+            controller.text = address;
+          });
+        }
+      } else {
+        throw Exception('Failed to load address');
+      }
+    } catch (e) {
+      // Handle errors
+      print("Error getting location: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +238,7 @@ class _AdminLocationWidgetState extends State<AdminLocationWidget> {
               height: 50,
               child: IconTextButton(
                 text: Strings.useMyLocation,
-                onPressed: () {},
+                onPressed: _useMyLocation,
                 color: ThemeColors.cardColor,
                 iconHorizontalPadding: 5,
                 buttonTextStyle: Theme.of(context).textTheme.titleSmall,
@@ -174,7 +261,14 @@ class _AdminLocationWidgetState extends State<AdminLocationWidget> {
               ],
             ),
             const SizedBox(height: 10),
-            const FormInput(text: ""),
+            FormInput(
+              controller: urlController,
+              text: "",
+              suffixIcon: GestureDetector(
+                onTap: _extractFromGoogleMapsLink,
+                child: const Icon(Icons.search),
+              ),
+            ),
             const SizedBox(height: 30),
             SizedBox(
               width: screenSize.width * 0.7,
@@ -187,6 +281,9 @@ class _AdminLocationWidgetState extends State<AdminLocationWidget> {
                 onPressed: () {
                   if (locationData != null) {
                     widget.storeLocation(locationData!);
+                    locationData = null;
+                    urlController.clear();
+                    controller.clear();
                   }
                 },
                 color: ThemeColors.primary,

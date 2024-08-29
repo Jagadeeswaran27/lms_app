@@ -2,8 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs access to location when open.</string>
     <key>NSCameraUsageDescription</key>
-	<string>Camera permission is required for taking pictures.</string>
+    <string>Camera permission is required for taking pictures.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Photo Library permission is required for selecting pictures.</string>
 	<key>CFBundleDevelopmentRegion</key>
