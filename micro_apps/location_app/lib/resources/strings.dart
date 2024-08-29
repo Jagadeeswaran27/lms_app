@@ -134,12 +134,11 @@ class Strings {
   static const String resolved = 'Resolved';
   static const String toResolve = 'To Resolve';
   static const String location = 'Location';
-  static const String enterYourLocation = 'Enter your location : ';
-  static const String useMyLocation = 'Use my location : ';
+  static const String enterYourLocation = 'Enter your location ';
+  static const String useMyLocation = 'Use my location';
   static const String or = 'Or';
-  static const String searchOnGoogleMaps = 'Search on Google Maps : ';
-  static const String enterYourLocationOrLink =
-      'Enter your location or Link : ';
+  static const String searchOnGoogleMaps = 'Search on Google Maps ';
+  static const String enterYourLocationOrLink = 'Enter your location or Link';
   static const String fetchInstitutes = 'Fetch Institutes';
   static const String myLocation = 'My Location';
   static const String saveLocation = 'Save Location';

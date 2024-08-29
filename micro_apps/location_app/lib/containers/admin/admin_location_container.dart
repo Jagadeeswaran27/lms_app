@@ -1,12 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:location_app/core/services/firebase/location_service.dart';
+import 'package:location_app/models/location_model.dart';
+import 'package:location_app/utils/error/show_snackbar.dart';
 
 import 'package:location_app/widgets/admin/admin_location_widget.dart';
 
-class AdminLocationContainer extends StatelessWidget {
+class AdminLocationContainer extends StatefulWidget {
   const AdminLocationContainer({super.key});
 
   @override
+  State<AdminLocationContainer> createState() => _AdminLocationContainerState();
+}
+
+class _AdminLocationContainerState extends State<AdminLocationContainer> {
+  bool _isLoading = false;
+
+  Future<void> storeLocation(LocationModel location) async {
+    final locationService = LocationService();
+
+    setState(() {
+      _isLoading = true;
+    });
+    final response = await locationService.addLocation(location);
+    if (response != null) {
+      showSnackbar(context, 'Location added successfully');
+    } else {
+      showSnackbar(context, 'Error adding location');
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const AdminLocationWidget();
+    return AdminLocationWidget(
+      isLoading: _isLoading,
+      storeLocation: storeLocation,
+    );
   }
 }
