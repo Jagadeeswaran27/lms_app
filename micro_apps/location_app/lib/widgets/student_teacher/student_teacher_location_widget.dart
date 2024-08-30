@@ -61,8 +61,8 @@ class _StudentTeacherLocationWidgetState
 
     if (result.points.isNotEmpty) {
       polylines.add(Polyline(
-        polylineId: PolylineId('poly'),
-        color: Color.fromARGB(255, 40, 122, 198),
+        polylineId: const PolylineId('poly'),
+        color: const Color.fromARGB(255, 40, 122, 198),
         points:
             result.points.map((e) => LatLng(e.latitude, e.longitude)).toList(),
       ));
