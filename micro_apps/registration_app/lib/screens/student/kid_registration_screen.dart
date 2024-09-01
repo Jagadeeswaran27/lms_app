@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:registration_app/containers/student/kid_registration_container.dart';
 import 'package:registration_app/resources/images.dart';
-import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/themes/fonts.dart';
 
 class KidRegistrationScreen extends StatelessWidget {

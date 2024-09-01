@@ -351,4 +351,15 @@ class AuthProvider with ChangeNotifier {
       return true;
     }
   }
+
+  Future<String> createLMSUser(
+    String uid,
+    String name,
+    String email,
+    String role,
+    String phone,
+  ) async {
+    return await FirebaseAuthService()
+        .createLMSUser(uid, name, email, role, phone);
+  }
 }

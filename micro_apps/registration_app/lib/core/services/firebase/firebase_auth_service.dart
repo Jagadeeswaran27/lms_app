@@ -205,4 +205,21 @@ class FirebaseAuthService {
       return false;
     }
   }
+
+  Future<String> createLMSUser(
+      String uid, String name, String email, String role, String phone) async {
+    try {
+      await _firestore.collection('lms-users').doc(uid).set({
+        'uid': uid,
+        'name': name,
+        'email': email,
+        'role': role,
+        'phone': phone,
+      });
+      return uid;
+    } catch (e) {
+      log.e('Error creating LMS user: $e');
+      return '';
+    }
+  }
 }

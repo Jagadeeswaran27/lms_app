@@ -155,6 +155,7 @@ class _KidRegistrationWidgetState extends State<KidRegistrationWidget> {
             FormInput(
               text: Strings.confirmPassword,
               keyboardType: TextInputType.text,
+              onSaved: (value) => {_userConfirmPassword = value!},
               suffixIcon: InkWell(
                 onTap: revealConfirmPassword,
                 child: _isConfirmPasswordVisible
