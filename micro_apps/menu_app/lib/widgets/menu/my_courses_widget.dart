@@ -27,6 +27,7 @@ class MyCoursesWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListView.builder(
+        padding: const EdgeInsets.only(top: 10),
         itemCount: courses.length,
         itemBuilder: (context, index) {
           return CourseCard(

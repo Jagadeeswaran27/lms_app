@@ -63,6 +63,19 @@ class MenuLayout extends StatelessWidget {
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                   ),
+                Positioned(
+                  right: 10,
+                  top: -5,
+                  bottom: 0,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.logout_outlined,
+                      color: ThemeColors.primary,
+                      size: 20,
+                    ),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
                 Align(
                   alignment: Alignment.center,
                   child: Text(
@@ -86,27 +99,27 @@ class MenuLayout extends StatelessWidget {
           // Main content area
           Expanded(child: child),
           // Bottom container
-          if (showBottomBar)
-            Visibility(
-              visible: bottomInset == 0,
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: ThemeColors.primary,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20.0),
-                    topRight: Radius.circular(20.0),
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    bottomText ?? '',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ),
-              ),
-            ),
+          // if (showBottomBar)
+          //   Visibility(
+          //     visible: bottomInset == 0,
+          //     child: Container(
+          //       width: double.infinity,
+          //       padding: const EdgeInsets.all(16.0),
+          //       decoration: BoxDecoration(
+          //         color: ThemeColors.primary,
+          //         borderRadius: const BorderRadius.only(
+          //           topLeft: Radius.circular(20.0),
+          //           topRight: Radius.circular(20.0),
+          //         ),
+          //       ),
+          //       child: Center(
+          //         child: Text(
+          //           bottomText ?? '',
+          //           style: Theme.of(context).textTheme.titleLarge,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
         ],
       ),
     );

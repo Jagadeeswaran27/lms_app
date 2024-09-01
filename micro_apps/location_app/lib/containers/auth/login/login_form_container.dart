@@ -1,8 +1,10 @@
 import 'package:location_app/constants/constants.dart';
+import 'package:location_app/constants/enums/user_role_enum.dart';
 import 'package:location_app/models/auth/auth_model.dart';
 import 'package:location_app/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:location_app/resources/strings.dart';
+import 'package:location_app/screens/admin/admin_app.dart';
 import 'package:location_app/screens/student_teacher/student_teacher_app.dart';
 import 'package:location_app/utils/error/show_snackbar.dart';
 import 'package:location_app/utils/shared_preference/shared_preference.dart';
@@ -69,6 +71,14 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
         _isLoading = false;
       });
       if (context.mounted) {
+        if (authProvider.currentUser!.role == UserRoleEnum.institute.roleName) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => const AdminApp(),
+            ),
+          );
+          return;
+        }
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => const StudentTeacherApp(),

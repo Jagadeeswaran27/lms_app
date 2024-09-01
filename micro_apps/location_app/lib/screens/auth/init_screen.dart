@@ -36,11 +36,11 @@ class _InitScreenState extends State<InitScreen> {
           );
           return;
         }
-
         if (authProvider.user != null &&
             authProvider.user!.emailVerified &&
             authProvider.loggedInStatus == true) {
           authProvider.removeListener(authListener);
+          print(authProvider.currentUser!.role);
 
           if (authProvider.currentUser!.role ==
               UserRoleEnum.institute.roleName) {
