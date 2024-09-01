@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:menu_app/constants/enums/user_role_enum.dart';
 import 'package:menu_app/providers/auth_provider.dart';
 import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/screens/common/welcome_screen.dart';
@@ -6,7 +8,9 @@ import 'package:menu_app/screens/common/welcome_screen.dart';
 import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
 import 'package:menu_app/utils/show_snackbar.dart';
+import 'package:menu_app/widgets/common/svg_lodder.dart';
 import 'package:provider/provider.dart';
+import 'package:menu_app/resources/icons.dart' as icons;
 
 class MenuLayout extends StatelessWidget {
   const MenuLayout({
@@ -18,6 +22,7 @@ class MenuLayout extends StatelessWidget {
     this.onIconTap,
     this.showBackButton = true,
     this.showBottomBar = true,
+    this.showAccessCode,
   });
 
   final Widget child;
@@ -27,9 +32,12 @@ class MenuLayout extends StatelessWidget {
   final void Function()? onIconTap;
   final bool? showBackButton;
   final bool showBottomBar;
+  final bool? showAccessCode;
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
     void logout(BuildContext context) async {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final response = await authProvider.signOut();
@@ -42,6 +50,16 @@ class MenuLayout extends StatelessWidget {
         );
       } else {
         showSnackbar(context, Strings.errorLoggingOut);
+      }
+    }
+
+    void onCopy(BuildContext context) async {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final currentUser = authProvider.currentUser!;
+      final clinicId = currentUser.institute.first;
+      await Clipboard.setData(ClipboardData(text: clinicId));
+      if (context.mounted) {
+        showSnackbar(context, 'AccessCode Code Copied');
       }
     }
 
@@ -97,9 +115,37 @@ class MenuLayout extends StatelessWidget {
                 ),
                 Align(
                   alignment: Alignment.center,
-                  child: Text(
-                    topBarText,
-                    style: Theme.of(context).textTheme.bodyMediumPrimary,
+                  child: Column(
+                    children: [
+                      Text(
+                        topBarText,
+                        style: Theme.of(context).textTheme.bodyMediumPrimary,
+                      ),
+                      if (authProvider.currentUser?.role ==
+                          UserRoleEnum.admin.roleName)
+                        Container(
+                          margin: const EdgeInsets.only(left: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                authProvider.currentUser?.institute.first ?? '',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMediumTitleBrownSemiBold,
+                              ),
+                              IconButton(
+                                icon: const SizedBox(
+                                  width: 18,
+                                  height: 18,
+                                  child: SVGLoader(image: icons.Icons.copy),
+                                ),
+                                onPressed: () => onCopy(context),
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
                   ),
                 ),
                 if (icon != null)

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'package:menu_app/config/auth/user_role.dart';
 import 'package:menu_app/constants/enums/button_size.dart';
-import 'package:menu_app/resources/images.dart';
 import 'package:menu_app/resources/regex.dart';
 import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/screens/auth/login_screen.dart';
@@ -11,7 +10,6 @@ import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
 import 'package:menu_app/widgets/common/custom_elevated_button.dart';
 import 'package:menu_app/widgets/common/form_input.dart';
-import 'package:menu_app/widgets/common/svg_lodder.dart';
 
 class SignupFormWidget extends StatefulWidget {
   final void Function({

@@ -60,13 +60,12 @@ class FirebaseAuthService {
     String password,
     String phone,
     String role,
-    String instituteId,
+    String accessCodeId,
   ) async {
     try {
       UserCredential userCredential = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
-      final bool isInstitute =
-          role == UserRoleEnum.institute.roleName ? true : false;
+      final bool isAdmin = role == UserRoleEnum.admin.roleName ? true : false;
       await _firestore
           .collection('lms-users')
           .doc(userCredential.user!.uid)
@@ -76,13 +75,13 @@ class FirebaseAuthService {
         'email': email,
         'role': role,
         'phone': phone,
-        'institute': isInstitute ? [instituteId] : [],
+        'institute': isAdmin ? [accessCodeId] : [],
       });
-      if (role == UserRoleEnum.institute.roleName) {
-        await _firestore.collection('institutes').doc(instituteId).set({
-          'uid': instituteId,
+      if (role == UserRoleEnum.admin.roleName) {
+        await _firestore.collection('institutes').doc(accessCodeId).set({
+          'uid': accessCodeId,
           'email': email,
-          'instituteId': instituteId,
+          'instituteId': accessCodeId,
           'instituteName': userName,
         });
       }

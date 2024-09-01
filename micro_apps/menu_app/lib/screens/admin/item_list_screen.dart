@@ -9,10 +9,12 @@ class ItemListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MenuLayout(
+    final String subCategory =
+        ModalRoute.of(context)?.settings.arguments as String;
+
+    return MenuLayout(
       topBarText: Strings.itemList,
-      showBackButton: false,
-      child: ItemListContainer(),
+      child: ItemListContainer(subCategory: subCategory),
     );
   }
 }

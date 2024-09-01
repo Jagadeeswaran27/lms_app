@@ -18,10 +18,12 @@ class AddItemWidget extends StatefulWidget {
     super.key,
     required this.isLoading,
     required this.addItem,
+    required this.subCategory,
   });
 
   final bool isLoading;
   final Function(Map<String, dynamic>, File) addItem;
+  final String subCategory;
 
   @override
   AddItemWidgetState createState() => AddItemWidgetState();
@@ -93,7 +95,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
       return;
     }
 
-    if (_isBatchOfferedSelected == false) {
+    if (widget.subCategory == 'courses' && _isBatchOfferedSelected == false) {
       setState(() {
         _isBatchOfferedError = "Invalid batch offered";
       });
@@ -106,8 +108,8 @@ class AddItemWidgetState extends State<AddItemWidget> {
         'itemTitle': _itemTitle,
         'shortDescription': _shortDescription,
         'aboutDescription': _aboutDescription,
-        'batchDay': _batchDay,
-        'batchTime': _batchTime,
+        'batchDay': widget.subCategory == 'courses' ? _batchDay : null,
+        'batchTime': widget.subCategory == 'courses' ? _batchTime : null,
         'amount': _amountDetails,
       };
       widget.addItem({...formData}, _image!);
@@ -204,44 +206,51 @@ class AddItemWidgetState extends State<AddItemWidget> {
                 },
               ),
               const SizedBox(height: 20),
-              Row(
-                children: [
-                  Checkbox(
-                    value: _isBatchOfferedSelected,
-                    onChanged: _handleBatchOfferedChange,
-                    activeColor: ThemeColors.titleBrown,
-                  ),
-                  Text(
-                    Strings.addBatchOffered,
-                    style: Theme.of(context).textTheme.bodyMediumTitleBrown,
-                  ),
-                ],
-              ),
-              if (_isBatchOfferedError != null)
-                Padding(
-                  padding: const EdgeInsets.only(left: 10, top: 10),
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      _isBatchOfferedError!,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(color: ThemeColors.primary),
-                    ),
-                  ),
-                ),
-              const SizedBox(height: 20),
-              if (_isBatchOfferedSelected)
+              if (widget.subCategory == 'courses')
                 Column(
                   children: [
-                    BatchOfferedCard(
-                      selectedDay: _batchDay,
-                      selectedTime: _batchTime,
-                      onSelectedDayChanged: _handleBatchOfferedDayChange,
-                      onSelectedTimeChanged: _handleBatchOfferedTimeChange,
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: _isBatchOfferedSelected,
+                          onChanged: _handleBatchOfferedChange,
+                          activeColor: ThemeColors.titleBrown,
+                        ),
+                        Text(
+                          Strings.addBatchOffered,
+                          style:
+                              Theme.of(context).textTheme.bodyMediumTitleBrown,
+                        ),
+                      ],
                     ),
+                    if (_isBatchOfferedError != null)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10, top: 10),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            _isBatchOfferedError!,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(color: ThemeColors.primary),
+                          ),
+                        ),
+                      ),
                     const SizedBox(height: 20),
+                    if (_isBatchOfferedSelected)
+                      Column(
+                        children: [
+                          BatchOfferedCard(
+                            selectedDay: _batchDay,
+                            selectedTime: _batchTime,
+                            onSelectedDayChanged: _handleBatchOfferedDayChange,
+                            onSelectedTimeChanged:
+                                _handleBatchOfferedTimeChange,
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                      ),
                   ],
                 ),
               Row(

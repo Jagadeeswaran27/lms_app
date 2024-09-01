@@ -9,7 +9,9 @@ import 'package:menu_app/widgets/admin/add_item_widget.dart';
 import 'package:provider/provider.dart';
 
 class AddItemContainer extends StatefulWidget {
-  const AddItemContainer({super.key});
+  const AddItemContainer({super.key, required this.subCategory});
+
+  final String subCategory;
 
   @override
   State<AddItemContainer> createState() => _AddItemContainerState();
@@ -24,19 +26,20 @@ class _AddItemContainerState extends State<AddItemContainer> {
     setState(() {
       _isLoading = true;
     });
-    final courseId = await _courseService.addCourse(
+    final courseId = await _courseService.addItem(
       formData,
       image,
       authProvider.currentUser!.institute[0],
+      widget.subCategory,
     );
     setState(() {
       _isLoading = false;
     });
     if (courseId != null) {
-      showSnackbar(context, 'Course added successfully');
+      showSnackbar(context, 'Item added successfully');
       Navigator.pop(context);
     } else {
-      showSnackbar(context, 'Failed to add course');
+      showSnackbar(context, 'Failed to add item');
     }
   }
 
@@ -45,6 +48,7 @@ class _AddItemContainerState extends State<AddItemContainer> {
     return AddItemWidget(
       isLoading: _isLoading,
       addItem: addItem,
+      subCategory: widget.subCategory,
     );
   }
 }

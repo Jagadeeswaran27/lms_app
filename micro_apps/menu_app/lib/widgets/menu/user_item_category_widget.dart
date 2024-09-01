@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:menu_app/routes/admin_routes.dart';
+import 'package:menu_app/routes/student_teacher_routes.dart';
 import 'package:menu_app/widgets/admin/category_item_card.dart';
 import 'package:menu_app/resources/icons.dart' as icons;
 
-class ItemCategoryWidget extends StatelessWidget {
-  const ItemCategoryWidget({super.key});
+class UserItemCategoryWidget extends StatelessWidget {
+  const UserItemCategoryWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +13,7 @@ class ItemCategoryWidget extends StatelessWidget {
 
     void navigateToItemList(String subCategory) {
       Navigator.of(context)
-          .pushNamed(AdminRoutes.itemList, arguments: subCategory);
+          .pushNamed(StudentTeacherRoutes.myCourses, arguments: subCategory);
     }
 
     return Container(

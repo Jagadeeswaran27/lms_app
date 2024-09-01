@@ -71,7 +71,7 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
         _isLoading = false;
       });
       if (context.mounted) {
-        if (user.role == UserRoleEnum.institute.roleName) {
+        if (user.role == UserRoleEnum.admin.roleName) {
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
               builder: (context) => const AdminApp(),

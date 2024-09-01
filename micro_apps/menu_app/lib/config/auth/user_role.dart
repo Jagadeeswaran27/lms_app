@@ -5,17 +5,12 @@ import 'package:menu_app/resources/strings.dart';
 final List<RoleModel> userRoles = [
   RoleModel(
     roleId: 1,
-    roleName: Strings.student,
-    roleConstant: UserRoleEnum.student.roleName,
+    roleName: Strings.user,
+    roleConstant: UserRoleEnum.user.roleName,
   ),
   RoleModel(
     roleId: 2,
-    roleName: Strings.teacher,
-    roleConstant: UserRoleEnum.teacher.roleName,
-  ),
-  RoleModel(
-    roleId: 3,
-    roleName: Strings.institute,
-    roleConstant: UserRoleEnum.institute.roleName,
+    roleName: Strings.admin,
+    roleConstant: UserRoleEnum.admin.roleName,
   ),
 ];

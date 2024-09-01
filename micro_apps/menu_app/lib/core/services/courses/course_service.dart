@@ -10,55 +10,63 @@ class CourseService {
   final FirebaseStorageService _storageService = FirebaseStorageService();
   final log = CustomLogger.getLogger('CourseService');
 
-  Future<String?> addCourse(
+  Future<String?> addItem(
     Map<String, dynamic> formData,
     File imageFile,
-    String instituteId,
+    String accessCode,
+    String subCategory,
   ) async {
     try {
-      final courseId = _firestore
-          .collection('institutes')
-          .doc(instituteId)
-          .collection('courses')
-          .doc()
-          .id;
-      String imageUrl = await _storageService.uploadFile(
-          imageFile, 'institutes/$instituteId', '$courseId.jpg');
+      String imageUrl = await _storageService.uploadFile(imageFile,
+          'institutes/$accessCode', '${imageFile.path.split('/').last}.jpg');
 
-      // Create a new course with the image URL
-      CourseModel newCourse = CourseModel(
-        courseId: courseId,
-        courseTitle: formData['itemTitle'],
-        imageUrl: imageUrl,
-        shortDescription: formData['shortDescription'],
-        aboutDescription: formData['aboutDescription'],
-        batchDay: formData['batchDay'],
-        batchTime: formData['batchTime'],
-        amount: double.parse(formData['amount']),
-        courseTeacher: '',
-      );
+      final itemTitles =
+          formData['itemTitle'].split(',').map((e) => e.trim()).toList();
+      String? lastAddedItemId;
+      for (String itemTitle in itemTitles) {
+        final itemId = _firestore
+            .collection('institutes')
+            .doc(accessCode)
+            .collection(subCategory)
+            .doc()
+            .id;
 
-      // Add the course to Firestore
-      await _firestore
-          .collection('institutes')
-          .doc(instituteId)
-          .collection('courses')
-          .doc(courseId)
-          .set(newCourse.toJson());
+        CourseModel newCourse = CourseModel(
+          courseId: itemId,
+          courseTitle: itemTitle,
+          imageUrl: imageUrl,
+          shortDescription: formData['shortDescription'],
+          aboutDescription: formData['aboutDescription'],
+          batchDay: formData['batchDay'] ?? '',
+          batchTime: formData['batchTime'] ?? '',
+          amount: double.parse(formData['amount']),
+        );
 
-      log.i('Course added successfully');
-      return courseId;
+        await _firestore
+            .collection('institutes')
+            .doc(accessCode)
+            .collection(subCategory)
+            .doc(itemId)
+            .set(newCourse.toJson()
+              ..removeWhere((key, value) => value == null || value == ''));
+
+        log.i('Item "$itemTitle" added successfully');
+        lastAddedItemId = itemId;
+      }
+      return lastAddedItemId;
     } catch (e) {
-      throw Exception('Failed to add course');
+      print(e);
+      throw Exception('Failed to add item');
     }
   }
 
-  Stream<List<CourseModel>> getCourses(String instituteId) async* {
+  Stream<List<CourseModel>> getItems(
+      String accessCode, String subCategory) async* {
     try {
       yield* _firestore
           .collection('institutes')
-          .doc(instituteId)
-          .collection('courses')
+          .doc(accessCode)
+          .collection(subCategory)
           .snapshots()
           .map((querySnapshot) {
         return querySnapshot.docs
@@ -67,8 +75,8 @@ class CourseService {
             .toList();
       });
     } catch (e) {
-      log.e('Error getting courses: $e');
-      throw Exception('Failed to get courses');
+      log.e('Error getting items: $e');
+      throw Exception('Failed to get items');
     }
   }
 }

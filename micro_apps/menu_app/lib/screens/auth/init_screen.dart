@@ -27,12 +27,6 @@ class _InitScreenState extends State<InitScreen> {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
       if (!authProvider.isLoading) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const WelcomeScreen(),
-          ),
-        );
-
         if (authProvider.user == null && context.mounted) {
           authProvider.removeListener(authListener);
           Navigator.of(context).pushReplacement(
@@ -50,10 +44,10 @@ class _InitScreenState extends State<InitScreen> {
 
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-              builder: (context) => authProvider.currentUser!.role ==
-                      UserRoleEnum.institute.roleName
-                  ? const AdminApp()
-                  : const StudentTeacherApp(),
+              builder: (context) =>
+                  authProvider.currentUser!.role == UserRoleEnum.admin.roleName
+                      ? const AdminApp()
+                      : const StudentTeacherApp(),
             ),
           );
           return;
@@ -76,13 +70,12 @@ class _InitScreenState extends State<InitScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: SizedBox(
         width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // const Center(child: SVGLoader(image: Images.logo)),
             const SizedBox(height: 20),
             CircularProgressIndicator(color: ThemeColors.primary),
           ],

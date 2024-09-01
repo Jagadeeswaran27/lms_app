@@ -12,4 +12,5 @@ class Icons {
   static const String resolve = 'assets/icon/resolve.svg';
   static const String food = 'assets/icon/food.svg';
   static const String tailor = 'assets/icon/tailor.svg';
+  static const String copy = 'assets/icon/copy.svg';
 }

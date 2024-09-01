@@ -7,7 +7,8 @@ import 'package:menu_app/widgets/menu/my_courses_widget.dart';
 import 'package:provider/provider.dart';
 
 class MyCoursesContainer extends StatefulWidget {
-  const MyCoursesContainer({super.key});
+  final String subCategory;
+  const MyCoursesContainer({super.key, required this.subCategory});
 
   @override
   State<MyCoursesContainer> createState() => _MyCoursesContainerState();
@@ -18,10 +19,10 @@ class _MyCoursesContainerState extends State<MyCoursesContainer> {
   final _courseService = CourseService();
   List<CourseModel> courses = [];
 
-  void fetchItems() {
+  void fetchItems(String subCategory) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     String instituteId = authProvider.selectedinstituteCode;
-    _courseService.getCourses(instituteId).listen((courses) {
+    _courseService.getItems(instituteId, subCategory).listen((courses) {
       setState(() {
         _isLoading = false;
         this.courses = courses;
@@ -30,18 +31,22 @@ class _MyCoursesContainerState extends State<MyCoursesContainer> {
       setState(() {
         _isLoading = false;
       });
-      print('Error fetching courses: $error');
+      print('Error fetching items: $error');
     });
   }
 
   @override
   void initState() {
     super.initState();
-    fetchItems();
+    fetchItems(widget.subCategory);
   }
 
   @override
   Widget build(BuildContext context) {
-    return MyCoursesWidget(isLoading: _isLoading, courses: courses);
+    return MyCoursesWidget(
+      isLoading: _isLoading,
+      courses: courses,
+      subCategory: widget.subCategory,
+    );
   }
 }

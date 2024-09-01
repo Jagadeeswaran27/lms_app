@@ -14,9 +14,11 @@ import 'package:menu_app/widgets/menu/course_detail_card.dart';
 import 'package:menu_app/resources/icons.dart' as icons;
 
 class CourseDetailWidget extends StatelessWidget {
-  const CourseDetailWidget({super.key, required this.course});
+  const CourseDetailWidget(
+      {super.key, required this.course, required this.subCategory});
 
   final CourseModel course;
+  final String subCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -62,20 +64,25 @@ class CourseDetailWidget extends StatelessWidget {
                   Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 16),
             ),
             const SizedBox(height: 20),
-            Row(
-              children: [
-                Text(
-                  Strings.batchOferred,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMediumPrimary
-                      .copyWith(fontSize: 20),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            BatchCard(role: role, course: course),
-            const SizedBox(height: 20),
+            if (subCategory == 'courses')
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        Strings.batchOferred,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMediumPrimary
+                            .copyWith(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  BatchCard(role: role, course: course),
+                  const SizedBox(height: 20),
+                ],
+              ),
             Row(
               children: [
                 Text(
@@ -96,7 +103,7 @@ class CourseDetailWidget extends StatelessWidget {
                   ),
             ),
             const SizedBox(height: 20),
-            if (role != UserRoleEnum.institute.roleName)
+            if (role != UserRoleEnum.admin.roleName)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

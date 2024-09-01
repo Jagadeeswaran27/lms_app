@@ -10,11 +10,14 @@ class CourseDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CourseModel course =
-        ModalRoute.of(context)?.settings.arguments as CourseModel;
+    final Map<String, dynamic> arguments =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
+    final CourseModel course = arguments['course'];
+    final String subCategory = arguments['subCategory'];
+
     return MenuLayout(
       topBarText: Strings.item,
-      child: CourseDetailContainer(course: course),
+      child: CourseDetailContainer(course: course, subCategory: subCategory),
     );
   }
 }

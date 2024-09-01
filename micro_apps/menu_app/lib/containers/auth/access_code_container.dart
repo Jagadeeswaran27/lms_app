@@ -17,7 +17,7 @@ class _AccessCodeContainerState extends State<AccessCodeContainer> {
   bool _isLoading = false;
 
   void navigateToHomeNavigation() {
-    Navigator.of(context).pushNamed(StudentTeacherRoutes.myCourses);
+    Navigator.of(context).pushNamed(StudentTeacherRoutes.userItemCategory);
   }
 
   void onInstituteSelection(String instituteCode) async {

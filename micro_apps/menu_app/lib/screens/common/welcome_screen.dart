@@ -48,7 +48,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   child: Text(
                     textAlign: TextAlign.center,
-                    Strings.loremIpsum,
+                    'Welcome to the Menu App! This platform allows administrators to add and manage content for the applications. Customize your app to fit your needs and streamline your operations.',
                     style: Theme.of(context).textTheme.displayMedium!.copyWith(
                           height: 1.4,
                           fontSize: 14,

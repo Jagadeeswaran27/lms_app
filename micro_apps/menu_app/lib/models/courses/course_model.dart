@@ -6,10 +6,9 @@ class CourseModel {
   final String imageUrl;
   final String shortDescription;
   final String aboutDescription;
-  final String batchDay;
-  final String batchTime;
+  final String? batchDay;
+  final String? batchTime;
   final double amount;
-  final String courseTeacher;
 
   CourseModel({
     required this.courseId,
@@ -20,7 +19,6 @@ class CourseModel {
     required this.batchDay,
     required this.batchTime,
     required this.amount,
-    required this.courseTeacher,
   });
 
   factory CourseModel.fromJson(Map<String, dynamic> json) {
@@ -30,10 +28,9 @@ class CourseModel {
       imageUrl: json['imageUrl'],
       shortDescription: json['shortDescription'],
       aboutDescription: json['aboutDescription'],
-      batchDay: json['batchDay'],
-      batchTime: json['batchTime'],
+      batchDay: json['batchDay'] ?? '',
+      batchTime: json['batchTime'] ?? '',
       amount: json['amount'].toDouble(),
-      courseTeacher: json['courseTeacher'],
     );
   }
 
@@ -47,7 +44,6 @@ class CourseModel {
       'batchDay': batchDay,
       'batchTime': batchTime,
       'amount': amount,
-      'courseTeacher': courseTeacher,
     };
   }
 
