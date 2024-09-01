@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:registration_app/core/services/registration/registration_service.dart';
 import 'package:registration_app/models/registration/student_registration_model.dart';
-
 import 'package:registration_app/widgets/admin/student_list_widget.dart';
 
 class StudentListContainer extends StatefulWidget {
@@ -33,6 +33,22 @@ class _StudentListContainerState extends State<StudentListContainer> {
     });
   }
 
+  void onRejectStudent(String registrationId) async {
+    try {
+      final response =
+          await RegistrationService().onRejectStudent(registrationId);
+      if (response) {
+        setState(() {
+          _registrationList = _registrationList
+              .where((item) => item.registrationId != registrationId)
+              .toList();
+        });
+      }
+    } catch (e) {
+      print('Error rejecting student $e');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +60,7 @@ class _StudentListContainerState extends State<StudentListContainer> {
     return StudentListWidget(
       isLoading: _isLoading,
       registrationList: _registrationList,
+      onRejectStudent: onRejectStudent,
     );
   }
 }

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
+import 'package:registration_app/models/registration/student_registration_model.dart';
 import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/themes/colors.dart';
 import 'package:registration_app/themes/fonts.dart';
@@ -9,19 +12,20 @@ import 'package:registration_app/resources/icons.dart' as icons;
 class StudentUploadCard extends StatelessWidget {
   const StudentUploadCard({
     super.key,
-    required this.name,
-    required this.courseName,
-    required this.paymentDone,
+    required this.student,
+    required this.pickImage,
+    this.feeReceiptImage,
+    this.applicationReceiptImage,
   });
 
-  final String name;
-  final String courseName;
-  final bool paymentDone;
+  final StudentRegistrationModel student;
+  final void Function(bool) pickImage;
+  final File? feeReceiptImage;
+  final File? applicationReceiptImage;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 140,
       margin: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
         color: ThemeColors.white,
@@ -40,87 +44,118 @@ class StudentUploadCard extends StatelessWidget {
         ),
       ),
       padding: const EdgeInsets.symmetric(
-        vertical: 15,
-        horizontal: 10,
+        vertical: 30,
+        horizontal: 20,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column(
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '${Strings.name} : ',
-                    style: Theme.of(context)
-                        .textTheme
-                        .displayMediumTitleBrownSemiBold,
+                  Row(
+                    children: [
+                      Text(
+                        '${Strings.name} : ',
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayMediumTitleBrownSemiBold,
+                      ),
+                      Text(
+                        student.userName,
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayMediumPrimarySemiBold,
+                      ),
+                    ],
                   ),
-                  Text(
-                    name,
-                    style: Theme.of(context)
-                        .textTheme
-                        .displayMediumPrimarySemiBold,
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Text(
+                        '${Strings.course1} : ',
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayMediumTitleBrownSemiBold,
+                      ),
+                      Text(
+                        student.courseName,
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayMediumPrimarySemiBold,
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Text(
+                        '${Strings.payment} : ',
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayMediumTitleBrownSemiBold,
+                      ),
+                      Text(
+                        student.paymentStatus == 'done'
+                            ? Strings.done
+                            : Strings.pending,
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayMediumPrimarySemiBold
+                            .copyWith(
+                              color: student.paymentStatus == 'done'
+                                  ? ThemeColors.primary
+                                  : ThemeColors.titleBrown,
+                            ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
                 ],
               ),
-              Row(
-                children: [
-                  Text(
-                    '${Strings.course1} : ',
-                    style: Theme.of(context)
-                        .textTheme
-                        .displayMediumTitleBrownSemiBold,
-                  ),
-                  Text(
-                    courseName,
-                    style: Theme.of(context)
-                        .textTheme
-                        .displayMediumPrimarySemiBold,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Text(
-                    '${Strings.payment} : ',
-                    style: Theme.of(context)
-                        .textTheme
-                        .displayMediumTitleBrownSemiBold,
-                  ),
-                  Text(
-                    paymentDone ? Strings.done : Strings.pending,
-                    style: Theme.of(context)
-                        .textTheme
-                        .displayMediumPrimarySemiBold
-                        .copyWith(
-                          color: paymentDone
-                              ? ThemeColors.primary
-                              : ThemeColors.titleBrown,
-                        ),
-                  ),
-                ],
+              ClipRRect(
+                borderRadius: BorderRadius.circular(50.0),
+                child: Image.network(
+                  student.imageUrl,
+                  width: 100,
+                  height: 100,
+                  fit: BoxFit.cover,
+                ),
               ),
             ],
           ),
+          const SizedBox(height: 20),
+          Row(children: [
+            Text(
+              Strings.update,
+              style: Theme.of(context).textTheme.bodyMediumPrimary,
+            )
+          ]),
+          const SizedBox(height: 30),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ActionButton(
-                text: "Upload fee receipt",
-                icon: icons.Icons.upload,
-                onTap: () {},
-                width: 170,
+                text: Strings.feeReceipt,
+                icon: feeReceiptImage == null
+                    ? icons.Icons.upload
+                    : icons.Icons.accept,
+                onTap: () => pickImage(true),
+                width: 200,
                 height: 40,
               ),
+              const SizedBox(height: 30),
               ActionButton(
-                text: "Application receipt",
-                icon: icons.Icons.upload,
-                onTap: () {},
-                width: 170,
+                text: Strings.applicationReceipt,
+                icon: applicationReceiptImage == null
+                    ? icons.Icons.upload
+                    : icons.Icons.accept,
+                onTap: () => pickImage(false),
+                width: 200,
                 height: 40,
               ),
             ],

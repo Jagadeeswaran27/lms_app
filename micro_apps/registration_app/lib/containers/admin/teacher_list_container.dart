@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:registration_app/core/services/registration/registration_service.dart';
 import 'package:registration_app/models/registration/teacher_registration_model.dart';
+import 'package:registration_app/resources/strings.dart';
+import 'package:registration_app/utils/widgets/show_success_modal.dart';
 
 import 'package:registration_app/widgets/admin/teacher_list_widget.dart';
 
@@ -33,6 +35,47 @@ class _TeacherListContainerState extends State<TeacherListContainer> {
     });
   }
 
+  void onApproveTeacher(String registrationId) async {
+    try {
+      final bool response =
+          await RegistrationService().onAcceptTeacher(registrationId);
+
+      if (response) {
+        showSuccessModal(
+          context,
+          Strings.successfully,
+          () {
+            setState(() {
+              _registrationList = _registrationList
+                  .where((teacher) => teacher.registrationId != registrationId)
+                  .toList();
+            });
+          },
+          [registrationId],
+        );
+      }
+    } catch (e) {
+      print('Error approving student $e');
+    }
+  }
+
+  void onRejectTeacher(String registrationId) async {
+    try {
+      final bool response =
+          await RegistrationService().onRejectTeacher(registrationId);
+
+      if (response) {
+        setState(() {
+          _registrationList = _registrationList
+              .where((teacher) => teacher.registrationId != registrationId)
+              .toList();
+        });
+      }
+    } catch (e) {
+      print('Error approving student $e');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +87,8 @@ class _TeacherListContainerState extends State<TeacherListContainer> {
     return TeacherListWidget(
       isLoading: _isLoading,
       registrationList: _registrationList,
+      onApproveTeacher: onApproveTeacher,
+      onRejectTeacher: onRejectTeacher,
     );
   }
 }

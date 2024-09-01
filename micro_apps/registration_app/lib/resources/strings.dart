@@ -114,4 +114,7 @@ class Strings {
   static const String institute = 'Institute';
   static const String courseAlreadyInCart = 'Course already in cart';
   static const String courseAddedToCart = 'Course added to cart';
+  static const String update = "Update : ";
+  static const String feeReceipt = 'Fee receipt';
+  static const String applicationReceipt = 'Application receipt';
 }
