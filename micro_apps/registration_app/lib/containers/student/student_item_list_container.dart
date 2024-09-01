@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:registration_app/core/services/courses/course_service.dart';
 import 'package:registration_app/models/registration/course_model.dart';
+import 'package:registration_app/providers/auth_provider.dart';
 
 import 'package:registration_app/widgets/student/student_item_list_widget.dart';
 
@@ -18,7 +20,9 @@ class _StudentItemListContainerState extends State<StudentItemListContainer> {
   List<CourseModel> courses = [];
 
   void fetchItems() {
-    _courseService.getCourses().listen((courses) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    _courseService.getCourses(authProvider.selectedinstituteCode).listen(
+        (courses) {
       setState(() {
         _isLoading = false;
         this.courses = courses;

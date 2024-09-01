@@ -6,12 +6,12 @@ import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/widgets/menu/menu_layout.dart';
 
 class CourseDetailScreen extends StatelessWidget {
-  const CourseDetailScreen({super.key, required this.course});
-
-  final CourseModel course;
+  const CourseDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final CourseModel course =
+        ModalRoute.of(context)?.settings.arguments as CourseModel;
     return MenuLayout(
       topBarText: Strings.item,
       child: CourseDetailContainer(course: course),

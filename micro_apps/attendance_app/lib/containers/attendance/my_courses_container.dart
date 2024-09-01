@@ -16,7 +16,7 @@ class MyCoursesContainer extends StatefulWidget {
 class _MyCoursesContainerState extends State<MyCoursesContainer> {
   List<CourseModel> myCourses = []; // Variable to store fetched courses
   AttendanceService attendanceService = AttendanceService();
-  bool isLoading = true;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -25,9 +25,12 @@ class _MyCoursesContainerState extends State<MyCoursesContainer> {
   }
 
   Future<void> _fetchCourses() async {
+    setState(() {
+      isLoading = true;
+    });
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     String userId = authProvider.currentUser!.uid;
-    String instituteId = '12345';
+    String instituteId = authProvider.selectedinstituteCode;
     List<CourseModel> fetchedCourses =
         await attendanceService.getCourses(userId, instituteId);
     setState(() {

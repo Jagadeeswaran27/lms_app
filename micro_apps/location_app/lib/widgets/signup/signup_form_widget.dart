@@ -1,10 +1,8 @@
-import 'package:location_app/widgets/common/svg_lodder.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:location_app/config/auth/user_role.dart';
 import 'package:location_app/constants/enums/button_size.dart';
-import 'package:location_app/resources/images.dart';
 import 'package:location_app/resources/regex.dart';
 import 'package:location_app/resources/strings.dart';
 import 'package:location_app/screens/auth/login_screen.dart';

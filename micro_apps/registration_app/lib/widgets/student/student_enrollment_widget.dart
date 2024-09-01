@@ -58,7 +58,7 @@ class StudentEnrollmentWidget extends StatelessWidget {
               ),
               Text(
                 registrationIds[0],
-                style: Theme.of(context).textTheme.bodyMediumPrimary,
+                style: Theme.of(context).textTheme.displayMediumPrimary,
               ),
             ],
           ),

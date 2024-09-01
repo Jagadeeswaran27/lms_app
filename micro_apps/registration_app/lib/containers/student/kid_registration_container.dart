@@ -70,6 +70,7 @@ class _KidRegistrationContainerState extends State<KidRegistrationContainer> {
         mobileNumber: phone,
         registeredFor: 'Kid',
         email: userEmail,
+        instituteId: authProvider.selectedinstituteCode,
       );
 
       if (registrationIds.isNotEmpty) {

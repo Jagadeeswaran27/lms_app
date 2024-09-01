@@ -73,22 +73,25 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
       });
       if (context.mounted) {
         if (authProvider.currentUser!.role == UserRoleEnum.institute.roleName) {
-          Navigator.of(context).pushReplacement(
+          Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const AdminApp()),
+            (Route<dynamic> route) => false,
           );
           return;
         }
 
         if (authProvider.currentUser!.role == UserRoleEnum.student.roleName) {
-          Navigator.of(context).pushReplacement(
+          Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const StudentApp()),
+            (Route<dynamic> route) => false,
           );
           return;
         }
 
         if (authProvider.currentUser!.role == UserRoleEnum.teacher.roleName) {
-          Navigator.of(context).pushReplacement(
+          Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const TeacherApp()),
+            (Route<dynamic> route) => false,
           );
           return;
         }

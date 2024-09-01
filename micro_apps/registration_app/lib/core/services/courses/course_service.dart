@@ -6,15 +6,8 @@ class CourseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final log = CustomLogger.getLogger('CourseService');
 
-  Stream<List<CourseModel>> getCourses() async* {
+  Stream<List<CourseModel>> getCourses(String instituteId) async* {
     try {
-      QuerySnapshot qSnapshot =
-          await _firestore.collection('institutes').limit(1).get();
-      if (qSnapshot.docs.isEmpty) {
-        yield [];
-        return;
-      }
-      String instituteId = qSnapshot.docs.first.id;
       yield* _firestore
           .collection('institutes')
           .doc(instituteId)

@@ -27,21 +27,14 @@ class EnquiryService {
     String description,
     String priority,
     String userId,
-    String instId,
+    String instituteId,
     String type,
     File? file,
   ) async {
     try {
-      QuerySnapshot snapshot = await _firestore
-          .collection('institutes')
-          .limit(1) // Limit the query to get only the first document
-          .get();
-
-      String instituteId = snapshot.docs.first.id;
-
       String enquiryId = _firestore
           .collection('institutes')
-          .doc(snapshot.docs.first.id)
+          .doc(instituteId)
           .collection('enquiries')
           .doc()
           .id;
@@ -84,16 +77,9 @@ class EnquiryService {
 
   Future<List<EnquiryModel>> getMyEnquiries(
     String userId,
-    String instId,
+    String instituteId,
   ) async {
     try {
-      QuerySnapshot snapshot = await _firestore
-          .collection('institutes')
-          .limit(1) // Limit the query to get only the first document
-          .get();
-
-      String instituteId = snapshot.docs.first.id;
-
       // Query Firestore for enquiries with the matching userId
       QuerySnapshot querySnapshot = await _firestore
           .collection('institutes')

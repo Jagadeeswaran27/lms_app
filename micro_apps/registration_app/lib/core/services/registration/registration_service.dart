@@ -17,17 +17,9 @@ class RegistrationService {
     required String selectedBatchTime,
     required String registeredBy,
     required String userName,
+    required String instituteId,
   }) async {
     try {
-      // Get the first institute ID
-      final QuerySnapshot instituteSnapshot =
-          await _firestore.collection('institutes').limit(1).get();
-      if (instituteSnapshot.docs.isEmpty) {
-        return '';
-      }
-
-      final String instituteId = instituteSnapshot.docs.first.id;
-
       // Generate a unique registration ID
       final DocumentReference registrationRef = _firestore
           .collection('institutes')
@@ -78,17 +70,9 @@ class RegistrationService {
     required String userName,
     required String mobileNumber,
     required String registeredFor,
+    required String instituteId,
   }) async {
     try {
-      // Get the first institute ID
-      final QuerySnapshot instituteSnapshot =
-          await _firestore.collection('institutes').limit(1).get();
-      if (instituteSnapshot.docs.isEmpty) {
-        return [];
-      }
-
-      final String instituteId = instituteSnapshot.docs.first.id;
-
       // Create a list to store registration IDs
       List<String> registrationIds = [];
 
@@ -153,17 +137,9 @@ class RegistrationService {
     required String userName,
     required String mobileNumber,
     required String registeredFor,
+    required String instituteId,
   }) async {
     try {
-      // Get the first institute ID
-      final QuerySnapshot instituteSnapshot =
-          await _firestore.collection('institutes').limit(1).get();
-      if (instituteSnapshot.docs.isEmpty) {
-        return [];
-      }
-
-      final String instituteId = instituteSnapshot.docs.first.id;
-
       // Create a list to store registration IDs
       List<String> registrationIds = [];
 
@@ -214,11 +190,9 @@ class RegistrationService {
     }
   }
 
-  Future<List<StudentRegistrationModel>> getStudentRegistrationList() async {
+  Future<List<StudentRegistrationModel>> getStudentRegistrationList(
+      String instituteId) async {
     try {
-      final QuerySnapshot instituteSnapshot =
-          await _firestore.collection('institutes').limit(1).get();
-      final String instituteId = instituteSnapshot.docs.first.id;
       final QuerySnapshot snapshot = await _firestore
           .collection('institutes')
           .doc(instituteId)
@@ -235,11 +209,9 @@ class RegistrationService {
     }
   }
 
-  Future<List<TeacherRegistrationModel>> getTeacherRegistrationList() async {
+  Future<List<TeacherRegistrationModel>> getTeacherRegistrationList(
+      String instituteId) async {
     try {
-      final QuerySnapshot instituteSnapshot =
-          await _firestore.collection('institutes').limit(1).get();
-      final String instituteId = instituteSnapshot.docs.first.id;
       final QuerySnapshot snapshot = await _firestore
           .collection('institutes')
           .doc(instituteId)
@@ -259,11 +231,9 @@ class RegistrationService {
     String registrationId,
     File feeReceipt,
     File applicationReceipt,
+    String instituteId,
   ) async {
     try {
-      final QuerySnapshot instituteSnapshot =
-          await _firestore.collection('institutes').limit(1).get();
-      final String instituteId = instituteSnapshot.docs.first.id;
       String feeReceiptUrl = await _firebaseStorage.uploadFile(
           feeReceipt,
           'institutes/$instituteId/studentt-registration/$registrationId',
@@ -292,12 +262,9 @@ class RegistrationService {
 
   Future<bool> onRejectStudent(
     String registrationId,
+    String instituteId,
   ) async {
     try {
-      final QuerySnapshot instituteSnapshot =
-          await _firestore.collection('institutes').limit(1).get();
-      final String instituteId = instituteSnapshot.docs.first.id;
-
       final DocumentReference studentRef = _firestore
           .collection('institutes')
           .doc(instituteId)
@@ -314,11 +281,9 @@ class RegistrationService {
     }
   }
 
-  Future<bool> onAcceptTeacher(String registrationId) async {
+  Future<bool> onAcceptTeacher(
+      String registrationId, String instituteId) async {
     try {
-      final QuerySnapshot instituteSnapshot =
-          await _firestore.collection('institutes').limit(1).get();
-      final String instituteId = instituteSnapshot.docs.first.id;
       final DocumentReference studentRef = _firestore
           .collection('institutes')
           .doc(instituteId)
@@ -333,11 +298,9 @@ class RegistrationService {
     }
   }
 
-  Future<bool> onRejectTeacher(String registrationId) async {
+  Future<bool> onRejectTeacher(
+      String registrationId, String instituteId) async {
     try {
-      final QuerySnapshot instituteSnapshot =
-          await _firestore.collection('institutes').limit(1).get();
-      final String instituteId = instituteSnapshot.docs.first.id;
       final DocumentReference studentRef = _firestore
           .collection('institutes')
           .doc(instituteId)
@@ -352,12 +315,9 @@ class RegistrationService {
     }
   }
 
-  Future<List<StudentRegistrationModel>>
-      getApprovedStudentRegistrationList() async {
+  Future<List<StudentRegistrationModel>> getApprovedStudentRegistrationList(
+      String instituteId) async {
     try {
-      final QuerySnapshot instituteSnapshot =
-          await _firestore.collection('institutes').limit(1).get();
-      final String instituteId = instituteSnapshot.docs.first.id;
       final QuerySnapshot snapshot = await _firestore
           .collection('institutes')
           .doc(instituteId)

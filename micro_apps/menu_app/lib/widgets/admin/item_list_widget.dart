@@ -5,7 +5,6 @@ import 'package:menu_app/resources/icons.dart' as icons;
 import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/routes/admin_routes.dart';
 import 'package:menu_app/screens/admin/add_item_screen.dart';
-import 'package:menu_app/screens/common/course_detail_screen.dart';
 import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/widgets/admin/add_item_card.dart';
 import 'package:menu_app/widgets/common/course_card.dart';
@@ -27,11 +26,7 @@ class ItemListWidget extends StatelessWidget {
   }
 
   void navigateToCourseDetail(BuildContext context, CourseModel course) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (ctx) => CourseDetailScreen(course: course),
-      ),
-    );
+    Navigator.of(context).pushNamed(AdminRoutes.courseDetail);
   }
 
   @override

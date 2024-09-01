@@ -42,6 +42,7 @@ class _StudentRegisterContainerState extends State<StudentRegisterContainer> {
         userName: userName,
         mobileNumber: mobileNumber,
         registeredFor: selectedOption,
+        instituteId: authProvider.selectedinstituteCode,
       );
       if (response.isNotEmpty) {
         authProvider.updateRegisteredCoursesList(courseIds);

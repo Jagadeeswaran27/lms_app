@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:menu_app/core/services/courses/course_service.dart';
 import 'package:menu_app/models/courses/course_model.dart';
+import 'package:menu_app/providers/auth_provider.dart';
 
 import 'package:menu_app/widgets/menu/my_courses_widget.dart';
+import 'package:provider/provider.dart';
 
 class MyCoursesContainer extends StatefulWidget {
   const MyCoursesContainer({super.key});
@@ -17,7 +19,9 @@ class _MyCoursesContainerState extends State<MyCoursesContainer> {
   List<CourseModel> courses = [];
 
   void fetchItems() {
-    _courseService.getCourses().listen((courses) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    String instituteId = authProvider.selectedinstituteCode;
+    _courseService.getCourses(instituteId).listen((courses) {
       setState(() {
         _isLoading = false;
         this.courses = courses;

@@ -7,7 +7,7 @@ class Strings {
   static const String loremIpsum =
       'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type';
   static const String getStarted = 'GET STARTED';
-  static const String homeText = 'Your Education, Your Comfort,\nAt Your Home';
+  static const String homeText = 'Your Comfort,\nAt Your Home';
   static const signIn = "Sign In";
   static const String register = 'Register';
   static const String enterSignInDetails =
@@ -45,10 +45,12 @@ class Strings {
   static const String invalidEmail = 'Invalid Email';
   static const String invalidMobileNumber = 'Invalid mobile number';
   static const String pleaseSelectRole = 'Please select a role';
+  static const String errorLoggingOut = 'Error logging out';
 
   //app related
   static const String attendance = 'Attendance';
   static const String enquiry = 'Enquiry';
+  static const String enquiryApp = 'Enquiry App';
   static const String myCourses = 'My Courses';
   static const String english = 'English';
   static const String courseCode = 'Course code : ';

@@ -28,7 +28,7 @@ class WelcomeScreen extends StatelessWidget {
         children: [
           const Spacer(),
           Padding(
-            padding: const EdgeInsets.only(bottom: 60),
+            padding: const EdgeInsets.only(bottom: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -38,7 +38,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  Strings.courseMenu,
+                  Strings.menuApp,
                   style: Theme.of(context).textTheme.headlineLarge,
                 ),
                 Container(
@@ -60,7 +60,7 @@ class WelcomeScreen extends StatelessWidget {
                   child: CustomElevatedButton(
                     text: Strings.getStarted,
                     onPressed: () {
-                      Navigator.of(context).pushReplacement(
+                      Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (ctx) => const OptionsScreen(),
                         ),

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:registration_app/constants/enums/button_size.dart';
-import 'package:registration_app/resources/images.dart';
 import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/screens/auth/signup_screen.dart';
 import 'package:registration_app/themes/colors.dart';
 import 'package:registration_app/widgets/common/custom_elevated_button.dart';
 import 'package:registration_app/widgets/common/form_input.dart';
-import 'package:registration_app/widgets/common/svg_lodder.dart';
 import 'package:registration_app/themes/fonts.dart';
 
 class LoginFormWidget extends StatefulWidget {

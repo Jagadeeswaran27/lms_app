@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:registration_app/core/services/registration/registration_service.dart';
 import 'package:registration_app/models/registration/teacher_registration_model.dart';
+import 'package:registration_app/providers/auth_provider.dart';
 import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/utils/widgets/show_success_modal.dart';
 
@@ -18,12 +20,14 @@ class _TeacherListContainerState extends State<TeacherListContainer> {
   List<TeacherRegistrationModel> _registrationList = [];
 
   Future<void> fetchTeacherRegistrationList() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     setState(() {
       _isLoading = true;
     });
 
     try {
-      final response = await RegistrationService().getTeacherRegistrationList();
+      final response = await RegistrationService()
+          .getTeacherRegistrationList(authProvider.currentUser!.institute[0]);
       setState(() {
         _registrationList = response;
       });
@@ -36,9 +40,10 @@ class _TeacherListContainerState extends State<TeacherListContainer> {
   }
 
   void onApproveTeacher(String registrationId) async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     try {
-      final bool response =
-          await RegistrationService().onAcceptTeacher(registrationId);
+      final bool response = await RegistrationService().onAcceptTeacher(
+          registrationId, authProvider.currentUser!.institute[0]);
 
       if (response) {
         showSuccessModal(
@@ -60,9 +65,10 @@ class _TeacherListContainerState extends State<TeacherListContainer> {
   }
 
   void onRejectTeacher(String registrationId) async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     try {
-      final bool response =
-          await RegistrationService().onRejectTeacher(registrationId);
+      final bool response = await RegistrationService().onRejectTeacher(
+          registrationId, authProvider.currentUser!.institute[0]);
 
       if (response) {
         setState(() {

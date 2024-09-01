@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:registration_app/core/services/registration/registration_service.dart';
 import 'package:registration_app/models/registration/student_registration_model.dart';
+import 'package:registration_app/providers/auth_provider.dart';
 import 'package:registration_app/widgets/admin/student_list_widget.dart';
 
 class StudentListContainer extends StatefulWidget {
@@ -16,12 +18,14 @@ class _StudentListContainerState extends State<StudentListContainer> {
   List<StudentRegistrationModel> _registrationList = [];
 
   Future<void> fetchStudentRegistrationList() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     setState(() {
       _isLoading = true;
     });
 
     try {
-      final response = await RegistrationService().getStudentRegistrationList();
+      final response = await RegistrationService()
+          .getStudentRegistrationList(authProvider.currentUser!.institute[0]);
       setState(() {
         _registrationList = response;
       });
@@ -34,9 +38,10 @@ class _StudentListContainerState extends State<StudentListContainer> {
   }
 
   void onRejectStudent(String registrationId) async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     try {
-      final response =
-          await RegistrationService().onRejectStudent(registrationId);
+      final response = await RegistrationService().onRejectStudent(
+          registrationId, authProvider.currentUser!.institute[0]);
       if (response) {
         setState(() {
           _registrationList = _registrationList

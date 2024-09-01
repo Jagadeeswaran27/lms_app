@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:menu_app/screens/menu/my_courses_screen.dart';
+import 'package:menu_app/routes/student_teacher_routes.dart';
 import 'package:menu_app/themes/themes.dart';
 
 class StudentTeacherApp extends StatelessWidget {
@@ -11,13 +11,8 @@ class StudentTeacherApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: Themes.buildLightTheme(context),
-      home: const SafeArea(
-        child: Center(
-          child: Scaffold(
-            body: MyCoursesScreen(),
-          ),
-        ),
-      ),
+      initialRoute: StudentTeacherRoutes.initialStudentTeacherRoute,
+      routes: StudentTeacherRoutes.buildStudentTeacherRoutes,
     );
   }
 }

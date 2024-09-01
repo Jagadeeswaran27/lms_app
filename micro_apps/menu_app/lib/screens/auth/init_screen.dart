@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:menu_app/constants/enums/user_role_enum.dart';
 import 'package:menu_app/screens/auth/login_screen.dart';
 import 'package:menu_app/screens/common/welcome_screen.dart';
-import 'package:menu_app/screens/menu/my_courses_screen.dart';
+import 'package:menu_app/screens/menu/student_teacher_app.dart';
 import 'package:menu_app/themes/colors.dart';
 
 import 'package:provider/provider.dart';
@@ -32,7 +32,7 @@ class _InitScreenState extends State<InitScreen> {
             builder: (context) => const WelcomeScreen(),
           ),
         );
-        return;
+
         if (authProvider.user == null && context.mounted) {
           authProvider.removeListener(authListener);
           Navigator.of(context).pushReplacement(
@@ -53,7 +53,7 @@ class _InitScreenState extends State<InitScreen> {
               builder: (context) => authProvider.currentUser!.role ==
                       UserRoleEnum.institute.roleName
                   ? const AdminApp()
-                  : const MyCoursesScreen(),
+                  : const StudentTeacherApp(),
             ),
           );
           return;

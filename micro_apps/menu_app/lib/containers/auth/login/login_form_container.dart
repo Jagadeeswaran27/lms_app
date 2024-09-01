@@ -5,7 +5,7 @@ import 'package:menu_app/models/auth/auth_model.dart';
 import 'package:menu_app/providers/auth_provider.dart';
 import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/screens/admin/admin_app.dart';
-import 'package:menu_app/screens/menu/my_courses_screen.dart';
+import 'package:menu_app/screens/menu/student_teacher_app.dart';
 import 'package:menu_app/utils/shared_preference/shared_preference.dart';
 import 'package:menu_app/utils/show_snackbar.dart';
 
@@ -72,16 +72,18 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
       });
       if (context.mounted) {
         if (user.role == UserRoleEnum.institute.roleName) {
-          Navigator.of(context).pushReplacement(
+          Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
               builder: (context) => const AdminApp(),
             ),
+            (Route<dynamic> route) => false,
           );
         } else {
-          Navigator.of(context).pushReplacement(
+          Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (context) => const MyCoursesScreen(),
+              builder: (context) => const StudentTeacherApp(),
             ),
+            (Route<dynamic> route) => false,
           );
         }
       }
