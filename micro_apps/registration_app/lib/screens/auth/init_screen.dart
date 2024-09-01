@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:registration_app/constants/enums/user_role_enum.dart';
 import 'package:registration_app/providers/auth_provider.dart';
 import 'package:registration_app/screens/auth/login_screen.dart';
+import 'package:registration_app/screens/auth/role_type_selection_screen.dart';
 import 'package:registration_app/screens/auth/welcome_screen.dart';
 import 'package:registration_app/screens/student/student_app.dart';
 import 'package:registration_app/screens/teacher/teacher_app.dart';
@@ -43,26 +44,35 @@ class _InitScreenState extends State<InitScreen> {
             authProvider.loggedInStatus == true) {
           authProvider.removeListener(authListener);
 
-          if (authProvider.currentUser!.role ==
-              UserRoleEnum.institute.roleName) {
+          if (authProvider.currentUser!.role == UserRoleEnum.admin.roleName) {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => const AdminApp()),
             );
             return;
-          }
+          } else {
+            if (authProvider.currentUser?.roleType == null ||
+                authProvider.currentUser?.roleType == '') {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                    builder: (context) => const RoleTypeSelectionScreen()),
+              );
+              return;
+            }
+            if (authProvider.currentUser!.roleType ==
+                UserRoleTypeEnum.student.roleName) {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const StudentApp()),
+              );
+              return;
+            }
 
-          if (authProvider.currentUser!.role == UserRoleEnum.student.roleName) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const StudentApp()),
-            );
-            return;
-          }
-
-          if (authProvider.currentUser!.role == UserRoleEnum.teacher.roleName) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const TeacherApp()),
-            );
-            return;
+            if (authProvider.currentUser!.roleType ==
+                UserRoleTypeEnum.teacher.roleName) {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const TeacherApp()),
+              );
+              return;
+            }
           }
         } else {
           authProvider.removeListener(authListener);

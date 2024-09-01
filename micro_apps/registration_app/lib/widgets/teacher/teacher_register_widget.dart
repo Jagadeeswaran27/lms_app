@@ -92,19 +92,6 @@ class _TeacherRegisterWidgetState extends State<TeacherRegisterWidget> {
                 readOnly: true,
               ),
               const SizedBox(height: 20),
-              FormInput(
-                text: Strings.course1,
-                initialValue: widget.course.courseTitle,
-                readOnly: true,
-              ),
-              const SizedBox(height: 30),
-              BatchOfferedCard(
-                selectedBatchDay: batchDay,
-                selectedBatchTime: batchTime,
-                onBatchDayChanged: onBatchDayChanged,
-                onBatchTimeChanged: onBatchTimeChanged,
-              ),
-              const SizedBox(height: 30),
               SizedBox(
                 width: screenSize.width * 0.7,
                 height: 50,

@@ -17,7 +17,6 @@ class TeacherEnrollmentScreen extends StatelessWidget {
 
     return ScreenLayout(
       topBarText: Strings.enrollmentInitiated,
-      showBackButton: false,
       child: TeacherEnrollmentContainer(regId: regId, course: course),
     );
   }

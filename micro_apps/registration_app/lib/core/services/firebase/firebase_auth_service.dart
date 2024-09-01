@@ -60,13 +60,12 @@ class FirebaseAuthService {
     String password,
     String phone,
     String role,
-    String instituteId,
+    String accessCode,
   ) async {
     try {
       UserCredential userCredential = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
-      final bool isInstitute =
-          role == UserRoleEnum.institute.roleName ? true : false;
+      final bool isAdmin = role == UserRoleEnum.admin.roleName ? true : false;
       await _firestore
           .collection('lms-users')
           .doc(userCredential.user!.uid)
@@ -76,13 +75,13 @@ class FirebaseAuthService {
         'email': email,
         'role': role,
         'phone': phone,
-        'institute': isInstitute ? [instituteId] : [],
+        'institute': isAdmin ? [accessCode] : [],
       });
-      if (role == UserRoleEnum.institute.roleName) {
-        await _firestore.collection('institutes').doc(instituteId).set({
-          'uid': instituteId,
+      if (role == UserRoleEnum.admin.roleName) {
+        await _firestore.collection('institutes').doc(accessCode).set({
+          'uid': accessCode,
           'email': email,
-          'instituteId': instituteId,
+          'instituteId': accessCode,
           'instituteName': userName,
         });
       }
@@ -233,6 +232,18 @@ class FirebaseAuthService {
     } catch (e) {
       log.e('Error creating LMS user: $e');
       return '';
+    }
+  }
+
+  Future<bool> updateUserRoleType(String roleType, String uid) async {
+    try {
+      await _firestore.collection('lms-users').doc(uid).update({
+        'roleType': roleType,
+      });
+      return true;
+    } catch (e) {
+      log.e('Error updating user role for user $uid: $e');
+      return false;
     }
   }
 }

@@ -10,6 +10,7 @@ class UserModel {
   final String? profileUrl;
   final String? state;
   final List<String> registeredCourses;
+  final String roleType;
 
   UserModel({
     required this.uid,
@@ -23,6 +24,7 @@ class UserModel {
     this.state,
     this.city,
     this.registeredCourses = const [],
+    this.roleType = '',
   });
 
   factory UserModel.fromMap(Map<String, dynamic> data) {
@@ -38,6 +40,7 @@ class UserModel {
       profileUrl: data['profileUrl'] ?? '',
       institute: List<String>.from(data['institute'] ?? []),
       registeredCourses: List<String>.from(data['registeredCourses'] ?? []),
+      roleType: data['roleType'] ?? '',
     );
   }
 
@@ -54,6 +57,7 @@ class UserModel {
       profileUrl: '',
       institute: [],
       registeredCourses: [],
+      roleType: '',
     );
   }
 
@@ -70,6 +74,7 @@ class UserModel {
       'state': state,
       'profileUrl': profileUrl,
       'registeredCourses': registeredCourses,
+      'roleType': roleType,
     };
   }
 }

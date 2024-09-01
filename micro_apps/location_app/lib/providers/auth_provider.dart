@@ -21,6 +21,7 @@ class AuthProvider with ChangeNotifier {
   bool _isLoading = true;
   UserModel? _currentUser;
   bool _loggedInStatus = false;
+  String selectedinstituteCode = '';
 
   final log = CustomLogger.getLogger('AuthProvider');
   final storageService = FirebaseStorageService();
@@ -63,6 +64,7 @@ class AuthProvider with ChangeNotifier {
           state: loggedUser.state,
           city: loggedUser.city,
           address: loggedUser.address,
+          roleType: loggedUser.roleType,
         );
       }
       _loggedInStatus = loggedInStatus;
@@ -128,19 +130,19 @@ class AuthProvider with ChangeNotifier {
           state: loggedUser.state,
           city: loggedUser.city,
           profileUrl: userCredential.user!.photoURL,
+          roleType: loggedUser.roleType,
         );
         if (loggedUser.uid != '') {
           return AuthModel.success(
-            userName: loggedUser.name,
-            email: email,
-            password: password,
-            credential: userCredential.credential,
-            isEmailVerified: userCredential.user!.emailVerified,
-            userId: userCredential.user!.uid,
-            phoneNumber: loggedUser.phone,
-            imageUrl: userCredential.user!.photoURL ?? '',
-            role: loggedUser.role,
-          );
+              userName: loggedUser.name,
+              email: email,
+              password: password,
+              credential: userCredential.credential,
+              isEmailVerified: userCredential.user!.emailVerified,
+              userId: userCredential.user!.uid,
+              phoneNumber: loggedUser.phone,
+              imageUrl: userCredential.user!.photoURL ?? '',
+              role: loggedUser.role);
         }
       }
       // notifyListeners();
@@ -148,6 +150,47 @@ class AuthProvider with ChangeNotifier {
     } catch (e) {
       log.i('Error fetching user: $e');
       return AuthModel.error(message: parseErrorMessage(e.toString()));
+    }
+  }
+
+  Future<bool> checkExistingInstituteCode(String instituteCode) async {
+    if (currentUser!.institute.isEmpty ||
+        !currentUser!.institute.contains(instituteCode)) {
+      bool doesClinicExists =
+          await FirebaseAuthService().doesInstituteExist(instituteCode);
+
+      if (!doesClinicExists) {
+        return false;
+      }
+      final response = await FirebaseAuthService().updateUserInstitutes(
+        currentUser!.uid,
+        [instituteCode, ...currentUser!.institute],
+      );
+      final User? user = FirebaseAuthService().currentUser;
+
+      if (response && currentUser != null) {
+        selectedinstituteCode = instituteCode;
+        _currentUser = UserModel(
+          uid: currentUser!.uid,
+          name: currentUser!.name,
+          email: currentUser!.email,
+          role: currentUser!.role,
+          phone: currentUser!.phone,
+          address: currentUser!.address,
+          state: currentUser!.state,
+          city: currentUser!.city,
+          institute: [instituteCode, ...currentUser!.institute],
+          profileUrl: user!.photoURL,
+          roleType: currentUser!.roleType,
+        );
+        notifyListeners();
+        return true;
+      }
+      return false;
+    } else {
+      selectedinstituteCode = instituteCode;
+      notifyListeners();
+      return true;
     }
   }
 
@@ -191,6 +234,7 @@ class AuthProvider with ChangeNotifier {
           state: loggedUser.state,
           city: loggedUser.city,
           profileUrl: url,
+          roleType: loggedUser.roleType,
         );
 
         notifyListeners();
@@ -232,6 +276,7 @@ class AuthProvider with ChangeNotifier {
           state: loggedUser.state,
           city: loggedUser.city,
           profileUrl: user.photoURL,
+          roleType: loggedUser.roleType,
         );
         _user = user;
         _loggedInStatus = true;

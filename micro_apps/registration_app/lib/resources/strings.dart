@@ -28,6 +28,8 @@ class Strings {
   static const String registerAs = 'Register as';
   static const String teacher = 'Teacher';
   static const String student = 'Student';
+  static const String user = 'User';
+  static const String admin = 'Admin';
   static const String password = 'Password';
   static const String confirmPassword = 'Confirm password';
   static const String iAgreeWithThe = 'I agree with the ';

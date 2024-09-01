@@ -107,26 +107,6 @@ class _StudentRegisterWidgetState extends State<StudentRegisterWidget> {
                 },
               ),
               const SizedBox(height: 20),
-              ...courses.map(
-                (course) => Column(
-                  children: [
-                    FormInput(
-                      text: 'Course ${courses.indexOf(course) + 1}',
-                      initialValue: course.courseTitle,
-                      hintText: course.courseTitle,
-                      readOnly: true,
-                    ),
-                    const SizedBox(height: 20),
-                  ],
-                ),
-              ),
-              BatchOfferedCard(
-                selectedBatchDay: batchDay,
-                selectedBatchTime: batchTime,
-                onBatchDayChanged: onBatchDayChanged,
-                onBatchTimeChanged: onBatchTimeChanged,
-              ),
-              const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [

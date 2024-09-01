@@ -42,8 +42,7 @@ class _InitScreenState extends State<InitScreen> {
           authProvider.removeListener(authListener);
           print(authProvider.currentUser!.role);
 
-          if (authProvider.currentUser!.role ==
-              UserRoleEnum.institute.roleName) {
+          if (authProvider.currentUser!.role == UserRoleEnum.admin.roleName) {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => const AdminApp(),
@@ -52,8 +51,7 @@ class _InitScreenState extends State<InitScreen> {
             return;
           }
 
-          if (authProvider.currentUser!.role == UserRoleEnum.student.roleName ||
-              authProvider.currentUser!.role == UserRoleEnum.teacher.roleName) {
+          if (authProvider.currentUser!.role == UserRoleEnum.user.roleName) {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => const StudentTeacherApp(),

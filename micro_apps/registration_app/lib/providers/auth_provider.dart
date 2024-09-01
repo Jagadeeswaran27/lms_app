@@ -48,7 +48,40 @@ class AuthProvider with ChangeNotifier {
   }
 
   void updateRegisteredCoursesList(List<String> courseIds) {
-    _currentUser!.registeredCourses.addAll(courseIds);
+    if (_currentUser != null) {
+      _currentUser = UserModel(
+        uid: _currentUser!.uid,
+        name: _currentUser!.name,
+        email: _currentUser!.email,
+        role: _currentUser!.role,
+        phone: _currentUser!.phone,
+        institute: _currentUser!.institute,
+        profileUrl: _currentUser!.profileUrl,
+        address: _currentUser!.address,
+        state: _currentUser!.state,
+        city: _currentUser!.city,
+        registeredCourses: [..._currentUser!.registeredCourses, ...courseIds],
+        roleType: _currentUser!.roleType,
+      );
+    }
+    notifyListeners();
+  }
+
+  void setUserRoleType(String roleType) {
+    _currentUser = UserModel(
+      uid: _currentUser!.uid,
+      name: _currentUser!.name,
+      email: _currentUser!.email,
+      role: _currentUser!.role,
+      phone: _currentUser!.phone,
+      institute: _currentUser!.institute,
+      profileUrl: _currentUser!.profileUrl,
+      address: _currentUser!.address,
+      state: _currentUser!.state,
+      city: _currentUser!.city,
+      registeredCourses: _currentUser!.registeredCourses,
+      roleType: roleType,
+    );
     notifyListeners();
   }
 
@@ -82,6 +115,7 @@ class AuthProvider with ChangeNotifier {
           city: loggedUser.city,
           address: loggedUser.address,
           registeredCourses: loggedUser.registeredCourses,
+          roleType: loggedUser.roleType,
         );
       }
       _loggedInStatus = loggedInStatus;
@@ -148,6 +182,7 @@ class AuthProvider with ChangeNotifier {
           city: loggedUser.city,
           profileUrl: userCredential.user!.photoURL,
           registeredCourses: loggedUser.registeredCourses,
+          roleType: loggedUser.roleType,
         );
         if (loggedUser.uid != '') {
           return AuthModel.success(
@@ -212,6 +247,7 @@ class AuthProvider with ChangeNotifier {
           city: loggedUser.city,
           profileUrl: url,
           registeredCourses: loggedUser.registeredCourses,
+          roleType: loggedUser.roleType,
         );
 
         notifyListeners();
@@ -254,6 +290,7 @@ class AuthProvider with ChangeNotifier {
           city: loggedUser.city,
           profileUrl: user.photoURL,
           registeredCourses: loggedUser.registeredCourses,
+          roleType: loggedUser.roleType,
         );
         _user = user;
         _loggedInStatus = true;
@@ -366,6 +403,7 @@ class AuthProvider with ChangeNotifier {
           city: currentUser!.city,
           institute: [instituteCode, ...currentUser!.institute],
           profileUrl: user!.photoURL,
+          roleType: currentUser!.roleType,
         );
         notifyListeners();
         return true;
@@ -402,5 +440,9 @@ class AuthProvider with ChangeNotifier {
   ) async {
     return await FirebaseAuthService()
         .createLMSUser(uid, name, email, role, phone);
+  }
+
+  Future<bool> updateUserRoleType(String roleType, String uid) async {
+    return await FirebaseAuthService().updateUserRoleType(roleType, uid);
   }
 }

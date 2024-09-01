@@ -36,7 +36,7 @@ class WelcomeScreenWidget extends StatelessWidget {
                 ),
                 child: Text(
                   textAlign: TextAlign.center,
-                  Strings.loremIpsum,
+                  'Register effortlessly with our app! Secure, user-friendly, and quick. Join now to unlock exclusive features and personalized experiences.',
                   style: Theme.of(context).textTheme.displayMedium!.copyWith(
                         height: 1.4,
                       ),

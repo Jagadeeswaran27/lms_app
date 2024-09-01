@@ -53,7 +53,7 @@ class CartWidget extends StatelessWidget {
               svgIcon: icons.Icons.cartIconSvg,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 100),
         ],
       ),
     );

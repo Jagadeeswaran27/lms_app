@@ -14,7 +14,7 @@ class ItemCard extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.0),
           color: ThemeColors.cardColor,

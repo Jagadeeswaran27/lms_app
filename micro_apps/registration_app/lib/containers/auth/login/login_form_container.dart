@@ -7,6 +7,7 @@ import 'package:registration_app/models/auth/auth_model.dart';
 import 'package:registration_app/providers/auth_provider.dart';
 import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/screens/admin/admin_app.dart';
+import 'package:registration_app/screens/auth/role_type_selection_screen.dart';
 import 'package:registration_app/screens/student/student_app.dart';
 import 'package:registration_app/screens/teacher/teacher_app.dart';
 import 'package:registration_app/utils/shared_preference/shared_preference.dart';
@@ -72,28 +73,39 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
         _isLoading = false;
       });
       if (context.mounted) {
-        if (authProvider.currentUser!.role == UserRoleEnum.institute.roleName) {
+        if (authProvider.currentUser!.role == UserRoleEnum.admin.roleName) {
           Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const AdminApp()),
             (Route<dynamic> route) => false,
           );
           return;
-        }
+        } else {
+          if (authProvider.currentUser?.roleType == null ||
+              authProvider.currentUser?.roleType == '') {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                  builder: (context) => const RoleTypeSelectionScreen()),
+            );
+            return;
+          }
 
-        if (authProvider.currentUser!.role == UserRoleEnum.student.roleName) {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const StudentApp()),
-            (Route<dynamic> route) => false,
-          );
-          return;
-        }
+          if (authProvider.currentUser!.roleType ==
+              UserRoleTypeEnum.student.roleName) {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const StudentApp()),
+              (Route<dynamic> route) => false,
+            );
+            return;
+          }
 
-        if (authProvider.currentUser!.role == UserRoleEnum.teacher.roleName) {
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => const TeacherApp()),
-            (Route<dynamic> route) => false,
-          );
-          return;
+          if (authProvider.currentUser!.roleType ==
+              UserRoleTypeEnum.teacher.roleName) {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const TeacherApp()),
+              (Route<dynamic> route) => false,
+            );
+            return;
+          }
         }
       }
     }
