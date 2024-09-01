@@ -29,7 +29,7 @@ class _MyTicketsContainerState extends State<MyTicketsContainer> {
   Future<void> fetchMyEnquiries() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     String userId = authProvider.currentUser!.uid;
-    String instituteId = '123456';
+    String instituteId = authProvider.selectedinstituteCode;
     try {
       _myEnquiries = await enquiryService.getMyEnquiries(userId, instituteId);
     } catch (e) {

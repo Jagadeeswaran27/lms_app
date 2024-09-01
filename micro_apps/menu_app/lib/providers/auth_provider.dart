@@ -21,6 +21,7 @@ class AuthProvider with ChangeNotifier {
   bool _isLoading = true;
   UserModel? _currentUser;
   bool _loggedInStatus = false;
+  String selectedinstituteCode = '';
 
   final log = CustomLogger.getLogger('AuthProvider');
   final storageService = FirebaseStorageService();
@@ -70,6 +71,46 @@ class AuthProvider with ChangeNotifier {
     }
     _isLoading = false;
     notifyListeners();
+  }
+
+  Future<bool> checkExistingInstituteCode(String instituteCode) async {
+    if (currentUser!.institute.isEmpty ||
+        !currentUser!.institute.contains(instituteCode)) {
+      bool doesClinicExists =
+          await FirebaseAuthService().doesInstituteExist(instituteCode);
+
+      if (!doesClinicExists) {
+        return false;
+      }
+      final response = await FirebaseAuthService().updateUserInstitutes(
+        currentUser!.uid,
+        [instituteCode, ...currentUser!.institute],
+      );
+      final User? user = FirebaseAuthService().currentUser;
+
+      if (response && currentUser != null) {
+        selectedinstituteCode = instituteCode;
+        _currentUser = UserModel(
+          uid: currentUser!.uid,
+          name: currentUser!.name,
+          email: currentUser!.email,
+          role: currentUser!.role,
+          phone: currentUser!.phone,
+          address: currentUser!.address,
+          state: currentUser!.state,
+          city: currentUser!.city,
+          institute: [instituteCode, ...currentUser!.institute],
+          profileUrl: user!.photoURL,
+        );
+        notifyListeners();
+        return true;
+      }
+      return false;
+    } else {
+      selectedinstituteCode = instituteCode;
+      notifyListeners();
+      return true;
+    }
   }
 
   Future<AuthModel> signUp(

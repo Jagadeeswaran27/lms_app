@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:registration_app/core/services/registration/registration_service.dart';
 import 'package:registration_app/models/registration/student_registration_model.dart';
+import 'package:registration_app/providers/auth_provider.dart';
 import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/routes/admin_routes.dart';
 import 'package:registration_app/utils/widgets/show_success_modal.dart';
@@ -31,13 +33,17 @@ class _UploadStudentReceiptContainerState
     File feeReceipt,
     File applicationReceipt,
   ) async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     setState(() {
       _isLoading = true;
     });
 
     try {
-      final response = await RegistrationService()
-          .onAcceptStudent(registrationId, feeReceipt, applicationReceipt);
+      final response = await RegistrationService().onAcceptStudent(
+          registrationId,
+          feeReceipt,
+          applicationReceipt,
+          authProvider.currentUser!.institute[0]);
       if (response) {
         showSuccessModal(
           context,

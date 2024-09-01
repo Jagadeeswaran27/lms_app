@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:menu_app/providers/auth_provider.dart';
+import 'package:menu_app/resources/strings.dart';
+import 'package:menu_app/screens/common/welcome_screen.dart';
 
 import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
+import 'package:menu_app/utils/show_snackbar.dart';
+import 'package:provider/provider.dart';
 
 class MenuLayout extends StatelessWidget {
   const MenuLayout({
@@ -25,8 +30,22 @@ class MenuLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void logout(BuildContext context) async {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final response = await authProvider.signOut();
+      if (response) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const WelcomeScreen(),
+          ),
+          (Route<dynamic> route) => false,
+        );
+      } else {
+        showSnackbar(context, Strings.errorLoggingOut);
+      }
+    }
+
     // Detect the height of the keyboard
-    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     final topInset = MediaQuery.of(context).viewPadding.top + 20;
 
     return Scaffold(
@@ -73,7 +92,7 @@ class MenuLayout extends StatelessWidget {
                       color: ThemeColors.primary,
                       size: 20,
                     ),
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: () => logout(context),
                   ),
                 ),
                 Align(

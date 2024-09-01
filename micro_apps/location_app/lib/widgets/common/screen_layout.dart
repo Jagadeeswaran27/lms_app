@@ -1,7 +1,12 @@
+import 'package:location_app/screens/auth/welcome_screen.dart';
+import 'package:location_app/utils/error/show_snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:location_app/providers/auth_provider.dart';
+import 'package:location_app/resources/strings.dart';
 
 import 'package:location_app/themes/colors.dart';
 import 'package:location_app/themes/fonts.dart';
+import 'package:provider/provider.dart';
 
 class ScreenLayout extends StatelessWidget {
   const ScreenLayout({
@@ -25,8 +30,22 @@ class ScreenLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void logout(BuildContext context) async {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final response = await authProvider.signOut();
+      if (response) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const WelcomeScreen(),
+          ),
+          (Route<dynamic> route) => false,
+        );
+      } else {
+        showSnackbar(context, Strings.errorLoggingOut);
+      }
+    }
+
     // Detect the height of the keyboard
-    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
     final topInset = MediaQuery.of(context).viewPadding.top + 20;
 
     return Scaffold(
@@ -63,6 +82,19 @@ class ScreenLayout extends StatelessWidget {
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                   ),
+                Positioned(
+                  right: 10,
+                  top: -5,
+                  bottom: 0,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.logout_outlined,
+                      color: ThemeColors.primary,
+                      size: 20,
+                    ),
+                    onPressed: () => logout(context),
+                  ),
+                ),
                 Align(
                   alignment: Alignment.center,
                   child: Text(
@@ -86,27 +118,27 @@ class ScreenLayout extends StatelessWidget {
           // Main content area
           Expanded(child: child),
           // Bottom container
-          if (showBottomBar)
-            Visibility(
-              visible: bottomInset == 0,
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: ThemeColors.primary,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20.0),
-                    topRight: Radius.circular(20.0),
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    bottomText ?? '',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ),
-              ),
-            ),
+          // if (showBottomBar)
+          //   Visibility(
+          //     visible: bottomInset == 0,
+          //     child: Container(
+          //       width: double.infinity,
+          //       padding: const EdgeInsets.all(16.0),
+          //       decoration: BoxDecoration(
+          //         color: ThemeColors.primary,
+          //         borderRadius: const BorderRadius.only(
+          //           topLeft: Radius.circular(20.0),
+          //           topRight: Radius.circular(20.0),
+          //         ),
+          //       ),
+          //       child: Center(
+          //         child: Text(
+          //           bottomText ?? '',
+          //           style: Theme.of(context).textTheme.titleLarge,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
         ],
       ),
     );

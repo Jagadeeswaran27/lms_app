@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:menu_app/models/courses/course_model.dart';
-import 'package:menu_app/screens/common/course_detail_screen.dart';
+import 'package:menu_app/routes/student_teacher_routes.dart';
 import 'package:menu_app/widgets/common/course_card.dart';
 
 class MyCoursesWidget extends StatelessWidget {
@@ -15,11 +15,8 @@ class MyCoursesWidget extends StatelessWidget {
   final bool isLoading;
 
   void navigateToCourseDetail(BuildContext context, CourseModel course) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (ctx) => CourseDetailScreen(course: course),
-      ),
-    );
+    Navigator.of(context)
+        .pushNamed(StudentTeacherRoutes.courseDetail, arguments: course);
   }
 
   @override

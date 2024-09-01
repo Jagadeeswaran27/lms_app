@@ -69,10 +69,11 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
         _isLoading = false;
       });
       if (context.mounted) {
-        Navigator.of(context).pushReplacement(
+        Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const StudentTeacherApp(),
           ),
+          (Route<dynamic> route) => false,
         );
       }
     }

@@ -13,12 +13,9 @@ class CourseService {
   Future<String?> addCourse(
     Map<String, dynamic> formData,
     File imageFile,
+    String instituteId,
   ) async {
     try {
-      QuerySnapshot querySnapshot =
-          await _firestore.collection('institutes').limit(1).get();
-      String instituteId = querySnapshot.docs.first.id;
-      // String imagePath = 'institutes/$instituteId/${course.courseId}.jpg';
       final courseId = _firestore
           .collection('institutes')
           .doc(instituteId)
@@ -56,15 +53,8 @@ class CourseService {
     }
   }
 
-  Stream<List<CourseModel>> getCourses() async* {
+  Stream<List<CourseModel>> getCourses(String instituteId) async* {
     try {
-      QuerySnapshot qSnapshot =
-          await _firestore.collection('institutes').limit(1).get();
-      if (qSnapshot.docs.isEmpty) {
-        yield [];
-        return;
-      }
-      String instituteId = qSnapshot.docs.first.id;
       yield* _firestore
           .collection('institutes')
           .doc(instituteId)

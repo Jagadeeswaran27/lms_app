@@ -107,6 +107,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 text: Strings.login,
                 buttonSize: ButtonSize.large,
                 onPressed: _handleSignIn,
+                isLoading: widget.isLoading,
               ),
             ),
             const SizedBox(height: 20),

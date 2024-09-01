@@ -17,17 +17,13 @@ class AttendanceService {
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<List<CourseModel>> getCourses(String userId, String instId) async {
+  Future<List<CourseModel>> getCourses(
+      String userId, String instituteId) async {
     try {
       // Step 1: Fetch the user document
       DocumentSnapshot userSnapshot =
           await _firestore.collection('lms-users').doc(userId).get();
-      QuerySnapshot snapshot = await _firestore
-          .collection('institutes')
-          .limit(1) // Limit the query to get only the first document
-          .get();
 
-      String instituteId = snapshot.docs.first.id;
       if (userSnapshot.exists) {
         // Explicitly cast the data to a Map
         Map<String, dynamic> userData =

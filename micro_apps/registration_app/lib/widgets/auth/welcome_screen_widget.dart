@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:registration_app/constants/enums/button_size.dart';
 import 'package:registration_app/resources/strings.dart';
-import 'package:registration_app/routes/routes.dart';
+import 'package:registration_app/screens/auth/options_screen.dart';
 import 'package:registration_app/widgets/common/custom_elevated_button.dart';
 
 class WelcomeScreenWidget extends StatelessWidget {
@@ -26,7 +26,7 @@ class WelcomeScreenWidget extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                Strings.registration,
+                Strings.registrationApp,
                 style: Theme.of(context).textTheme.headlineLarge,
               ),
               Container(
@@ -47,8 +47,11 @@ class WelcomeScreenWidget extends StatelessWidget {
                 child: CustomElevatedButton(
                   text: Strings.getStarted,
                   onPressed: () {
-                    Navigator.of(context)
-                        .pushReplacementNamed(Routes.optionsScreen);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => const OptionsScreen(),
+                      ),
+                    );
                   },
                   buttonSize: ButtonSize.large,
                 ),

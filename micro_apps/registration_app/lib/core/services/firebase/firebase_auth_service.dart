@@ -65,8 +65,8 @@ class FirebaseAuthService {
     try {
       UserCredential userCredential = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
-      // final bool isInstitute =
-      //     role == UserRoleEnum.institute.roleName ? true : false;
+      final bool isInstitute =
+          role == UserRoleEnum.institute.roleName ? true : false;
       await _firestore
           .collection('lms-users')
           .doc(userCredential.user!.uid)
@@ -76,7 +76,7 @@ class FirebaseAuthService {
         'email': email,
         'role': role,
         'phone': phone,
-        // 'institute': isInstitute ? [instituteId] : [],
+        'institute': isInstitute ? [instituteId] : [],
       });
       if (role == UserRoleEnum.institute.roleName) {
         await _firestore.collection('institutes').doc(instituteId).set({
@@ -202,6 +202,19 @@ class FirebaseAuthService {
       return instituteDoc.exists;
     } catch (e) {
       log.e('Error checking institute existence: $e');
+      return false;
+    }
+  }
+
+  Future<bool> updateUserInstitutes(String uid, List<String> institutes) async {
+    try {
+      await _firestore.collection('lms-users').doc(uid).update({
+        'institute': institutes,
+      });
+      log.i('institutes updated successfully for user $uid');
+      return true;
+    } catch (e) {
+      log.e('Error updating institutes for user $uid: $e');
       return false;
     }
   }
