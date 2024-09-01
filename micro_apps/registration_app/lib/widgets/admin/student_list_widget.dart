@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:registration_app/models/registration/student_registration_model.dart';
 
-import 'package:registration_app/resources/strings.dart';
+import 'package:registration_app/models/registration/student_registration_model.dart';
 import 'package:registration_app/routes/admin_routes.dart';
 import 'package:registration_app/themes/colors.dart';
 import 'package:registration_app/widgets/admin/action_card.dart';
@@ -11,10 +10,12 @@ class StudentListWidget extends StatelessWidget {
     super.key,
     required this.isLoading,
     required this.registrationList,
+    required this.onRejectStudent,
   });
 
   final bool isLoading;
   final List<StudentRegistrationModel> registrationList;
+  final Function(String) onRejectStudent;
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +49,12 @@ class StudentListWidget extends StatelessWidget {
                   courseName: student.courseName,
                   paymentDone: student.paymentStatus == 'Paid',
                   onAccept: () {
-                    Navigator.of(context).pushNamed(AdminRoutes.uploadReceipt);
+                    Navigator.of(context).pushNamed(
+                      AdminRoutes.uploadReceipt,
+                      arguments: student,
+                    );
                   },
-                  onReject: () {},
+                  onReject: () => onRejectStudent(student.registrationId),
                 ))
             .toList(),
       ),

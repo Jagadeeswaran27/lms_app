@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:registration_app/core/services/firebase/firebase_storage_service.dart';
 import 'package:registration_app/models/registration/course_model.dart';
 import 'package:registration_app/models/registration/student_registration_model.dart';
 import 'package:registration_app/models/registration/teacher_registration_model.dart';
 
 class RegistrationService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  static final FirebaseStorageService _firebaseStorage =
+      FirebaseStorageService();
 
   Future<String> registerTeacher({
     required CourseModel course,
@@ -218,6 +223,7 @@ class RegistrationService {
           .collection('institutes')
           .doc(instituteId)
           .collection('students-registrations')
+          .where('status', isEqualTo: 'Pending')
           .get();
       return snapshot.docs
           .map((doc) => StudentRegistrationModel.fromJson(
@@ -246,6 +252,125 @@ class RegistrationService {
     } catch (e) {
       print('Error fetching teacher registration list: $e');
       throw Exception('Failed to fetch teacher registration list');
+    }
+  }
+
+  Future<bool> onAcceptStudent(
+    String registrationId,
+    File feeReceipt,
+    File applicationReceipt,
+  ) async {
+    try {
+      final QuerySnapshot instituteSnapshot =
+          await _firestore.collection('institutes').limit(1).get();
+      final String instituteId = instituteSnapshot.docs.first.id;
+      String feeReceiptUrl = await _firebaseStorage.uploadFile(
+          feeReceipt,
+          'institutes/$instituteId/studentt-registration/$registrationId',
+          'fee-receipt');
+      String applicationReceiptUrl = await _firebaseStorage.uploadFile(
+          applicationReceipt,
+          'institutes/$instituteId/studentt-registration/$registrationId',
+          'application-receipt');
+      final DocumentReference studentRef = _firestore
+          .collection('institutes')
+          .doc(instituteId)
+          .collection('students-registrations')
+          .doc(registrationId);
+
+      await studentRef.update({
+        'status': 'Approved',
+        'feeReceiptUrl': feeReceiptUrl,
+        'applicationReceiptUrl': applicationReceiptUrl,
+      });
+      return true;
+    } catch (e) {
+      print('Error fetching teacher registration list: $e');
+      return false;
+    }
+  }
+
+  Future<bool> onRejectStudent(
+    String registrationId,
+  ) async {
+    try {
+      final QuerySnapshot instituteSnapshot =
+          await _firestore.collection('institutes').limit(1).get();
+      final String instituteId = instituteSnapshot.docs.first.id;
+
+      final DocumentReference studentRef = _firestore
+          .collection('institutes')
+          .doc(instituteId)
+          .collection('students-registrations')
+          .doc(registrationId);
+
+      await studentRef.update({
+        'status': 'Rejected',
+      });
+      return true;
+    } catch (e) {
+      print('Error fetching teacher registration list: $e');
+      return false;
+    }
+  }
+
+  Future<bool> onAcceptTeacher(String registrationId) async {
+    try {
+      final QuerySnapshot instituteSnapshot =
+          await _firestore.collection('institutes').limit(1).get();
+      final String instituteId = instituteSnapshot.docs.first.id;
+      final DocumentReference studentRef = _firestore
+          .collection('institutes')
+          .doc(instituteId)
+          .collection('teachers-registrations')
+          .doc(registrationId);
+
+      await studentRef.update({'status': 'Approved'});
+      return true;
+    } catch (e) {
+      print('Error fetching teacher registration list: $e');
+      return false;
+    }
+  }
+
+  Future<bool> onRejectTeacher(String registrationId) async {
+    try {
+      final QuerySnapshot instituteSnapshot =
+          await _firestore.collection('institutes').limit(1).get();
+      final String instituteId = instituteSnapshot.docs.first.id;
+      final DocumentReference studentRef = _firestore
+          .collection('institutes')
+          .doc(instituteId)
+          .collection('teachers-registrations')
+          .doc(registrationId);
+
+      await studentRef.update({'status': 'Rejected'});
+      return true;
+    } catch (e) {
+      print('Error fetching teacher registration list: $e');
+      return false;
+    }
+  }
+
+  Future<List<StudentRegistrationModel>>
+      getApprovedStudentRegistrationList() async {
+    try {
+      final QuerySnapshot instituteSnapshot =
+          await _firestore.collection('institutes').limit(1).get();
+      final String instituteId = instituteSnapshot.docs.first.id;
+      final QuerySnapshot snapshot = await _firestore
+          .collection('institutes')
+          .doc(instituteId)
+          .collection('students-registrations')
+          .where('status', isEqualTo: 'Approved')
+          .get();
+      return snapshot.docs
+          .map((doc) => StudentRegistrationModel.fromJson(
+              doc.data() as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      print('Error fetching student registration list: $e');
+      throw Exception('Failed to fetch student registration list');
     }
   }
 }

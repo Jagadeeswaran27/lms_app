@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:registration_app/models/registration/teacher_registration_model.dart';
 
-import 'package:registration_app/resources/strings.dart';
-import 'package:registration_app/routes/admin_routes.dart';
+import 'package:registration_app/models/registration/teacher_registration_model.dart';
 import 'package:registration_app/themes/colors.dart';
-import 'package:registration_app/utils/widgets/show_success_modal.dart';
 import 'package:registration_app/widgets/admin/action_card.dart';
 
 class TeacherListWidget extends StatelessWidget {
@@ -12,10 +9,14 @@ class TeacherListWidget extends StatelessWidget {
     super.key,
     required this.isLoading,
     required this.registrationList,
+    required this.onApproveTeacher,
+    required this.onRejectTeacher,
   });
 
   final bool isLoading;
   final List<TeacherRegistrationModel> registrationList;
+  final void Function(String) onApproveTeacher;
+  final void Function(String) onRejectTeacher;
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +46,11 @@ class TeacherListWidget extends StatelessWidget {
         children: registrationList
             .map((teacher) => ActionCard(
                   imageUrl: teacher.imageUrl,
-                  name: teacher.userName ?? '',
+                  name: teacher.userName,
                   courseName: teacher.courseName,
                   paymentDone: teacher.paymentStatus == 'Paid',
-                  onAccept: () {
-                    Navigator.of(context).pushNamed(AdminRoutes.uploadReceipt);
-                  },
-                  onReject: () {},
+                  onAccept: () => onApproveTeacher(teacher.registrationId),
+                  onReject: () => onRejectTeacher(teacher.registrationId),
                 ))
             .toList(),
       ),
