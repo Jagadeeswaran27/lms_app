@@ -108,7 +108,7 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30), color: ThemeColors.white),
       padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
-      margin: const EdgeInsets.only(left: 15, right: 15, top: 70),
+      margin: const EdgeInsets.only(left: 15, right: 15, top: 40),
       child: Form(
         key: _formKey,
         child: Column(
@@ -298,13 +298,6 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
                 buttonSize: ButtonSize.large,
                 onPressed: _handleSignup,
                 isLoading: widget.isLoading,
-              ),
-            ),
-            const SizedBox(height: 20),
-            InkWell(
-              onTap: () {},
-              child: const SVGLoader(
-                image: Images.google,
               ),
             ),
             const SizedBox(height: 20),

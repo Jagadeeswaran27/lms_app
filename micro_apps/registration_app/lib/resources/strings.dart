@@ -117,4 +117,5 @@ class Strings {
   static const String update = "Update : ";
   static const String feeReceipt = 'Fee receipt';
   static const String applicationReceipt = 'Application receipt';
+  static const String proceedToPayment = 'Proceed to payment';
 }

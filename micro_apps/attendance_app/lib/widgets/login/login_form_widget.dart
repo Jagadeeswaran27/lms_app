@@ -110,21 +110,6 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               ),
             ),
             const SizedBox(height: 20),
-            Text(
-              Strings.orLoginWithGoogleAccount,
-              style: Theme.of(context)
-                  .textTheme
-                  .displayMedium!
-                  .copyWith(fontSize: 15),
-            ),
-            const SizedBox(height: 20),
-            InkWell(
-              onTap: () {},
-              child: const SVGLoader(
-                image: Images.google,
-              ),
-            ),
-            const SizedBox(height: 20),
             RichText(
               text: TextSpan(
                 children: [

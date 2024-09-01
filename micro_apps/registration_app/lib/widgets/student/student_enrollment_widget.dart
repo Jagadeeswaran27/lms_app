@@ -102,7 +102,7 @@ class StudentEnrollmentWidget extends StatelessWidget {
                     child: IconTextButton(
                       iconHorizontalPadding: 7,
                       radius: 20,
-                      text: Strings.proceedToCheckout,
+                      text: Strings.proceedToPayment,
                       onPressed: () {},
                       color: ThemeColors.primary,
                       buttonTextStyle: Theme.of(context).textTheme.bodyMedium,
