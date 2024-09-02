@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:menu_app/screens/auth/access_code_screen.dart';
 import 'package:menu_app/screens/common/course_detail_screen.dart';
 import 'package:menu_app/screens/menu/my_courses_screen.dart';
-import 'package:menu_app/screens/menu/user_item_category_screen.dart';
 
 class StudentTeacherRoutes {
   const StudentTeacherRoutes._();
@@ -15,7 +14,6 @@ class StudentTeacherRoutes {
   static Map<String, WidgetBuilder> get buildStudentTeacherRoutes {
     return {
       accessCode: (context) => const AccessCodeScreen(),
-      userItemCategory: (context) => const UserItemCategoryScreen(),
       myCourses: (context) => const MyCoursesScreen(),
       courseDetail: (context) => const CourseDetailScreen(),
     };

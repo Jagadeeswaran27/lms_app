@@ -27,14 +27,12 @@ class ItemListContainerState extends State<ItemListContainer> {
 
   Future<void> _fetchCourses() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    print(authProvider.currentUser!.institute[0]);
     setState(() {
       isLoading = true;
     });
     String instituteId = authProvider.currentUser!.institute[0];
     List<CourseModel> fetchedCourses =
         await itemsService.getCourses(instituteId);
-    print(fetchedCourses.length);
     setState(() {
       isLoading = false;
       myCourses = fetchedCourses;

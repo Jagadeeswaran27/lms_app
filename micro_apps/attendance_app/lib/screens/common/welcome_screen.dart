@@ -48,7 +48,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   child: Text(
                     textAlign: TextAlign.center,
-                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make',
+                    'Efficiently manage and track attendance with our intuitive app, ensuring accurate records, easy reporting, and seamless user experience for educators and Users.',
                     style: Theme.of(context).textTheme.displayMedium!.copyWith(
                           height: 1.4,
                         ),

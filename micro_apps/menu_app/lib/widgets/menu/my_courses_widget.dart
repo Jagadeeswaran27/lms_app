@@ -38,7 +38,7 @@ class MyCoursesWidget extends StatelessWidget {
     if (courses.isEmpty) {
       return Center(
         child: Text(
-          'No $subCategory found',
+          'Nothing found',
           style: Theme.of(context).textTheme.bodyMediumPrimary,
         ),
       );

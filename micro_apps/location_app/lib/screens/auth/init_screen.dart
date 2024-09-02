@@ -40,7 +40,6 @@ class _InitScreenState extends State<InitScreen> {
             authProvider.user!.emailVerified &&
             authProvider.loggedInStatus == true) {
           authProvider.removeListener(authListener);
-          print(authProvider.currentUser!.role);
 
           if (authProvider.currentUser!.role == UserRoleEnum.admin.roleName) {
             Navigator.of(context).pushReplacement(

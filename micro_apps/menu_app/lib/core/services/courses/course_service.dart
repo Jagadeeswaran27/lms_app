@@ -10,6 +10,28 @@ class CourseService {
   final FirebaseStorageService _storageService = FirebaseStorageService();
   final log = CustomLogger.getLogger('CourseService');
 
+  Future<String?> hasSelectedCategory(String accessCode) async {
+    try {
+      DocumentReference instituteDocRef =
+          _firestore.collection('institutes').doc(accessCode);
+
+      DocumentSnapshot instituteDoc = await instituteDocRef.get();
+
+      if (instituteDoc.exists) {
+        Map<String, dynamic>? data =
+            instituteDoc.data() as Map<String, dynamic>?;
+        if (data != null && data.containsKey('selectedCategory')) {
+          return data['selectedCategory'] as String;
+        }
+      }
+      return null;
+    } catch (e) {
+      print(e);
+      log.e('Error checking selectedCategory: $e');
+      throw Exception('Failed to check selectedCategory');
+    }
+  }
+
   Future<String?> addItem(
     Map<String, dynamic> formData,
     File imageFile,
@@ -23,6 +45,25 @@ class CourseService {
       final itemTitles =
           formData['itemTitle'].split(',').map((e) => e.trim()).toList();
       String? lastAddedItemId;
+      // Check if the selectedCategory field exists in the document
+      DocumentReference instituteDocRef =
+          _firestore.collection('institutes').doc(accessCode);
+
+      DocumentSnapshot instituteDoc = await instituteDocRef.get();
+
+      // Check if the document exists and if the selectedCategory field is present
+      if (instituteDoc.exists) {
+        Map<String, dynamic>? data =
+            instituteDoc.data() as Map<String, dynamic>?;
+        if (data == null || !data.containsKey('selectedCategory')) {
+          // If selectedCategory field doesn't exist, add it
+          await instituteDocRef.update({
+            'selectedCategory': subCategory,
+          });
+          log.i(
+              'selectedCategory set to "$subCategory" for institute "$accessCode"');
+        }
+      }
       for (String itemTitle in itemTitles) {
         final itemId = _firestore
             .collection('institutes')

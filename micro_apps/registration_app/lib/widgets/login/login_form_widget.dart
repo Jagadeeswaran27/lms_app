@@ -81,22 +81,22 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               ),
               obscureText: isPasswordVisible,
             ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Text(
-                    Strings.forgetYourPassword,
-                    style: Theme.of(context)
-                        .textTheme
-                        .displayMediumPrimary
-                        .copyWith(fontSize: 14.0),
-                  ),
-                )
-              ],
-            ),
+            // const SizedBox(height: 20),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.end,
+            //   children: [
+            //     GestureDetector(
+            //       onTap: () {},
+            //       child: Text(
+            //         Strings.forgetYourPassword,
+            //         style: Theme.of(context)
+            //             .textTheme
+            //             .displayMediumPrimary
+            //             .copyWith(fontSize: 14.0),
+            //       ),
+            //     )
+            //   ],
+            // ),
             const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,

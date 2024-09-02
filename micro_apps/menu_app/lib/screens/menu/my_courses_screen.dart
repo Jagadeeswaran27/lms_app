@@ -9,13 +9,10 @@ class MyCoursesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String subCategory =
-        ModalRoute.of(context)?.settings.arguments as String;
-
-    return MenuLayout(
+    return const MenuLayout(
       topBarText: Strings.itemList,
-      showBackButton: true,
-      child: MyCoursesContainer(subCategory: subCategory),
+      showBackButton: false,
+      child: MyCoursesContainer(),
     );
   }
 }

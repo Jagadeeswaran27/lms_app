@@ -11,8 +11,10 @@ class ItemCategoryWidget extends StatelessWidget {
     final Size screenSize = MediaQuery.of(context).size;
 
     void navigateToItemList(String subCategory) {
-      Navigator.of(context)
-          .pushNamed(AdminRoutes.itemList, arguments: subCategory);
+      Navigator.of(context).pushReplacementNamed(
+        AdminRoutes.itemList,
+        arguments: subCategory,
+      );
     }
 
     return Container(
