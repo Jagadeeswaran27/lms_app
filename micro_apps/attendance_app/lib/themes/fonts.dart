@@ -100,4 +100,6 @@ extension ThemeExtension on TextTheme {
       bodyLarge!.copyWith(color: ThemeColors.titleBrown);
   TextStyle get bodyLargeTitleBrownBold => bodyLarge!
       .copyWith(color: ThemeColors.titleBrown, fontWeight: FontWeight.w600);
+  TextStyle get bodyLargePrimaryBold => bodyLarge!
+      .copyWith(color: ThemeColors.primary, fontWeight: FontWeight.w600);
 }

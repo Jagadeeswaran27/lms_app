@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class CourseModel {
+class AdminCourseModel {
   final String courseId;
   final String courseTitle;
   final String imageUrl;
@@ -9,10 +9,9 @@ class CourseModel {
   final List<String> batchDay;
   final String batchTime;
   final double amount;
-  final int? noOfRegistrations;
-  final List<String>? students;
+  final int noOfRegistrations;
 
-  CourseModel({
+  AdminCourseModel({
     required this.courseId,
     required this.courseTitle,
     required this.imageUrl,
@@ -21,12 +20,11 @@ class CourseModel {
     required this.batchDay,
     required this.batchTime,
     required this.amount,
-    this.noOfRegistrations,
-    this.students,
+    required this.noOfRegistrations,
   });
 
-  factory CourseModel.fromJson(Map<String, dynamic> json) {
-    return CourseModel(
+  factory AdminCourseModel.fromJson(Map<String, dynamic> json) {
+    return AdminCourseModel(
       courseId: json['courseId'],
       courseTitle: json['courseTitle'],
       imageUrl: json['imageUrl'],
@@ -37,8 +35,7 @@ class CourseModel {
           .toList(),
       batchTime: json['batchTime'],
       amount: json['amount'].toDouble(),
-      noOfRegistrations: json['noOfRegistrations'] ?? 0,
-      students: json['students'] ?? [],
+      noOfRegistrations: json['noOfRegistrations'],
     );
   }
 
@@ -53,7 +50,6 @@ class CourseModel {
       'batchTime': batchTime,
       'amount': amount,
       'noOfRegistrations': noOfRegistrations,
-      'students': students,
     };
   }
 

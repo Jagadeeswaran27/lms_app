@@ -1,7 +1,9 @@
 import 'package:attendance_app/constants/constants.dart';
+import 'package:attendance_app/constants/enums/user_role_enum.dart';
 import 'package:attendance_app/models/auth/auth_model.dart';
 import 'package:attendance_app/providers/auth_provider.dart';
 import 'package:attendance_app/resources/strings.dart';
+import 'package:attendance_app/screens/admin/admin_app.dart';
 import 'package:attendance_app/screens/attendance/app.dart';
 import 'package:attendance_app/utils/error/show_snackbar.dart';
 import 'package:attendance_app/utils/shared_preference/shared_preference.dart';
@@ -69,12 +71,21 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
         _isLoading = false;
       });
       if (context.mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => const StudentTeacherAttencanceApp(),
-          ),
-          (Route<dynamic> route) => false,
-        );
+        if (user.role == UserRoleEnum.admin.roleName) {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const AdminApp(),
+            ),
+            (Route<dynamic> route) => false,
+          );
+        } else {
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const StudentTeacherAttencanceApp(),
+            ),
+            (Route<dynamic> route) => false,
+          );
+        }
       }
     }
   }

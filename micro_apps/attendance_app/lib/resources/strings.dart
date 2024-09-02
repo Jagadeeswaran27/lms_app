@@ -38,6 +38,8 @@ class Strings {
   static const String verifiedText = 'Email Verified\n& Signed up';
   static const String verifiedText2 = 'Email Verified\n& Credentials set';
   static const String ok = 'Ok';
+  static const String user = 'User';
+  static const String admin = 'Admin';
   static const String passwordValidationString =
       'Password must be at least 6 characters';
   static const String passwordsShouldMatch = 'Passwords should match';
@@ -135,4 +137,6 @@ class Strings {
   static const String toAcknowledge = 'To Acknowledge';
   static const String resolved = 'Resolved';
   static const String toResolve = 'To Resolve';
+  static const String totalRegistration = 'Total Registrations: ';
+  static const String studentNames = 'Student Names :';
 }
