@@ -80,20 +80,7 @@ class _TeacherItemDetailWidgetState extends State<TeacherItemDetailWidget> {
               ],
             ),
             const SizedBox(height: 20),
-            BatchCard(
-              batchDay: selectedBatchDay,
-              batchTime: selectedBatchTime,
-              onBatchDayChanged: (String? newValue) {
-                setState(() {
-                  selectedBatchDay = newValue!;
-                });
-              },
-              onBatchTimeChanged: (String? newValue) {
-                setState(() {
-                  selectedBatchTime = newValue!;
-                });
-              },
-            ),
+            BatchCard(course: widget.course),
             const SizedBox(height: 20),
             Row(
               children: [

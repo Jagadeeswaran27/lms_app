@@ -64,9 +64,12 @@ class SuccessCard extends StatelessWidget {
                 ...content!.map(
                   (item) {
                     return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text(
                               Strings.registrationNo,
@@ -84,7 +87,7 @@ class SuccessCard extends StatelessWidget {
                                   .textTheme
                                   .displayMediumPrimarySemiBold
                                   .copyWith(
-                                    fontSize: 14,
+                                    fontSize: 10,
                                   ),
                             ),
                           ],

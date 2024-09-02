@@ -61,7 +61,7 @@ class _TeacherRegisterWidgetState extends State<TeacherRegisterWidget> {
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final formKey = GlobalKey<FormState>();
-    String email = authProvider.user?.email ?? '';
+    String email = authProvider.currentUser?.email ?? '';
     String userName = authProvider.currentUser?.name ?? '';
     String mobileNumber = authProvider.currentUser?.phone ?? '';
     final Size screenSize = MediaQuery.of(context).size;

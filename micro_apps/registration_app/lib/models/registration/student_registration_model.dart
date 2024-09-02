@@ -7,7 +7,7 @@ class StudentRegistrationModel {
   final String paymentStatus;
   final String imageUrl;
   final String registeredFor;
-  final String batchDay;
+  final List<String> batchDay;
   final String batchTime;
   final String email;
   final String userName;
@@ -39,7 +39,9 @@ class StudentRegistrationModel {
       paymentStatus: json['paymentStatus'] as String,
       imageUrl: json['imageUrl'] as String,
       registeredFor: json['registeredFor'] as String,
-      batchDay: json['batchDay'] as String,
+      batchDay: (json['batchDay'] as List<dynamic>)
+          .map((item) => item as String)
+          .toList(),
       batchTime: json['batchTime'] as String,
       email: json['email'] as String,
       userName: json['userName'] as String,
@@ -100,36 +102,4 @@ class StudentRegistrationModel {
         userName,
         mobileNumber,
       );
-
-  StudentRegistrationModel copyWith({
-    String? courseName,
-    String? courseId,
-    String? registrationId,
-    String? registeredBy,
-    String? status,
-    String? paymentStatus,
-    String? imageUrl,
-    String? registeredFor,
-    String? batchDay,
-    String? batchTime,
-    String? email,
-    String? userName,
-    String? mobileNumber,
-  }) {
-    return StudentRegistrationModel(
-      courseName: courseName ?? this.courseName,
-      courseId: courseId ?? this.courseId,
-      registrationId: registrationId ?? this.registrationId,
-      registeredBy: registeredBy ?? this.registeredBy,
-      status: status ?? this.status,
-      paymentStatus: paymentStatus ?? this.paymentStatus,
-      imageUrl: imageUrl ?? this.imageUrl,
-      registeredFor: registeredFor ?? this.registeredFor,
-      batchDay: batchDay ?? this.batchDay,
-      batchTime: batchTime ?? this.batchTime,
-      email: email ?? this.email,
-      userName: userName ?? this.userName,
-      mobileNumber: mobileNumber ?? this.mobileNumber,
-    );
-  }
 }

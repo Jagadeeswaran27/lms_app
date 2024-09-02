@@ -6,7 +6,7 @@ class CourseModel {
   final String imageUrl;
   final String shortDescription;
   final String aboutDescription;
-  final String? batchDay;
+  final List<String>? batchDay;
   final String? batchTime;
   final double amount;
 
@@ -28,7 +28,9 @@ class CourseModel {
       imageUrl: json['imageUrl'],
       shortDescription: json['shortDescription'],
       aboutDescription: json['aboutDescription'],
-      batchDay: json['batchDay'] ?? '',
+      batchDay: (json['batchDay'] as List<dynamic>?)
+          ?.map((item) => item as String)
+          .toList(),
       batchTime: json['batchTime'] ?? '',
       amount: json['amount'].toDouble(),
     );

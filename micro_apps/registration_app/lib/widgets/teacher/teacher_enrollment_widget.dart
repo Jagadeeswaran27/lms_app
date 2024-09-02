@@ -68,7 +68,7 @@ class TeacherEnrollmentWidget extends StatelessWidget {
               ),
               Text(
                 regId,
-                style: Theme.of(context).textTheme.bodyMediumPrimary,
+                style: Theme.of(context).textTheme.displayMediumPrimary,
               ),
             ],
           ),
@@ -84,7 +84,6 @@ class TeacherEnrollmentWidget extends StatelessWidget {
                   imageUrl: course.imageUrl,
                   title: course.courseTitle,
                   description: course.shortDescription,
-                  batchDay: course.batchDay,
                   batchTime: course.batchTime,
                 ),
                 const SizedBox(height: 20),
@@ -111,7 +110,7 @@ class TeacherEnrollmentWidget extends StatelessWidget {
                     Column(
                       children: [
                         SizedBox(
-                          width: 200,
+                          width: 180,
                           child: FormInput(
                             text: "Status",
                             hintText: 'Pending',

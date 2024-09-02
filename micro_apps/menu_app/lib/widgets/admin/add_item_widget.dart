@@ -40,9 +40,15 @@ class AddItemWidgetState extends State<AddItemWidget> {
   String _itemTitle = '';
   String _shortDescription = '';
   String _aboutDescription = '';
-  String _batchDay = 'Weekend';
+  List<String> _selectedDays = [];
   String _batchTime = 'Morning';
   String _amountDetails = '';
+
+  void _handleBatchOfferedDaysChange(List<String> days) {
+    setState(() {
+      _selectedDays = days;
+    });
+  }
 
   void _handleTitleChange(String value) {
     setState(() {
@@ -67,7 +73,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
       _itemTitle = '';
       _shortDescription = '';
       _aboutDescription = '';
-      _batchDay = 'weekend';
+      _selectedDays = [];
       _batchTime = 'morning';
       _amountDetails = '';
       _isBatchOfferedSelected = false;
@@ -108,7 +114,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
         'itemTitle': _itemTitle,
         'shortDescription': _shortDescription,
         'aboutDescription': _aboutDescription,
-        'batchDay': widget.subCategory == 'courses' ? _batchDay : null,
+        'batchDay': widget.subCategory == 'courses' ? _selectedDays : null,
         'batchTime': widget.subCategory == 'courses' ? _batchTime : null,
         'amount': _amountDetails,
       };
@@ -133,12 +139,6 @@ class AddItemWidgetState extends State<AddItemWidget> {
     setState(() {
       _isBatchOfferedSelected = value!;
       _isBatchOfferedError = null;
-    });
-  }
-
-  void _handleBatchOfferedDayChange(String? value) {
-    setState(() {
-      _batchDay = value!;
     });
   }
 
@@ -242,9 +242,10 @@ class AddItemWidgetState extends State<AddItemWidget> {
                       Column(
                         children: [
                           BatchOfferedCard(
-                            selectedDay: _batchDay,
+                            selectedDays: _selectedDays,
                             selectedTime: _batchTime,
-                            onSelectedDayChanged: _handleBatchOfferedDayChange,
+                            onSelectedDaysChanged:
+                                _handleBatchOfferedDaysChange,
                             onSelectedTimeChanged:
                                 _handleBatchOfferedTimeChange,
                           ),

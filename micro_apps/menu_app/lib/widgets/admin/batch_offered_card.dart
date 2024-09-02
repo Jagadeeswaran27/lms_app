@@ -5,16 +5,16 @@ import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
 
 class BatchOfferedCard extends StatefulWidget {
-  final String selectedDay;
+  final List<String> selectedDays;
   final String selectedTime;
-  final ValueChanged<String?> onSelectedDayChanged;
+  final ValueChanged<List<String>> onSelectedDaysChanged;
   final ValueChanged<String?> onSelectedTimeChanged;
 
   const BatchOfferedCard({
     super.key,
-    required this.selectedDay,
+    required this.selectedDays,
     required this.selectedTime,
-    required this.onSelectedDayChanged,
+    required this.onSelectedDaysChanged,
     required this.onSelectedTimeChanged,
   });
 
@@ -23,6 +23,16 @@ class BatchOfferedCard extends StatefulWidget {
 }
 
 class BatchOfferedCardState extends State<BatchOfferedCard> {
+  void _handleDayChange(String day, bool isSelected) {
+    final newSelectedDays = List<String>.from(widget.selectedDays);
+    if (isSelected) {
+      newSelectedDays.add(day);
+    } else {
+      newSelectedDays.remove(day);
+    }
+    widget.onSelectedDaysChanged(newSelectedDays);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -54,18 +64,20 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              _CustomRadioButton(
+              _CustomCheckbox(
                 text: 'Weekend',
-                value: 'Weekend',
-                groupValue: widget.selectedDay,
-                onChanged: widget.onSelectedDayChanged,
+                value: widget.selectedDays.contains('Weekend'),
+                onChanged: (bool? newValue) {
+                  _handleDayChange('Weekend', newValue!);
+                },
               ),
               const SizedBox(width: 20),
-              _CustomRadioButton(
+              _CustomCheckbox(
                 text: 'Weekday',
-                value: 'Weekday',
-                groupValue: widget.selectedDay,
-                onChanged: widget.onSelectedDayChanged,
+                value: widget.selectedDays.contains('Weekday'),
+                onChanged: (bool? newValue) {
+                  _handleDayChange('Weekday', newValue!);
+                },
               ),
             ],
           ),
@@ -139,6 +151,52 @@ class _CustomRadioButton extends StatelessWidget {
           Radio<String>(
             value: value,
             groupValue: groupValue,
+            onChanged: onChanged,
+            activeColor: ThemeColors.titleBrown,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CustomCheckbox extends StatelessWidget {
+  final String text;
+  final bool value;
+  final ValueChanged<bool?> onChanged;
+
+  const _CustomCheckbox({
+    required this.text,
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 135,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(50),
+        color: ThemeColors.white,
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(1, 2.5),
+            blurRadius: 9,
+            spreadRadius: 0,
+            color: ThemeColors.black.withOpacity(0.1),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.only(left: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            text,
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+          Checkbox(
+            value: value,
             onChanged: onChanged,
             activeColor: ThemeColors.titleBrown,
           ),

@@ -66,7 +66,7 @@ class CourseDetailCard extends StatelessWidget {
                           ),
                           const SizedBox(height: 30),
                           SizedBox(
-                            width: 100, // Adjust this value as needed
+                            width: 70, // Adjust this value as needed
                             child: Text(
                               course.courseId,
                               style: Theme.of(context)

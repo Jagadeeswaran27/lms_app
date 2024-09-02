@@ -23,6 +23,7 @@ class ScreenLayout extends StatelessWidget {
     this.showBackButton = true,
     this.showBottomBar = true,
     this.showAccessCode,
+    this.onBack,
   });
 
   final Widget child;
@@ -33,6 +34,7 @@ class ScreenLayout extends StatelessWidget {
   final bool? showBackButton;
   final bool showBottomBar;
   final bool? showAccessCode;
+  final void Function()? onBack;
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +99,7 @@ class ScreenLayout extends StatelessWidget {
                         color: ThemeColors.primary,
                         size: 20,
                       ),
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: onBack ?? () => Navigator.of(context).pop(),
                     ),
                   ),
                 Positioned(

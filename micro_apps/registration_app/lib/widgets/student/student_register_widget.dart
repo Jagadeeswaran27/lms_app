@@ -4,7 +4,6 @@ import 'package:registration_app/providers/auth_provider.dart';
 
 import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/themes/colors.dart';
-import 'package:registration_app/widgets/common/batch_offered_card.dart';
 import 'package:registration_app/widgets/common/form_input.dart';
 import 'package:registration_app/widgets/common/icon_text_button.dart';
 import 'package:registration_app/widgets/common/radio_button.dart';
@@ -12,8 +11,11 @@ import 'package:registration_app/resources/icons.dart' as icons;
 
 class StudentRegisterWidget extends StatefulWidget {
   final bool isLoading;
-  final Function(String, String, String, String, String, String)
-      registerStudent;
+  final Function(
+    String,
+    String,
+    String,
+  ) registerStudent;
 
   const StudentRegisterWidget({
     super.key,
@@ -27,9 +29,7 @@ class StudentRegisterWidget extends StatefulWidget {
 
 class _StudentRegisterWidgetState extends State<StudentRegisterWidget> {
   final formKey = GlobalKey<FormState>();
-  String _email = '';
-  String _userName = '';
-  String _mobileNumber = '';
+
   String? selectedOption = 'Self';
   String batchDay = 'Weekend';
   String batchTime = 'Morning';
@@ -38,9 +38,6 @@ class _StudentRegisterWidgetState extends State<StudentRegisterWidget> {
     if (formKey.currentState!.validate()) {
       formKey.currentState?.save();
       widget.registerStudent(
-        _email,
-        _userName,
-        _mobileNumber,
         selectedOption!,
         batchDay,
         batchTime,
@@ -52,7 +49,6 @@ class _StudentRegisterWidgetState extends State<StudentRegisterWidget> {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final courses = authProvider.cart;
 
     void onBatchDayChanged(String value) {
       setState(() {
@@ -75,36 +71,21 @@ class _StudentRegisterWidgetState extends State<StudentRegisterWidget> {
           child: Column(
             children: [
               FormInput(
-                text: Strings.email,
-                onSaved: (value) => {_email = value!},
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return Strings.invalidEmailOrPhone;
-                  }
-                  return null;
-                },
+                text: "",
+                hintText: authProvider.currentUser!.email,
+                readOnly: true,
               ),
               const SizedBox(height: 20),
               FormInput(
-                text: Strings.userName,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return Strings.invalidFullName;
-                  }
-                  return null;
-                },
-                onSaved: (value) => {_userName = value!},
+                text: "",
+                hintText: authProvider.currentUser!.name,
+                readOnly: true,
               ),
               const SizedBox(height: 20),
               FormInput(
-                text: Strings.mobileNumber,
-                onSaved: (value) => {_mobileNumber = value!},
-                validator: (value) {
-                  if (value == null || value.isEmpty || value.length < 10) {
-                    return Strings.invalidMobileNumber;
-                  }
-                  return null;
-                },
+                text: "",
+                hintText: authProvider.currentUser!.phone,
+                readOnly: true,
               ),
               const SizedBox(height: 20),
               Row(

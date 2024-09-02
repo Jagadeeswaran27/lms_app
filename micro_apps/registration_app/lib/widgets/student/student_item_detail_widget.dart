@@ -64,12 +64,7 @@ class StudentItemDetailWidget extends StatelessWidget {
                   .copyWith(fontSize: 20),
             ),
             const SizedBox(height: 20),
-            BatchCard(
-              batchDay: 'Weekend',
-              batchTime: 'Morning',
-              onBatchDayChanged: (String? newValue) {},
-              onBatchTimeChanged: (String? newValue) {},
-            ),
+            BatchCard(course: course),
             const SizedBox(height: 20),
             Row(
               children: [

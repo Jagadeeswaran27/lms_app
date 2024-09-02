@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
-
+import 'package:registration_app/models/registration/course_model.dart';
 import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/themes/colors.dart';
 import 'package:registration_app/widgets/common/drop_down_row.dart';
 
-class BatchCard extends StatelessWidget {
+class BatchCard extends StatefulWidget {
   const BatchCard({
     super.key,
-    required this.batchDay,
-    required this.batchTime,
-    required this.onBatchDayChanged,
-    required this.onBatchTimeChanged,
+    required this.course,
   });
 
-  final String batchDay;
-  final String batchTime;
-  final void Function(String? newValue) onBatchDayChanged;
-  final void Function(String? newValue) onBatchTimeChanged;
+  final CourseModel course;
+
+  @override
+  _BatchCardState createState() => _BatchCardState();
+}
+
+class _BatchCardState extends State<BatchCard> {
+  late List<String> selectedBatchDays;
+  late List<String> selectedBatchTime;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedBatchDays = widget.course.batchDay ?? [];
+    selectedBatchTime = [widget.course.batchTime!]; // Default value
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,16 +63,18 @@ class BatchCard extends StatelessWidget {
                   children: [
                     DropDownRow(
                       label: Strings.days,
-                      value: batchDay,
-                      options: const ["Weekend", "Weekday"],
-                      onChanged: onBatchDayChanged,
+                      value: selectedBatchDays[0],
+                      options: selectedBatchDays,
+                      onChanged: (String? newValue) {},
+                      isDropdown: true,
                     ),
                     const SizedBox(height: 20),
                     DropDownRow(
                       label: Strings.time,
-                      value: batchTime,
-                      options: const ["Morning", "Evening"],
-                      onChanged: onBatchTimeChanged,
+                      value: selectedBatchTime[0],
+                      options: selectedBatchTime,
+                      onChanged: (String? newValue) {},
+                      isDropdown: true,
                     ),
                   ],
                 ),

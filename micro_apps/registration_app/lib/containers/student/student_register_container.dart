@@ -19,9 +19,6 @@ class _StudentRegisterContainerState extends State<StudentRegisterContainer> {
   bool isLoading = false;
 
   Future<void> registerStudent(
-    String email,
-    String userName,
-    String mobileNumber,
     String selectedOption,
     String batchDay,
     String batchTime,
@@ -35,12 +32,10 @@ class _StudentRegisterContainerState extends State<StudentRegisterContainer> {
     if (selectedOption == 'Self') {
       final response = await registrationService.registerStudent(
         courses: authProvider.cart,
-        selectedBatchDay: batchDay,
-        selectedBatchTime: batchTime,
         registeredBy: authProvider.currentUser!.uid,
-        email: email,
-        userName: userName,
-        mobileNumber: mobileNumber,
+        email: authProvider.currentUser!.email,
+        userName: authProvider.currentUser!.name,
+        mobileNumber: authProvider.currentUser!.phone,
         registeredFor: selectedOption,
         instituteId: authProvider.selectedinstituteCode,
       );
@@ -65,9 +60,9 @@ class _StudentRegisterContainerState extends State<StudentRegisterContainer> {
         'courses': authProvider.cart,
         'batchDay': batchDay,
         'batchTime': batchTime,
-        'email': email,
-        'userName': userName,
-        'mobileNumber': mobileNumber,
+        'email': authProvider.currentUser!.email,
+        'userName': authProvider.currentUser!.name,
+        'mobileNumber': authProvider.currentUser!.phone,
       });
     }
   }
