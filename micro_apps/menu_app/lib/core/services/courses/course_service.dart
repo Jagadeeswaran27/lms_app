@@ -37,7 +37,7 @@ class CourseService {
           imageUrl: imageUrl,
           shortDescription: formData['shortDescription'],
           aboutDescription: formData['aboutDescription'],
-          batchDay: formData['batchDay'] ?? '',
+          batchDay: formData['batchDay'] ?? [],
           batchTime: formData['batchTime'] ?? '',
           amount: double.parse(formData['amount']),
         );
