@@ -139,12 +139,12 @@ class Strings {
   static const String enterYourLocation = 'Enter your location ';
   static const String useMyLocation = 'Use my location';
   static const String or = 'Or';
-  static const String searchOnGoogleMaps = 'Search on Google Maps ';
+  static const String searchOnGoogleMaps = 'Search by Institute name ';
   static const String enterYourLocationOrLink = 'Enter your location or Link';
   static const String fetchInstitutes = 'Fetch Institutes';
   static const String myLocation = 'My Location';
   static const String saveLocation = 'Save Location';
-  static const String centerName = 'Center Name : ';
+  static const String centerName = 'Location Name : ';
   static const String yourLocationSaved = 'Your Location Saved';
   static const String institute = 'Institute';
 }

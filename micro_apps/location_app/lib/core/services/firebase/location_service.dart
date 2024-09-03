@@ -18,6 +18,7 @@ class LocationService {
           'latitude': location.latitude,
           'longitude': location.longitude,
         },
+        SetOptions(merge: true),
       );
 
       return location.placeId;
