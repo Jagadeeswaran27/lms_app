@@ -147,4 +147,7 @@ class Strings {
   static const String centerName = 'Location Name : ';
   static const String yourLocationSaved = 'Your Location Saved';
   static const String institute = 'Institute';
+  static const String locationEnquiry = 'Location Enquiry';
+  static const String resolve = 'Resolve';
+  static const String noEnquiriesFound = 'No Enquiries Found';
 }

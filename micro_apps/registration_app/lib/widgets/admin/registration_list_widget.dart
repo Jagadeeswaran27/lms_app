@@ -21,54 +21,56 @@ class RegistrationListWidget extends StatelessWidget {
       child: Column(
         children: [
           Expanded(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      Strings.student,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLargePrimary
-                          .copyWith(
-                            fontSize: 20,
-                          ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(AdminRoutes.studentList);
-                  },
-                  child: const Image(
-                    image: AssetImage(Images.studentCard),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        Strings.student,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLargePrimary
+                            .copyWith(
+                              fontSize: 20,
+                            ),
+                      ),
+                    ],
                   ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Text(
-                      Strings.teacher,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLargePrimary
-                          .copyWith(
-                            fontSize: 20,
-                          ),
+                  const SizedBox(height: 20),
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushNamed(AdminRoutes.studentList);
+                    },
+                    child: const Image(
+                      image: AssetImage(Images.studentCard),
                     ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(AdminRoutes.teacherList);
-                  },
-                  child: const Image(
-                    image: AssetImage(Images.teacherCard),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Text(
+                        Strings.teacher,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLargePrimary
+                            .copyWith(
+                              fontSize: 20,
+                            ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushNamed(AdminRoutes.teacherList);
+                    },
+                    child: const Image(
+                      image: AssetImage(Images.teacherCard),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 10),

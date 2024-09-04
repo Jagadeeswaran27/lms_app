@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-import 'package:menu_app/models/enquiry/enquiry_model.dart';
-import 'package:menu_app/models/enquiry/message_model.dart';
-import 'package:menu_app/resources/strings.dart';
-import 'package:menu_app/themes/colors.dart';
-import 'package:menu_app/themes/fonts.dart';
-import 'package:menu_app/widgets/admin/messages.dart';
-import 'package:menu_app/widgets/common/choose_file_button.dart';
-import 'package:menu_app/widgets/common/enquiry_reception_title_card.dart';
-import 'package:menu_app/widgets/common/form_input.dart';
-import 'package:menu_app/widgets/common/full_screen_image_viewer.dart';
-import 'package:menu_app/widgets/common/icon_text_button.dart';
-import 'package:menu_app/widgets/common/status_progress_indicator.dart';
-import 'package:menu_app/resources/icons.dart' as icons;
-import 'package:menu_app/widgets/common/svg_lodder.dart';
+import 'package:location_app/models/enquiry/enquiry_model.dart';
+import 'package:location_app/models/enquiry/message_model.dart';
+import 'package:location_app/resources/strings.dart';
+import 'package:location_app/themes/colors.dart';
+import 'package:location_app/themes/fonts.dart';
+import 'package:location_app/widgets/admin/choose_file_button.dart';
+import 'package:location_app/widgets/admin/enquiry_reception_title_card.dart';
+import 'package:location_app/widgets/admin/full_screen_image_viewer.dart';
+import 'package:location_app/widgets/admin/messages.dart';
+import 'package:location_app/widgets/common/form_input.dart';
+import 'package:location_app/widgets/common/icon_text_button.dart';
+import 'package:location_app/resources/icons.dart' as icons;
+import 'package:location_app/widgets/admin/admin_status_progress_indicator.dart';
+import 'package:location_app/widgets/common/svg_lodder.dart';
 
 class ReceptionEnquiryDetailWidget extends StatefulWidget {
   const ReceptionEnquiryDetailWidget({
@@ -240,7 +240,7 @@ class _ReceptionEnquiryDetailWidgetState
                         ],
                       ),
                       const SizedBox(width: 10),
-                      StatusProgressIndicator(
+                      AdminStatusProgressIndicator(
                         isAcknowledged:
                             isAcknowledged || isResolved ? true : false,
                         isResolved: isResolved ? true : false,

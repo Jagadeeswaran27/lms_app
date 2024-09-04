@@ -1,3 +1,4 @@
+import 'package:attendance_app/widgets/common/svg_lodder.dart';
 import 'package:flutter/material.dart';
 
 import 'package:attendance_app/models/enquiry/enquiry_model.dart';
@@ -281,7 +282,7 @@ class _ReceptionEnquiryDetailWidgetState
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send, color: ThemeColors.primary),
+                  icon: const SVGLoader(image: icons.Icons.send),
                   onPressed: onSendMessage,
                 ),
               ],

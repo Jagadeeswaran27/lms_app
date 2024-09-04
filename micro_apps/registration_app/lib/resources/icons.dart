@@ -15,4 +15,5 @@ class Icons {
   static const String addFile = 'assets/icon/add_file.svg';
   static const String copy = 'assets/icon/copy.svg';
   static const String resolve = 'assets/icon/resolve.svg';
+  static const String send = 'assets/icon/send.svg';
 }

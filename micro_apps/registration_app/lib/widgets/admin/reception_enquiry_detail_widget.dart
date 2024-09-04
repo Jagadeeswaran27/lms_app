@@ -13,6 +13,7 @@ import 'package:registration_app/widgets/common/form_input.dart';
 import 'package:registration_app/widgets/common/icon_text_button.dart';
 import 'package:registration_app/resources/icons.dart' as icons;
 import 'package:registration_app/widgets/admin/admin_status_progress_indicator.dart';
+import 'package:registration_app/widgets/common/svg_lodder.dart';
 
 class ReceptionEnquiryDetailWidget extends StatefulWidget {
   const ReceptionEnquiryDetailWidget({
@@ -279,7 +280,7 @@ class _ReceptionEnquiryDetailWidgetState
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send, color: ThemeColors.primary),
+                  icon: const SVGLoader(image: icons.Icons.send),
                   onPressed: onSendMessage,
                 ),
               ],

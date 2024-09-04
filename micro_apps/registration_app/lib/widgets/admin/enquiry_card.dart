@@ -58,8 +58,12 @@ class EnquiryCard extends StatelessWidget {
                 Text(
                   enquiry.enquiryId,
                   overflow: TextOverflow.ellipsis,
-                  style:
-                      Theme.of(context).textTheme.bodyMediumTitleBrownSemiBold,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMediumTitleBrownSemiBold
+                      .copyWith(
+                        fontSize: 14,
+                      ),
                 ),
                 // Text(
                 //   "Student",
@@ -72,11 +76,15 @@ class EnquiryCard extends StatelessWidget {
                       Strings.ticketNo,
                       style: Theme.of(context).textTheme.titleSmallTitleBrown,
                     ),
-                    Text(
-                      enquiry.enquiryId,
-                      style: Theme.of(context)
-                          .textTheme
-                          .displaySmallPrimarySemiBold,
+                    SizedBox(
+                      width: 120,
+                      child: Text(
+                        overflow: TextOverflow.ellipsis,
+                        enquiry.enquiryId,
+                        style: Theme.of(context)
+                            .textTheme
+                            .displaySmallPrimarySemiBold,
+                      ),
                     )
                   ],
                 ),

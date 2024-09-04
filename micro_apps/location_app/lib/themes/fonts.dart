@@ -106,4 +106,6 @@ extension ThemeExtension on TextTheme {
       titleLarge!.copyWith(color: ThemeColors.titleBrown);
   TextStyle get displaySmallTitleBrownSemiBold => displaySmall!
       .copyWith(color: ThemeColors.primary, fontWeight: FontWeight.w500);
+  TextStyle get displaySmallPrimarySemiBold => displaySmall!
+      .copyWith(color: ThemeColors.primary, fontWeight: FontWeight.w500);
 }

@@ -61,13 +61,22 @@ class TicketCard extends StatelessWidget {
                   children: [
                     Text(
                       Strings.ticketNo,
-                      style: Theme.of(context).textTheme.titleSmallTitleBrown,
-                    ),
-                    Text(
-                      ticketNo,
                       style: Theme.of(context)
                           .textTheme
-                          .displaySmallPrimarySemiBold,
+                          .titleSmallTitleBrown
+                          .copyWith(
+                            fontSize: 14,
+                          ),
+                    ),
+                    SizedBox(
+                      width: 120,
+                      child: Text(
+                        overflow: TextOverflow.ellipsis,
+                        ticketNo,
+                        style: Theme.of(context)
+                            .textTheme
+                            .displaySmallPrimarySemiBold,
+                      ),
                     )
                   ],
                 ),

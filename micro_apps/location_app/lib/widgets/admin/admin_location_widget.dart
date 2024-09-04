@@ -6,6 +6,7 @@ import 'package:location_app/models/location_model.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:location_app/resources/strings.dart';
+import 'package:location_app/routes/admin_routes.dart';
 import 'package:location_app/themes/colors.dart';
 import 'package:location_app/themes/fonts.dart';
 import 'package:location_app/widgets/common/form_input.dart';
@@ -126,6 +127,29 @@ class _AdminLocationWidgetState extends State<AdminLocationWidget> {
       child: SingleChildScrollView(
         child: Column(
           children: [
+            const SizedBox(height: 10),
+            Align(
+              alignment: Alignment.centerRight,
+              child: SizedBox(
+                width: screenSize.width * 0.65,
+                height: 50,
+                child: IconTextButton(
+                  iconHorizontalPadding: 5,
+                  radius: 20,
+                  text: Strings.locationEnquiry,
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed(AdminRoutes.receptionEnquiry);
+                  },
+                  color: ThemeColors.primary,
+                  buttonTextStyle:
+                      Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontSize: 14,
+                          ),
+                  svgIcon: icons.Icons.enquiry,
+                ),
+              ),
+            ),
             const SizedBox(height: 20),
             Row(
               children: [

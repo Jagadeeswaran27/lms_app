@@ -1,4 +1,5 @@
 import 'package:enquiry_app/widgets/admin/admin_messages.dart';
+import 'package:enquiry_app/widgets/common/svg_lodder.dart';
 import 'package:enquiry_app/widgets/student_teacher/choose_file_button.dart';
 import 'package:enquiry_app/widgets/student_teacher/enquiry_reception_title_card.dart';
 import 'package:flutter/material.dart';
@@ -279,7 +280,7 @@ class _ReceptionEnquiryDetailWidgetState
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send, color: ThemeColors.primary),
+                  icon: const SVGLoader(image: icons.Icons.send),
                   onPressed: onSendMessage,
                 ),
               ],

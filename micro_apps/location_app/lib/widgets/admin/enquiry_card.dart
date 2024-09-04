@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:attendance_app/models/enquiry/enquiry_model.dart';
+import 'package:location_app/models/enquiry/enquiry_model.dart';
 
-import 'package:attendance_app/resources/strings.dart';
-import 'package:attendance_app/themes/colors.dart';
-import 'package:attendance_app/themes/fonts.dart';
+import 'package:location_app/resources/strings.dart';
+import 'package:location_app/themes/colors.dart';
+import 'package:location_app/themes/fonts.dart';
 
 class EnquiryCard extends StatelessWidget {
   const EnquiryCard({
@@ -76,15 +76,11 @@ class EnquiryCard extends StatelessWidget {
                       Strings.ticketNo,
                       style: Theme.of(context).textTheme.titleSmallTitleBrown,
                     ),
-                    SizedBox(
-                      width: 120,
-                      child: Text(
-                        overflow: TextOverflow.ellipsis,
-                        enquiry.enquiryId,
-                        style: Theme.of(context)
-                            .textTheme
-                            .displaySmallPrimarySemiBold,
-                      ),
+                    Text(
+                      enquiry.enquiryId,
+                      style: Theme.of(context)
+                          .textTheme
+                          .displaySmallPrimarySemiBold,
                     )
                   ],
                 ),

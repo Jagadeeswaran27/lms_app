@@ -1,3 +1,4 @@
+import 'package:enquiry_app/widgets/common/svg_lodder.dart';
 import 'package:flutter/material.dart';
 
 import 'package:enquiry_app/models/enquiry/message_model.dart';
@@ -11,6 +12,7 @@ import 'package:enquiry_app/widgets/common/form_input.dart';
 import 'package:enquiry_app/widgets/common/status_progress_indicator.dart';
 import 'package:enquiry_app/widgets/student_teacher/choose_file_button.dart';
 import 'package:enquiry_app/widgets/student_teacher/enquiry_reception_title_card.dart';
+import 'package:enquiry_app/resources/icons.dart' as icons;
 
 class MyTicketWidget extends StatefulWidget {
   const MyTicketWidget({
@@ -260,7 +262,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send, color: ThemeColors.primary),
+                  icon: const SVGLoader(image: icons.Icons.send),
                   onPressed: onSendMessage,
                 ),
               ],
