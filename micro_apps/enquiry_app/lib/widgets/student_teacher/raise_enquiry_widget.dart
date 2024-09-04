@@ -38,20 +38,29 @@ class RaiseEnquiryWidget extends StatelessWidget {
                     },
                   ),
                   EnquiryCard(
-                    text: Strings.teacher,
+                    text: Strings.registration,
                     onTap: () {
                       Navigator.of(context).pushNamed(
                         StudentTeacherRoutes.enquiryReception,
-                        arguments: EnquiryArguments(Strings.teacher),
+                        arguments: EnquiryArguments(Strings.registration),
                       );
                     },
                   ),
                   EnquiryCard(
-                    text: Strings.instituteAdmin,
+                    text: Strings.attendance,
                     onTap: () {
                       Navigator.of(context).pushNamed(
                         StudentTeacherRoutes.enquiryReception,
-                        arguments: EnquiryArguments(Strings.instituteAdmin),
+                        arguments: EnquiryArguments(Strings.attendance),
+                      );
+                    },
+                  ),
+                  EnquiryCard(
+                    text: Strings.location,
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        StudentTeacherRoutes.enquiryReception,
+                        arguments: EnquiryArguments(Strings.location),
                       );
                     },
                   ),
@@ -61,15 +70,6 @@ class RaiseEnquiryWidget extends StatelessWidget {
                       Navigator.of(context).pushNamed(
                         StudentTeacherRoutes.enquiryReception,
                         arguments: EnquiryArguments(Strings.owner),
-                      );
-                    },
-                  ),
-                  EnquiryCard(
-                    text: Strings.hospitalityEnquiry,
-                    onTap: () {
-                      Navigator.of(context).pushNamed(
-                        StudentTeacherRoutes.enquiryReception,
-                        arguments: EnquiryArguments(Strings.hospitalityEnquiry),
                       );
                     },
                   ),

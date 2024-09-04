@@ -72,6 +72,8 @@ class ThemeFonts {
 extension ThemeExtension on TextTheme {
   TextStyle get titleSmallTitleBrown =>
       titleSmall!.copyWith(color: ThemeColors.titleBrown);
+  TextStyle get titleSmallWhite =>
+      titleSmall!.copyWith(color: ThemeColors.white);
   TextStyle get displayMediumPrimary =>
       displayMedium!.copyWith(color: ThemeColors.authPrimary);
   TextStyle get displayMediumBlack =>
@@ -102,4 +104,8 @@ extension ThemeExtension on TextTheme {
       .copyWith(color: ThemeColors.titleBrown, fontWeight: FontWeight.w600);
   TextStyle get bodyLargePrimaryBold => bodyLarge!
       .copyWith(color: ThemeColors.primary, fontWeight: FontWeight.w600);
+  TextStyle get titleLargePrimary =>
+      titleLarge!.copyWith(color: ThemeColors.titleBrown);
+  TextStyle get displaySmallPrimarySemiBold => displaySmall!
+      .copyWith(color: ThemeColors.primary, fontWeight: FontWeight.w500);
 }

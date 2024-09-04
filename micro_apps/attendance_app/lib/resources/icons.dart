@@ -6,4 +6,6 @@ class Icons {
   static const String bookIcon = 'assets/icon/book_icon.svg';
   static const String successIcon = 'assets/icon/success_icon.svg';
   static const String copy = 'assets/icon/copy.svg';
+  static const String enquiry = 'assets/icon/enquiry.svg';
+  static const String resolve = 'assets/icon/resolve.svg';
 }

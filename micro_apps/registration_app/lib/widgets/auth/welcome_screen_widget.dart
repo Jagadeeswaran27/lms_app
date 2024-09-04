@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:registration_app/constants/enums/button_size.dart';
 import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/screens/auth/options_screen.dart';
+import 'package:registration_app/themes/colors.dart';
 import 'package:registration_app/widgets/common/custom_elevated_button.dart';
 
 class WelcomeScreenWidget extends StatelessWidget {
@@ -22,12 +23,16 @@ class WelcomeScreenWidget extends StatelessWidget {
             children: [
               Text(
                 Strings.welcomeTo,
-                style: Theme.of(context).textTheme.headlineLarge,
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                      color: ThemeColors.primary,
+                    ),
               ),
               const SizedBox(height: 10),
               Text(
                 Strings.registrationApp,
-                style: Theme.of(context).textTheme.headlineLarge,
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                      color: ThemeColors.primary,
+                    ),
               ),
               Container(
                 margin: const EdgeInsets.symmetric(

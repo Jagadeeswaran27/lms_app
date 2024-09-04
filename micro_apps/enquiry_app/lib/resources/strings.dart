@@ -26,8 +26,8 @@ class Strings {
   static const String email = 'Email';
   static const String mobileNumber = 'Mobile number';
   static const String registerAs = 'Register as';
-  static const String teacher = 'Teacher';
-  static const String student = 'Student';
+  static const String user = 'User';
+  static const String admin = 'Admin';
   static const String password = 'Password';
   static const String confirmPassword = 'Confirm password';
   static const String iAgreeWithThe = 'I agree with the ';
@@ -67,7 +67,7 @@ class Strings {
   static const String days = 'Days';
   static const String about = 'About';
   static const String time = 'Time';
-  static const String receptionEnquiry = 'Reception Enquiry';
+  static const String receptionEnquiry = 'Enquiries';
   static const String item = 'Item';
   static const String addTitle = 'Add Title :';
   static const String amountDetails = 'Amount Details';
@@ -135,4 +135,7 @@ class Strings {
   static const String toAcknowledge = 'To Acknowledge';
   static const String resolved = 'Resolved';
   static const String toResolve = 'To Resolve';
+  static const String location = 'Location';
+  static const String noEnquiriesFound = 'No Enquiries Found';
+  static const String resolve = 'Resolve';
 }

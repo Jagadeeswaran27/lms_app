@@ -1,6 +1,8 @@
-import 'package:enquiry_app/widgets/common/full_screen_image_viewer.dart';
 import 'package:flutter/material.dart';
 
+import 'package:enquiry_app/models/enquiry/message_model.dart';
+import 'package:enquiry_app/widgets/common/full_screen_image_viewer.dart';
+import 'package:enquiry_app/widgets/student_teacher/messages.dart';
 import 'package:enquiry_app/models/enquiry/enquiry_model.dart';
 import 'package:enquiry_app/themes/colors.dart';
 import 'package:enquiry_app/resources/strings.dart';
@@ -10,30 +12,75 @@ import 'package:enquiry_app/widgets/common/status_progress_indicator.dart';
 import 'package:enquiry_app/widgets/student_teacher/choose_file_button.dart';
 import 'package:enquiry_app/widgets/student_teacher/enquiry_reception_title_card.dart';
 
-class MyTicketWidget extends StatelessWidget {
+class MyTicketWidget extends StatefulWidget {
   const MyTicketWidget({
     super.key,
     required this.enquiry,
+    required this.onSendMessage,
+    required this.messages,
   });
 
   final EnquiryModel enquiry;
+  final Future<bool> Function(String) onSendMessage;
+  final List<MessageModel> messages;
+
+  @override
+  State<MyTicketWidget> createState() => _MyTicketWidgetState();
+}
+
+class _MyTicketWidgetState extends State<MyTicketWidget> {
+  final _formKey = GlobalKey<FormState>();
+  String message = '';
+
+  final ScrollController _scrollController = ScrollController();
+
+  void onSendMessage() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      final response = await widget.onSendMessage(message);
+      if (response) {
+        _formKey.currentState!.reset();
+        _scrollToBottom(); // Scroll to bottom when a new message is sent
+      }
+    }
+  }
+
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant MyTicketWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.messages.length > oldWidget.messages.length) {
+      _scrollToBottom(); // Scroll to bottom when a new message is received
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isAcknowledged = enquiry.status == 'acknowledged';
-    final isResolved = enquiry.status == 'resolved';
+    final isAcknowledged = widget.enquiry.status == 'acknowledged';
+    final isResolved = widget.enquiry.status == 'resolved';
     final Size screenSize = MediaQuery.of(context).size;
 
     return Column(
       children: [
         EnquiryReceptionTitleCard(
-          name: enquiry.enquiryId,
+          name: widget.enquiry.enquiryId,
           isTicket: true,
-          priority: enquiry.priority,
+          priority: widget.enquiry.priority,
         ),
         Expanded(
           child: SizedBox(
             width: screenSize.width * 0.9,
             child: SingleChildScrollView(
+              controller: _scrollController,
               child: Column(
                 children: [
                   const SizedBox(height: 20),
@@ -49,7 +96,7 @@ class MyTicketWidget extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        enquiry.issue,
+                        widget.enquiry.issue,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
@@ -67,7 +114,7 @@ class MyTicketWidget extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        enquiry.subject,
+                        widget.enquiry.subject,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
@@ -85,7 +132,7 @@ class MyTicketWidget extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        enquiry.description,
+                        widget.enquiry.description,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
@@ -103,11 +150,11 @@ class MyTicketWidget extends StatelessWidget {
                         width: 70,
                         child: ChooseFileButton(
                           onTap: () {
-                            enquiry.fileUrl != null
+                            widget.enquiry.fileUrl != null
                                 ? Navigator.of(context).push(
                                     MaterialPageRoute(
                                       builder: (ctx) => FullScreenImageViewer(
-                                        imageUrl: enquiry.fileUrl!,
+                                        imageUrl: widget.enquiry.fileUrl!,
                                       ),
                                     ),
                                   )
@@ -118,7 +165,7 @@ class MyTicketWidget extends StatelessWidget {
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        enquiry.fileUrl != null ? '1 file' : 'no file',
+                        widget.enquiry.fileUrl != null ? '1 file' : 'no file',
                         style: Theme.of(context).textTheme.titleSmall,
                       )
                     ],
@@ -181,11 +228,46 @@ class MyTicketWidget extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 30),
+                  if (widget.messages.isNotEmpty)
+                    Messages(
+                      messages: widget.messages,
+                    ),
                 ],
               ),
             ),
           ),
         ),
+        const SizedBox(height: 20),
+        SizedBox(
+          width: screenSize.width * 0.9,
+          child: Form(
+            key: _formKey, // Assign the form key here
+            child: Row(
+              children: [
+                Expanded(
+                  child: FormInput(
+                    validator: (value) {
+                      if (value!.trim().isEmpty) {
+                        return "Type something";
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      message = value!;
+                    },
+                    text: "",
+                    hintText: "Type your message...",
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.send, color: ThemeColors.primary),
+                  onPressed: onSendMessage,
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
       ],
     );
   }

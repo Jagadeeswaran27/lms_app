@@ -26,6 +26,7 @@ class FormInput extends StatelessWidget {
     this.borderWidth,
     this.hasShadow = false,
     this.isDescription = false,
+    this.style,
   });
 
   final String text;
@@ -48,6 +49,7 @@ class FormInput extends StatelessWidget {
   final double? borderWidth;
   final bool hasShadow;
   final bool isDescription;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +79,7 @@ class FormInput extends StatelessWidget {
         onTap: onTap,
         onSaved: onSaved,
         onChanged: onChanged,
-        style: Theme.of(context).textTheme.titleSmallTitleBrown,
+        style: style ?? Theme.of(context).textTheme.titleSmallTitleBrown,
         decoration: InputDecoration(
           fillColor: fillColor,
           filled: true,
@@ -108,7 +110,7 @@ class FormInput extends StatelessWidget {
                   ),
                 )
               : null, // Conditionally display the label if text is not null
-          labelStyle: Theme.of(context).textTheme.displaySmall,
+          labelStyle: Theme.of(context).textTheme.titleLarge,
           hintText: hintText,
           hintStyle: hintTextStyle,
           errorStyle: Theme.of(context)

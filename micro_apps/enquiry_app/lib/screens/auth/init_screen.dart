@@ -1,11 +1,14 @@
-import 'package:enquiry_app/providers/auth_provider.dart';
-import 'package:enquiry_app/screens/auth/login_screen.dart';
+import 'package:enquiry_app/screens/admin/admin_app.dart';
 import 'package:enquiry_app/screens/auth/welcome_screen.dart';
 import 'package:enquiry_app/screens/student_teacher_app/app.dart';
-import 'package:enquiry_app/themes/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:enquiry_app/constants/enums/user_role_enum.dart';
+import 'package:enquiry_app/screens/auth/login_screen.dart';
+import 'package:enquiry_app/themes/colors.dart';
 
 import 'package:provider/provider.dart';
+
+import 'package:enquiry_app/providers/auth_provider.dart';
 
 class InitScreen extends StatefulWidget {
   const InitScreen({super.key});
@@ -22,6 +25,7 @@ class _InitScreenState extends State<InitScreen> {
     super.initState();
     authListener = () {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
       if (!authProvider.isLoading) {
         if (authProvider.user == null && context.mounted) {
           authProvider.removeListener(authListener);
@@ -40,7 +44,10 @@ class _InitScreenState extends State<InitScreen> {
 
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-              builder: (context) => const StudentTeacherApp(),
+              builder: (context) =>
+                  authProvider.currentUser!.role == UserRoleEnum.admin.roleName
+                      ? const AdminApp()
+                      : const StudentTeacherApp(),
             ),
           );
           return;
@@ -69,7 +76,6 @@ class _InitScreenState extends State<InitScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // const Center(child: SVGLoader(image: Images.logo)),
             const SizedBox(height: 20),
             CircularProgressIndicator(color: ThemeColors.primary),
           ],

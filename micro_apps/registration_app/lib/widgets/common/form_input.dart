@@ -19,6 +19,7 @@ class FormInput extends StatelessWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.initialValue,
+    this.hintTextStyle,
     this.hintText,
     this.enabled,
     this.fillColor,
@@ -37,6 +38,7 @@ class FormInput extends StatelessWidget {
   final void Function(String)? onChanged;
   final bool? readOnly;
   final Widget? prefixIcon;
+  final TextStyle? hintTextStyle;
   final Widget? suffixIcon;
   final Color? borderColor;
   final void Function()? onTap;
@@ -116,7 +118,8 @@ class FormInput extends StatelessWidget {
                 )
               : suffixIcon,
           hintText: hintText,
-          hintStyle: Theme.of(context).textTheme.titleSmallTitleBrown,
+          hintStyle:
+              hintTextStyle ?? Theme.of(context).textTheme.titleSmallTitleBrown,
           errorStyle: Theme.of(context)
               .textTheme
               .bodySmall!

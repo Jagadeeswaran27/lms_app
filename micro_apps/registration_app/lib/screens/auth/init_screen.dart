@@ -31,6 +31,7 @@ class _InitScreenState extends State<InitScreen> {
       if (!authProvider.isLoading) {
         if (authProvider.user == null && context.mounted) {
           authProvider.removeListener(authListener);
+          print("came");
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) => const WelcomeScreen(),

@@ -122,4 +122,19 @@ class Strings {
   static const String feeReceipt = 'Fee receipt';
   static const String applicationReceipt = 'Application receipt';
   static const String proceedToPayment = 'Proceed to payment';
+  static const String ticketNo = 'Ticket no : ';
+  static const String myTicket = 'My Ticket';
+  static const String facingIssue = 'Facing issue : ';
+  static const String describedIssue = 'Described issue : ';
+  static const String view = 'View';
+  static const String acknowledged = 'Acknowledged';
+  static const String toAcknowledge = 'To Acknowledge';
+  static const String resolved = 'Resolved';
+  static const String toResolve = 'To Resolve';
+  static const String subject = 'Subject : ';
+  static const String file = 'File';
+  static const String resolve = 'Resolve';
+  static const String noEnquiriesFound = 'No enquiries found';
+  static const String itemCategory = 'Item Category';
+  static const String registrationEnquiry = 'Registration Enquiry';
 }

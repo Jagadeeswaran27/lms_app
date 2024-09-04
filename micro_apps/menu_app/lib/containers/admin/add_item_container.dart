@@ -23,7 +23,6 @@ class _AddItemContainerState extends State<AddItemContainer> {
 
   Future<void> addItem(Map<String, dynamic> formData, File image) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    print(formData['batchDay']);
     setState(() {
       _isLoading = true;
     });

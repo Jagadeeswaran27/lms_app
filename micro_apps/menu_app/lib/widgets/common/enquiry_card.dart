@@ -61,10 +61,10 @@ class EnquiryCard extends StatelessWidget {
                   style:
                       Theme.of(context).textTheme.bodyMediumTitleBrownSemiBold,
                 ),
-                Text(
-                  "Student",
-                  style: Theme.of(context).textTheme.titleSmallTitleBrown,
-                ),
+                // Text(
+                //   "Student",
+                //   style: Theme.of(context).textTheme.titleSmallTitleBrown,
+                // ),
                 const SizedBox(height: 10),
                 Row(
                   children: [

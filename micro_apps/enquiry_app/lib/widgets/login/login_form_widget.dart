@@ -101,6 +101,16 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             //   ],
             // ),
             const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: CustomElevatedButton(
+                text: Strings.login,
+                buttonSize: ButtonSize.large,
+                isLoading: widget.isLoading,
+                onPressed: _handleSignIn,
+              ),
+            ),
+            const SizedBox(height: 20),
             RichText(
               text: TextSpan(
                 children: [

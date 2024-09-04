@@ -1,10 +1,8 @@
-import 'package:enquiry_app/widgets/common/svg_lodder.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:enquiry_app/config/auth/user_role.dart';
 import 'package:enquiry_app/constants/enums/button_size.dart';
-import 'package:enquiry_app/resources/images.dart';
 import 'package:enquiry_app/resources/regex.dart';
 import 'package:enquiry_app/resources/strings.dart';
 import 'package:enquiry_app/screens/auth/login_screen.dart';

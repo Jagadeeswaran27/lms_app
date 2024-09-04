@@ -21,7 +21,7 @@ class _ReceptionEnquiryContainerState extends State<ReceptionEnquiryContainer> {
 
   void fetchEnquiries() {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    _enquiryService.getEnquiries(authProvider.currentUser!.uid).listen(
+    _enquiryService.getEnquiries(authProvider.currentUser!.institute[0]).listen(
         (enquiries) {
       setState(() {
         _enquiries = enquiries;

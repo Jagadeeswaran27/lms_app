@@ -16,20 +16,15 @@ class EnquiryService {
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Stream<List<EnquiryModel>> getEnquiries(String userId) async* {
+  Stream<List<EnquiryModel>> getEnquiries(String accessId) async* {
     try {
-      // Get the first institute document
-      QuerySnapshot snapshot =
-          await _firestore.collection('institutes').limit(1).get();
-
-      String instituteId = snapshot.docs.first.id;
-
       // Create a stream of enquiries
       Stream<QuerySnapshot> enquiriesStream = _firestore
           .collection('institutes')
-          .doc(instituteId)
+          .doc(accessId)
           .collection('enquiries')
           .where("status", isNotEqualTo: "resolved")
+          .where("type", isEqualTo: "Reception")
           .snapshots();
 
       // Yield enquiries as they come in
@@ -46,18 +41,12 @@ class EnquiryService {
     }
   }
 
-  Future<bool> resolveEnquiry(String enquiryId) async {
+  Future<bool> resolveEnquiry(String enquiryId, String accessId) async {
     try {
-      // Get the first institute document
-      QuerySnapshot snapshot =
-          await _firestore.collection('institutes').limit(1).get();
-
-      String instituteId = snapshot.docs.first.id;
-
       // Update the enquiry status to "resolved"
       await _firestore
           .collection('institutes')
-          .doc(instituteId)
+          .doc(accessId)
           .collection('enquiries')
           .doc(enquiryId)
           .update({'status': 'resolved'});
