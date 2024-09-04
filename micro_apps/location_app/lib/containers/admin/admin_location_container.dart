@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:location_app/core/services/firebase/location_service.dart';
 import 'package:location_app/models/location_model.dart';
+import 'package:location_app/providers/auth_provider.dart';
 import 'package:location_app/utils/error/show_snackbar.dart';
 
 import 'package:location_app/widgets/admin/admin_location_widget.dart';
+import 'package:provider/provider.dart';
 
 class AdminLocationContainer extends StatefulWidget {
   const AdminLocationContainer({super.key});
@@ -21,7 +23,11 @@ class _AdminLocationContainerState extends State<AdminLocationContainer> {
     setState(() {
       _isLoading = true;
     });
-    final response = await locationService.addLocation(location);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final response = await locationService.addLocation(
+      location,
+      authProvider.currentUser?.institute.first ?? '',
+    );
     if (response != null) {
       showSnackbar(context, 'Location added successfully');
     } else {
