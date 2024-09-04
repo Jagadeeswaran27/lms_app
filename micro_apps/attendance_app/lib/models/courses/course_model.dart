@@ -9,8 +9,9 @@ class CourseModel {
   final List<String> batchDay;
   final String batchTime;
   final double amount;
+  final int totalHours;
   final int? noOfRegistrations;
-  final List<String>? students;
+  final List<Map<String, String>>? students;
 
   CourseModel({
     required this.courseId,
@@ -21,6 +22,7 @@ class CourseModel {
     required this.batchDay,
     required this.batchTime,
     required this.amount,
+    required this.totalHours,
     this.noOfRegistrations,
     this.students,
   });
@@ -39,6 +41,7 @@ class CourseModel {
       amount: json['amount'].toDouble(),
       noOfRegistrations: json['noOfRegistrations'] ?? 0,
       students: json['students'] ?? [],
+      totalHours: json['totalHours'] ?? 0,
     );
   }
 
@@ -54,6 +57,7 @@ class CourseModel {
       'amount': amount,
       'noOfRegistrations': noOfRegistrations,
       'students': students,
+      'totalHours': totalHours,
     };
   }
 

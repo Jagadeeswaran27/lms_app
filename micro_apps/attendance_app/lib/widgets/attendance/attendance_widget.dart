@@ -8,9 +8,13 @@ class AttendanceWidget extends StatelessWidget {
   const AttendanceWidget({
     super.key,
     required this.course,
+    required this.totalHours,
+    required this.attendedHours,
   });
 
   final CourseModel course;
+  final int totalHours;
+  final int attendedHours;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +22,10 @@ class AttendanceWidget extends StatelessWidget {
       child: Column(
         children: [
           CourseDetailWidget(course: course),
-          const ClassProgressWidget(),
+          ClassProgressWidget(
+            attenedHours: attendedHours,
+            totalHours: totalHours,
+          ),
         ],
       ),
     );

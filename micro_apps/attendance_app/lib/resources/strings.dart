@@ -138,7 +138,7 @@ class Strings {
   static const String resolved = 'Resolved';
   static const String toResolve = 'To Resolve';
   static const String totalRegistration = 'Total Registrations: ';
-  static const String studentNames = 'Student Names :';
+  static const String studentNames = 'Student Names';
   static const String resolve = 'Resolve';
   static const String noEnquiriesFound = 'No Enquiries found';
   static const String attendanceEnquiry = 'Attendance Enquiry';

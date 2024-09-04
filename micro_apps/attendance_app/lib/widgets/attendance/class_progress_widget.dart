@@ -6,7 +6,14 @@ import 'package:attendance_app/themes/fonts.dart';
 import 'package:attendance_app/widgets/common/continue_button.dart';
 
 class ClassProgressWidget extends StatelessWidget {
-  const ClassProgressWidget({super.key});
+  const ClassProgressWidget({
+    super.key,
+    required this.totalHours,
+    required this.attenedHours,
+  });
+
+  final int totalHours;
+  final int attenedHours;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +54,7 @@ class ClassProgressWidget extends StatelessWidget {
                         Strings.totalHours,
                         style: Theme.of(context).textTheme.bodyMediumTitleBrown,
                       ),
-                      _buildCircularProgress(64, 64, context),
+                      _buildCircularProgress(totalHours, totalHours, context),
                     ],
                   ),
                   const SizedBox(height: 30),
@@ -58,7 +65,7 @@ class ClassProgressWidget extends StatelessWidget {
                         Strings.completedHours,
                         style: Theme.of(context).textTheme.bodyMediumTitleBrown,
                       ),
-                      _buildCircularProgress(48, 64, context),
+                      _buildCircularProgress(attenedHours, totalHours, context),
                     ],
                   ),
                   const SizedBox(height: 30),

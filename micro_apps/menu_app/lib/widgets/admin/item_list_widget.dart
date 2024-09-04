@@ -39,7 +39,6 @@ class ItemListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-
     return SizedBox(
       width: screenSize.width * 0.9,
       child: Column(

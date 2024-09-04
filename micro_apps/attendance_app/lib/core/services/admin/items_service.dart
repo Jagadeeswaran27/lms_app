@@ -39,10 +39,15 @@ class ItemsService {
             .where('courseId', isEqualTo: courseData['courseId'])
             .get();
 
-        // Extract user names from the registrations
-        List<String> userNames = registrationSnapshot.docs
-            .map((registrationDoc) => registrationDoc['userName'] as String)
-            .toList();
+        // Extract user names from the registrations with student ID as the key
+        List<Map<String, String>> userNames =
+            registrationSnapshot.docs.map((registrationDoc) {
+          // Assuming 'userId' and 'userName' are fields in your document
+          String studentId = registrationDoc['registeredBy'] as String;
+          String studentName = registrationDoc['userName'] as String;
+
+          return {studentId: studentName};
+        }).toList();
 
         int noOfRegistrations = registrationSnapshot.size;
 

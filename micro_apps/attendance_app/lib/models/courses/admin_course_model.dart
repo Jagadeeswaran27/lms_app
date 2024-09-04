@@ -10,6 +10,7 @@ class AdminCourseModel {
   final String batchTime;
   final double amount;
   final int noOfRegistrations;
+  final int totalHours;
 
   AdminCourseModel({
     required this.courseId,
@@ -21,6 +22,7 @@ class AdminCourseModel {
     required this.batchTime,
     required this.amount,
     required this.noOfRegistrations,
+    required this.totalHours,
   });
 
   factory AdminCourseModel.fromJson(Map<String, dynamic> json) {
@@ -36,6 +38,7 @@ class AdminCourseModel {
       batchTime: json['batchTime'],
       amount: json['amount'].toDouble(),
       noOfRegistrations: json['noOfRegistrations'],
+      totalHours: json['totalHours'] ?? 0,
     );
   }
 
@@ -50,6 +53,7 @@ class AdminCourseModel {
       'batchTime': batchTime,
       'amount': amount,
       'noOfRegistrations': noOfRegistrations,
+      'totalHours': totalHours,
     };
   }
 

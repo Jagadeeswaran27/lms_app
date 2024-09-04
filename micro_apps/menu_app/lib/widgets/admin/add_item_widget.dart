@@ -43,6 +43,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
   List<String> _selectedDays = [];
   String _batchTime = 'Morning';
   String _amountDetails = '';
+  String _totalHours = '';
 
   void _handleBatchOfferedDaysChange(List<String> days) {
     setState(() {
@@ -76,6 +77,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
       _selectedDays = [];
       _batchTime = 'morning';
       _amountDetails = '';
+      _totalHours = '';
       _isBatchOfferedSelected = false;
       _isBatchOfferedError = null;
       _titleError = null;
@@ -117,6 +119,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
         'batchDay': widget.subCategory == 'courses' ? _selectedDays : null,
         'batchTime': widget.subCategory == 'courses' ? _batchTime : null,
         'amount': _amountDetails,
+        'totalHours': _totalHours,
       };
       widget.addItem({...formData}, _image!);
       resetForm();
@@ -252,6 +255,29 @@ class AddItemWidgetState extends State<AddItemWidget> {
                           const SizedBox(height: 20),
                         ],
                       ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Text(
+                          "Total Hours (Number)",
+                          style:
+                              Theme.of(context).textTheme.bodyMediumTitleBrown,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    FormInput(
+                      keyboardType: TextInputType.number,
+                      text: _totalHours,
+                      onSaved: (value) => {_totalHours = value!},
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Enter a valid number";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
                   ],
                 ),
               Row(

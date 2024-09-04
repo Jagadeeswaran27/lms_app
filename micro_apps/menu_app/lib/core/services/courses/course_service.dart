@@ -81,6 +81,7 @@ class CourseService {
           batchDay: formData['batchDay'] ?? [],
           batchTime: formData['batchTime'] ?? '',
           amount: double.parse(formData['amount']),
+          totalHours: int.parse(formData['totalHours']),
         );
 
         await _firestore
@@ -110,6 +111,7 @@ class CourseService {
           .collection(subCategory)
           .snapshots()
           .map((querySnapshot) {
+        print(querySnapshot.docs.length);
         return querySnapshot.docs
             .map((doc) =>
                 CourseModel.fromJson(doc.data() as Map<String, dynamic>))

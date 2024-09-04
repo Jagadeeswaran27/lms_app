@@ -91,7 +91,7 @@ class CourseDetailWidget extends StatelessWidget {
                                   .displayMediumTitleBrownSemiBold,
                             ),
                             Text(
-                              '64 Hours',
+                              '${course.totalHours} Hours',
                               style: Theme.of(context)
                                   .textTheme
                                   .displayMediumPrimarySemiBold,
