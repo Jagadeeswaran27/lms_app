@@ -218,6 +218,32 @@ class _StudentTeacherLocationWidgetState
                   _addMarker(
                       instituteLocation!, 'institute', 'Institute Location');
                   _getPolyline();
+
+                  // Zoom and center the map to show the route
+                  if (mapController != null && currentLocation != null) {
+                    LatLngBounds bounds = LatLngBounds(
+                      southwest: LatLng(
+                        currentLocation!.latitude < instituteLocation!.latitude
+                            ? currentLocation!.latitude
+                            : instituteLocation!.latitude,
+                        currentLocation!.longitude <
+                                instituteLocation!.longitude
+                            ? currentLocation!.longitude
+                            : instituteLocation!.longitude,
+                      ),
+                      northeast: LatLng(
+                        currentLocation!.latitude > instituteLocation!.latitude
+                            ? currentLocation!.latitude
+                            : instituteLocation!.latitude,
+                        currentLocation!.longitude >
+                                instituteLocation!.longitude
+                            ? currentLocation!.longitude
+                            : instituteLocation!.longitude,
+                      ),
+                    );
+                    mapController!.animateCamera(
+                        CameraUpdate.newLatLngBounds(bounds, 50));
+                  }
                 });
               },
             ),

@@ -6,11 +6,12 @@ class LocationService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final log = CustomLogger.getLogger('LocationService');
 
-  Future<String?> addLocation(LocationModel location) async {
+  Future<String?> addLocation(
+      LocationModel location, String instituteId) async {
     try {
-      QuerySnapshot querySnapshot =
-          await _firestore.collection('institutes').limit(1).get();
-      String instituteId = querySnapshot.docs.first.id;
+      // QuerySnapshot querySnapshot =
+      //     await _firestore.collection('institutes').limit(1).get();
+      // String instituteId = querySnapshot.docs.first.id;
       await _firestore.collection('institutes').doc(instituteId).set(
         {
           'name': location.name,
