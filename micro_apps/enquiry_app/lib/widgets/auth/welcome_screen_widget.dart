@@ -36,7 +36,7 @@ class WelcomeScreenWidget extends StatelessWidget {
                 ),
                 child: Text(
                   textAlign: TextAlign.center,
-                  Strings.loremIpsum,
+                  "Effortlessly manage and organize all your inquiries with our intuitive app. Stay on top of responses, track progress, and enhance communication for better customer satisfaction and productivity.",
                   style: Theme.of(context).textTheme.displayMedium!.copyWith(
                         height: 1.4,
                       ),
