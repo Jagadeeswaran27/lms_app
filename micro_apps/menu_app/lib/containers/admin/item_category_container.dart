@@ -31,7 +31,10 @@ class _ItemCategoryContainerState extends State<ItemCategoryContainer> {
       Navigator.of(context).pushNamedAndRemoveUntil(
         AdminRoutes.itemList,
         (Route<dynamic> route) => false,
-        arguments: selectedCategory,
+        arguments: {
+          'category': selectedCategory,
+          'showBack': false,
+        },
       );
     } else {
       setState(() {

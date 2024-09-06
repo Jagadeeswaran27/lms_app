@@ -73,6 +73,15 @@ class RaiseEnquiryWidget extends StatelessWidget {
                       );
                     },
                   ),
+                  EnquiryCard(
+                    text: Strings.custom,
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        StudentTeacherRoutes.enquiryReception,
+                        arguments: EnquiryArguments(Strings.custom),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),

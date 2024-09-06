@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:menu_app/core/services/courses/course_service.dart';
 import 'package:menu_app/providers/auth_provider.dart';
+import 'package:menu_app/routes/admin_routes.dart';
 import 'package:menu_app/utils/show_snackbar.dart';
 
 import 'package:menu_app/widgets/admin/add_item_widget.dart';
@@ -37,7 +38,14 @@ class _AddItemContainerState extends State<AddItemContainer> {
     });
     if (courseId != null) {
       showSnackbar(context, 'Item added successfully');
-      Navigator.pop(context);
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        AdminRoutes.itemList,
+        (Route<dynamic> route) => false,
+        arguments: {
+          'category': widget.subCategory,
+          'showBack': false,
+        },
+      );
     } else {
       showSnackbar(context, 'Failed to add item');
     }

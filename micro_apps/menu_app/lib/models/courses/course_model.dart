@@ -9,7 +9,7 @@ class CourseModel {
   final List<String>? batchDay;
   final String? batchTime;
   final double amount;
-  final int totalHours;
+  final int? totalHours;
 
   CourseModel({
     required this.courseId,
@@ -20,7 +20,7 @@ class CourseModel {
     required this.batchDay,
     required this.batchTime,
     required this.amount,
-    required this.totalHours,
+    this.totalHours,
   });
 
   factory CourseModel.fromJson(Map<String, dynamic> json) {

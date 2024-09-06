@@ -9,9 +9,14 @@ import 'package:registration_app/widgets/student/cart_card.dart';
 import 'package:registration_app/resources/icons.dart' as icons;
 
 class CartWidget extends StatelessWidget {
-  const CartWidget({super.key, required this.courses});
+  const CartWidget({
+    super.key,
+    required this.courses,
+    required this.onRemoveFromCat,
+  });
 
   final List<CourseModel> courses;
+  final Function(String) onRemoveFromCat;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +34,9 @@ class CartWidget extends StatelessWidget {
                 final course = courses[index];
 
                 return CartCard(
+                  onRemoveFromCart: () {
+                    onRemoveFromCat(course.courseId);
+                  },
                   imageUrl: course.imageUrl,
                   title: course.courseTitle,
                   amount: course.amount.toString(),

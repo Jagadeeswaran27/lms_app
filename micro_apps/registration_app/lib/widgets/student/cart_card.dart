@@ -13,6 +13,7 @@ class CartCard extends StatelessWidget {
     this.description,
     this.batchDay,
     this.batchTime,
+    this.onRemoveFromCart,
   });
 
   final String imageUrl;
@@ -22,6 +23,7 @@ class CartCard extends StatelessWidget {
   final String? batchTime;
   final int discount;
   final String? description;
+  final void Function()? onRemoveFromCart;
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +64,22 @@ class CartCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleMedium,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    IconButton(
+                      onPressed: onRemoveFromCart,
+                      icon: Icon(
+                        Icons.delete,
+                        color: ThemeColors.primary,
+                        size: 20,
+                      ),
+                    )
+                  ],
                 ),
                 if (description != null)
                   Text(
@@ -75,7 +90,6 @@ class CartCard extends StatelessWidget {
                         .copyWith(fontSize: 13),
                     maxLines: 3,
                   ),
-                const SizedBox(height: 8.0),
                 if (batchDay != null)
                   Row(
                     children: [

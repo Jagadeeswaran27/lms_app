@@ -65,6 +65,7 @@ class CourseService {
         }
       }
       for (String itemTitle in itemTitles) {
+        print(itemTitle);
         final itemId = _firestore
             .collection('institutes')
             .doc(accessCode)
@@ -81,7 +82,6 @@ class CourseService {
           batchDay: formData['batchDay'] ?? [],
           batchTime: formData['batchTime'] ?? '',
           amount: double.parse(formData['amount']),
-          totalHours: int.parse(formData['totalHours']),
         );
 
         await _firestore

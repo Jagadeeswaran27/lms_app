@@ -11,9 +11,12 @@ class ItemCategoryWidget extends StatelessWidget {
     final Size screenSize = MediaQuery.of(context).size;
 
     void navigateToItemList(String subCategory) {
-      Navigator.of(context).pushReplacementNamed(
+      Navigator.of(context).pushNamed(
         AdminRoutes.itemList,
-        arguments: subCategory,
+        arguments: {
+          'category': subCategory,
+          'showBack': true,
+        },
       );
     }
 
@@ -37,6 +40,11 @@ class ItemCategoryWidget extends StatelessWidget {
               icon: icons.Icons.food,
               title: "Food",
               onTap: () => navigateToItemList("food"),
+            ),
+            CategoryItemCard(
+              icon: icons.Icons.food,
+              title: "Custom",
+              onTap: () => navigateToItemList("custom"),
             ),
           ],
         ),

@@ -290,17 +290,19 @@ class AddItemWidgetState extends State<AddItemWidget> {
               ),
               const SizedBox(height: 20),
               FormInput(
-                  text: _amountDetails,
-                  onSaved: (value) => {_amountDetails = value!},
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return Strings.invalidAmountDetails;
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    _amountDetails = value;
-                  }),
+                keyboardType: TextInputType.number,
+                text: _amountDetails,
+                onSaved: (value) => {_amountDetails = value!},
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return Strings.invalidAmountDetails;
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  _amountDetails = value;
+                },
+              ),
               const SizedBox(height: 20),
               SizedBox(
                 width: screenSize.width * 0.7,

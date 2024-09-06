@@ -29,7 +29,7 @@ class CourseCard extends StatelessWidget {
           ],
         ),
         child: SizedBox(
-          height: 120.0,
+          height: 150.0,
           child: Row(
             children: [
               Expanded(
@@ -68,8 +68,21 @@ class CourseCard extends StatelessWidget {
                             .copyWith(fontSize: 18),
                       ),
                       const SizedBox(height: 8.0),
+                      SizedBox(
+                        height: 30,
+                        child: Text(
+                          course.shortDescription,
+                          style: Theme.of(context)
+                              .textTheme
+                              .displaySmall!
+                              .copyWith(fontSize: 12),
+                          maxLines: 5,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(height: 8.0),
                       Text(
-                        course.shortDescription,
+                        'Rs.${course.amount.toString()}',
                         style: Theme.of(context)
                             .textTheme
                             .displaySmall!

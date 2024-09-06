@@ -109,6 +109,7 @@ class Strings {
   static const String reception = 'Reception';
   static const String instituteAdmin = 'Institute Admin';
   static const String owner = 'Owner';
+  static const String custom = 'Custom';
   static const String hospitalityEnquiry = 'Hospital Enquiry';
   static const String whatAreYouFacingIssueWith =
       'What are you facing issue with ? ';

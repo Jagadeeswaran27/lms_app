@@ -90,6 +90,11 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void removeFromCart(String courseId) {
+    _cart.removeWhere((course) => course.courseId == courseId);
+    notifyListeners();
+  }
+
   Future<void> _checkUser() async {
     final User? user = FirebaseAuthService().currentUser;
     if (user != null) {

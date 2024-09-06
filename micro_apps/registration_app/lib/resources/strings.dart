@@ -76,7 +76,7 @@ class Strings {
   static const String addItem = 'Add Item';
   static const String addToCart = 'Add to cart';
   static const String cart = 'Cart';
-  static const String proceedToCheckout = 'Proceed to checkout';
+  static const String proceedToCheckout = 'Go to checkout';
   static const String emailOfStudent = 'Email of Student :';
   static const String enterUserName = 'Enter User Name : ';
   static const String contactInfo = 'Contact Info : ';
