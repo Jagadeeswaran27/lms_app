@@ -17,13 +17,13 @@ class BatchCard extends StatefulWidget {
 }
 
 class _BatchCardState extends State<BatchCard> {
-  late List<String> selectedBatchDays;
+  late String selectedBatchDays;
   late List<String> selectedBatchTime;
 
   @override
   void initState() {
     super.initState();
-    selectedBatchDays = widget.course.batchDay ?? [];
+    selectedBatchDays = widget.course.batchDay;
     selectedBatchTime = [widget.course.batchTime!]; // Default value
   }
 
@@ -63,8 +63,8 @@ class _BatchCardState extends State<BatchCard> {
                   children: [
                     DropDownRow(
                       label: Strings.days,
-                      value: selectedBatchDays[0],
-                      options: selectedBatchDays,
+                      value: selectedBatchDays,
+                      options: [selectedBatchDays],
                       onChanged: (String? newValue) {},
                       isDropdown: true,
                     ),

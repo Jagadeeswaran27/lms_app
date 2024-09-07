@@ -64,37 +64,51 @@ class CourseService {
               'selectedCategory set to "$subCategory" for institute "$accessCode"');
         }
       }
+      WriteBatch batch = _firestore.batch();
+
       for (String itemTitle in itemTitles) {
-        print(itemTitle);
-        final itemId = _firestore
-            .collection('institutes')
-            .doc(accessCode)
-            .collection(subCategory)
-            .doc()
-            .id;
+        List batchDays = formData['batchDay'] ?? [];
+        List batchTimes = formData['batchTime'] ?? [];
 
-        CourseModel newCourse = CourseModel(
-          courseId: itemId,
-          courseTitle: itemTitle,
-          imageUrl: imageUrl,
-          shortDescription: formData['shortDescription'],
-          aboutDescription: formData['aboutDescription'],
-          batchDay: formData['batchDay'] ?? [],
-          batchTime: formData['batchTime'] ?? '',
-          amount: double.parse(formData['amount']),
-        );
+        for (String day in batchDays) {
+          for (String time in batchTimes) {
+            final itemId = _firestore
+                .collection('institutes')
+                .doc(accessCode)
+                .collection(subCategory)
+                .doc()
+                .id;
 
-        await _firestore
-            .collection('institutes')
-            .doc(accessCode)
-            .collection(subCategory)
-            .doc(itemId)
-            .set(newCourse.toJson()
-              ..removeWhere((key, value) => value == null || value == ''));
+            CourseModel newCourse = CourseModel(
+              courseId: itemId,
+              courseTitle: itemTitle,
+              imageUrl: imageUrl,
+              shortDescription: formData['shortDescription'],
+              aboutDescription: formData['aboutDescription'],
+              batchDay: day,
+              batchTime: time,
+              amount: double.parse(formData['amount']),
+            );
 
-        log.i('Item "$itemTitle" added successfully');
-        lastAddedItemId = itemId;
+            // Add the write operation to the batch
+            batch.set(
+              _firestore
+                  .collection('institutes')
+                  .doc(accessCode)
+                  .collection(subCategory)
+                  .doc(itemId),
+              newCourse.toJson()
+                ..removeWhere((key, value) => value == null || value == ''),
+            );
+            lastAddedItemId = itemId;
+          }
+        }
       }
+
+      await batch.commit();
+
+      log.i('Batch write completed successfully for all items.');
+
       return lastAddedItemId;
     } catch (e) {
       print(e);

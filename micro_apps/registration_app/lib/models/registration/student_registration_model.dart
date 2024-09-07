@@ -7,7 +7,7 @@ class StudentRegistrationModel {
   final String paymentStatus;
   final String imageUrl;
   final String registeredFor;
-  final List<String> batchDay;
+  final String batchDay;
   final String batchTime;
   final String email;
   final String userName;
@@ -39,9 +39,7 @@ class StudentRegistrationModel {
       paymentStatus: json['paymentStatus'] as String,
       imageUrl: json['imageUrl'] as String,
       registeredFor: json['registeredFor'] as String,
-      batchDay: (json['batchDay'] as List<dynamic>)
-          .map((item) => item as String)
-          .toList(),
+      batchDay: json['batchDay'] as String,
       batchTime: json['batchTime'] as String,
       email: json['email'] as String,
       userName: json['userName'] as String,

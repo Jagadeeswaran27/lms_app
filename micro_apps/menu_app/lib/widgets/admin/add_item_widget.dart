@@ -41,7 +41,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
   String _shortDescription = '';
   String _aboutDescription = '';
   List<String> _selectedDays = [];
-  String _batchTime = 'Morning';
+  List<String> _batchTime = [];
   String _amountDetails = '';
   String _totalHours = '';
 
@@ -75,7 +75,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
       _shortDescription = '';
       _aboutDescription = '';
       _selectedDays = [];
-      _batchTime = 'morning';
+      _batchTime = [];
       _amountDetails = '';
       _totalHours = '';
       _isBatchOfferedSelected = false;
@@ -145,9 +145,9 @@ class AddItemWidgetState extends State<AddItemWidget> {
     });
   }
 
-  void _handleBatchOfferedTimeChange(String? value) {
+  void _handleBatchOfferedTimeChange(List<String> value) {
     setState(() {
-      _batchTime = value!;
+      _batchTime = value;
     });
   }
 

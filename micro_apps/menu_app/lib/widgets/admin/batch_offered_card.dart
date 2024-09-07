@@ -6,9 +6,9 @@ import 'package:menu_app/themes/fonts.dart';
 
 class BatchOfferedCard extends StatefulWidget {
   final List<String> selectedDays;
-  final String selectedTime;
+  final List<String> selectedTime;
   final ValueChanged<List<String>> onSelectedDaysChanged;
-  final ValueChanged<String?> onSelectedTimeChanged;
+  final ValueChanged<List<String>> onSelectedTimeChanged;
 
   const BatchOfferedCard({
     super.key,
@@ -33,8 +33,19 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
     widget.onSelectedDaysChanged(newSelectedDays);
   }
 
+  void _handleTimeChange(String time, bool isSelected) {
+    final newSelectedTime = List<String>.from(widget.selectedTime);
+    if (isSelected) {
+      newSelectedTime.add(time);
+    } else {
+      newSelectedTime.remove(time);
+    }
+    widget.onSelectedTimeChanged(newSelectedTime);
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(widget.selectedTime);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),
@@ -90,69 +101,22 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              _CustomRadioButton(
+              _CustomCheckbox(
                 text: 'Morning',
-                value: 'Morning',
-                groupValue: widget.selectedTime,
-                onChanged: widget.onSelectedTimeChanged,
+                value: widget.selectedTime.contains('Morning'),
+                onChanged: (bool? newValue) {
+                  _handleTimeChange('Morning', newValue!);
+                },
               ),
               const SizedBox(width: 20),
-              _CustomRadioButton(
+              _CustomCheckbox(
                 text: 'Evening',
-                value: 'Evening',
-                groupValue: widget.selectedTime,
-                onChanged: widget.onSelectedTimeChanged,
+                value: widget.selectedTime.contains('Evening'),
+                onChanged: (bool? newValue) {
+                  _handleTimeChange('Evening', newValue!);
+                },
               ),
             ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _CustomRadioButton extends StatelessWidget {
-  final String text;
-  final String value;
-  final String groupValue;
-  final ValueChanged<String?> onChanged;
-
-  const _CustomRadioButton({
-    required this.text,
-    required this.value,
-    required this.groupValue,
-    required this.onChanged,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 135,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(50),
-        color: ThemeColors.white,
-        boxShadow: [
-          BoxShadow(
-            offset: const Offset(1, 2.5),
-            blurRadius: 9,
-            spreadRadius: 0,
-            color: ThemeColors.black.withOpacity(0.1),
-          ),
-        ],
-      ),
-      padding: const EdgeInsets.only(left: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            text,
-            style: Theme.of(context).textTheme.titleSmall,
-          ),
-          Radio<String>(
-            value: value,
-            groupValue: groupValue,
-            onChanged: onChanged,
-            activeColor: ThemeColors.titleBrown,
           ),
         ],
       ),
