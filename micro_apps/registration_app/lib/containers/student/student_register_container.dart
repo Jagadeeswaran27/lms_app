@@ -41,6 +41,7 @@ class _StudentRegisterContainerState extends State<StudentRegisterContainer> {
       );
       if (response.isNotEmpty) {
         authProvider.updateRegisteredCoursesList(courseIds);
+        authProvider.cart = [];
         showSnackbar(context, 'Course registered successfully');
         Navigator.of(context)
             .pushReplacementNamed(StudentRoutes.enrollment, arguments: {

@@ -20,13 +20,26 @@ class StudentItemDetailWidget extends StatelessWidget {
 
   void addToCart(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    if (authProvider.cart.any((item) => item.courseId == course.courseId)) {
-      showSnackbar(context, Strings.courseAlreadyInCart);
-      return;
-    }
     authProvider.addToCart(course);
     showSnackbar(context, Strings.courseAddedToCart);
     Navigator.pop(context);
+  }
+
+  String getOfferValue(String batchDay, String batchTime) {
+    String day = batchDay.toLowerCase();
+    String time = batchTime.toLowerCase();
+
+    if (day == 'weekday' && time == 'morning') {
+      return '20';
+    } else if (day == 'weekday' && time == 'evening') {
+      return '15';
+    } else if (day == 'weekend' && time == 'morning') {
+      return '10';
+    } else if (day == 'weekend' && time == 'evening') {
+      return '5';
+    } else {
+      return '0';
+    }
   }
 
   @override
@@ -82,7 +95,7 @@ class StudentItemDetailWidget extends StatelessWidget {
               text: course.amount.toString(),
               hintText: course.amount.toString(),
               hasOfferTag: true,
-              offer: "40",
+              offer: getOfferValue(course.batchDay, course.batchTime ?? ''),
               readOnly: true,
             ),
             const SizedBox(height: 20),

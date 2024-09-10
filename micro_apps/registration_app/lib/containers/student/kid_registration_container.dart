@@ -75,6 +75,7 @@ class _KidRegistrationContainerState extends State<KidRegistrationContainer> {
 
       if (registrationIds.isNotEmpty) {
         showSnackbar(context, 'Courses registered successfully');
+        authProvider.cart = [];
         Navigator.pushNamedAndRemoveUntil(
           context,
           StudentRoutes.itemList,

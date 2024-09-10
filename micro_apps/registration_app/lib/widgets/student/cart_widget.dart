@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:registration_app/models/registration/course_model.dart';
 
@@ -17,6 +19,23 @@ class CartWidget extends StatelessWidget {
 
   final List<CourseModel> courses;
   final Function(String) onRemoveFromCat;
+
+  int getOfferValue(String batchDay, String batchTime) {
+    String day = batchDay.toLowerCase();
+    String time = batchTime.toLowerCase();
+
+    if (day == 'weekday' && time == 'morning') {
+      return 20;
+    } else if (day == 'weekday' && time == 'evening') {
+      return 15;
+    } else if (day == 'weekend' && time == 'morning') {
+      return 10;
+    } else if (day == 'weekend' && time == 'evening') {
+      return 5;
+    } else {
+      return 0;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +59,8 @@ class CartWidget extends StatelessWidget {
                   imageUrl: course.imageUrl,
                   title: course.courseTitle,
                   amount: course.amount.toString(),
-                  discount: 10,
+                  discount:
+                      getOfferValue(course.batchDay, course.batchTime ?? ''),
                 );
               },
             ),

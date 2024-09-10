@@ -39,8 +39,11 @@ class CourseService {
     String subCategory,
   ) async {
     try {
-      String imageUrl = await _storageService.uploadFile(imageFile,
-          'institutes/$accessCode', '${imageFile.path.split('/').last}.jpg');
+      String imageUrl = await _storageService.uploadFile(
+        imageFile,
+        'institutes/$accessCode',
+        '${imageFile.path.split('/').last}',
+      );
 
       final itemTitles =
           formData['itemTitle'].split(',').map((e) => e.trim()).toList();

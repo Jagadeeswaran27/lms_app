@@ -22,7 +22,7 @@ class AuthProvider with ChangeNotifier {
   UserModel? _currentUser;
   bool _loggedInStatus = false;
   String selectedinstituteCode = "";
-  final List<CourseModel> _cart = [];
+  List<CourseModel> _cart = [];
 
   final log = CustomLogger.getLogger('AuthProvider');
   final storageService = FirebaseStorageService();
@@ -32,6 +32,11 @@ class AuthProvider with ChangeNotifier {
   UserModel? get currentUser => _currentUser;
   bool get loggedInStatus => _loggedInStatus;
   List<CourseModel> get cart => _cart;
+
+  set cart(List<CourseModel> cart) {
+    _cart = cart;
+    notifyListeners();
+  }
 
   AuthProvider() {
     _delayUserCheck();
