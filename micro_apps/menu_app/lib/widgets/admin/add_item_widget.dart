@@ -9,9 +9,9 @@ import 'package:menu_app/utils/show_snackbar.dart';
 import 'package:menu_app/widgets/admin/add_title_card.dart';
 import 'package:menu_app/widgets/admin/batch_offered_card.dart';
 import 'package:menu_app/widgets/common/form_input.dart';
-import 'package:menu_app/widgets/common/generic_media_dialog.dart';
 import 'package:menu_app/widgets/common/icon_text_button.dart';
 import 'package:menu_app/resources/icons.dart' as icons;
+import 'package:menu_app/widgets/common/registration_media_dialog.dart';
 
 class AddItemWidget extends StatefulWidget {
   const AddItemWidget({
@@ -22,7 +22,7 @@ class AddItemWidget extends StatefulWidget {
   });
 
   final bool isLoading;
-  final Function(Map<String, dynamic>, File) addItem;
+  final Function(Map<String, dynamic>, List<File> images) addItem;
   final String subCategory;
 
   @override
@@ -32,7 +32,7 @@ class AddItemWidget extends StatefulWidget {
 class AddItemWidgetState extends State<AddItemWidget> {
   final _formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
-  File? _image;
+  List<File?> _image = [];
   bool _isUploadValid = true;
   bool _isBatchOfferedSelected = false;
   String? _isBatchOfferedError;
@@ -59,16 +59,16 @@ class AddItemWidgetState extends State<AddItemWidget> {
     });
   }
 
-  void onSaveMedia(File file) {
+  void onSaveMedia(List<File?> files) {
     setState(() {
-      _image = file;
-      _isUploadValid = true;
+      _image = files;
+      _isUploadValid = !files.contains(null);
     });
   }
 
   void resetForm() {
     _formKey.currentState?.reset();
-    _image = null;
+    _image = [];
     setState(() {
       _isUploadValid = true;
       _itemTitle = '';
@@ -88,11 +88,11 @@ class AddItemWidgetState extends State<AddItemWidget> {
 
   void _onAddItem() {
     bool isFormValid = _formKey.currentState!.validate();
-    if (_image == null) {
+    if (_image.isEmpty || _image.contains(null)) {
       setState(() {
-        _isUploadValid = _image == null ? false : true;
+        _isUploadValid = _image.isEmpty || _image.contains(null) ? false : true;
       });
-      showSnackbar(context, 'Please upload an image');
+      showSnackbar(context, 'Please upload all images');
       return;
     }
 
@@ -121,7 +121,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
         'amount': _amountDetails,
         'totalHours': _totalHours,
       };
-      widget.addItem({...formData}, _image!);
+      widget.addItem({...formData}, _image.whereType<File>().toList());
       resetForm();
     }
   }
@@ -130,7 +130,8 @@ class AddItemWidgetState extends State<AddItemWidget> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return GenericMediaDialog(
+        return RegistrationMediaDialog(
+          itemTitles: _itemTitle.split(',').map((e) => e.trim()).toList(),
           mediaHeading: Strings.addImage,
           onSaveMedia: onSaveMedia,
         );
@@ -162,7 +163,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
           child: Column(
             children: [
               AddTitleCard(
-                image: _image,
+                image: _image.isNotEmpty ? _image.first : null,
                 text: titleController.text,
                 titleError: _titleError,
                 onTitleChange: _handleTitleChange,

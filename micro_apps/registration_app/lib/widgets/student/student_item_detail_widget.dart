@@ -70,7 +70,7 @@ class StudentItemDetailWidget extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             Text(
-              Strings.batchOferred,
+              Strings.batchOffered,
               style: Theme.of(context)
                   .textTheme
                   .bodyMediumPrimary

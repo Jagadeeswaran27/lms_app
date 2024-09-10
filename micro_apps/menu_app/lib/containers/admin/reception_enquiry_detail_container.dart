@@ -96,7 +96,6 @@ class _ReceptionEnquiryDetailContainerState
 
   @override
   Widget build(BuildContext context) {
-    print(messages.length);
     return !_isLoading
         ? RefreshIndicator(
             onRefresh: fetchMessages,

@@ -71,7 +71,7 @@ class _TeacherItemDetailWidgetState extends State<TeacherItemDetailWidget> {
             Row(
               children: [
                 Text(
-                  Strings.batchOferred,
+                  Strings.batchOffered,
                   style: Theme.of(context)
                       .textTheme
                       .bodyMediumPrimary

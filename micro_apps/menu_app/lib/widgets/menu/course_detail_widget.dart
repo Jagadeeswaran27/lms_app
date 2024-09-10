@@ -70,7 +70,7 @@ class CourseDetailWidget extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        Strings.batchOferred,
+                        Strings.batchOffered,
                         style: Theme.of(context)
                             .textTheme
                             .bodyMediumPrimary

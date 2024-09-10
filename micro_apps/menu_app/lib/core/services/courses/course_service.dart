@@ -34,19 +34,28 @@ class CourseService {
 
   Future<String?> addItem(
     Map<String, dynamic> formData,
-    File imageFile,
+    List<File> imageFile,
     String accessCode,
     String subCategory,
   ) async {
     try {
-      String imageUrl = await _storageService.uploadFile(
-        imageFile,
-        'institutes/$accessCode',
-        '${imageFile.path.split('/').last}',
-      );
-
       final itemTitles =
           formData['itemTitle'].split(',').map((e) => e.trim()).toList();
+      // String imageUrl = await _storageService.uploadFile(
+      //   imageFile,
+      //   'institutes/$accessCode',
+      //   '${imageFile.path.split('/').last}',
+      // );
+      List<String> imageUrls = [];
+      for (int i = 0; i < imageFile.length; i++) {
+        String url = await _storageService.uploadFile(
+          imageFile[i],
+          'institutes/$accessCode',
+          '${imageFile[i].path.split('/').last}',
+        );
+        imageUrls.add(url);
+      }
+
       String? lastAddedItemId;
       // Check if the selectedCategory field exists in the document
       DocumentReference instituteDocRef =
@@ -72,6 +81,7 @@ class CourseService {
       for (String itemTitle in itemTitles) {
         List batchDays = formData['batchDay'] ?? [];
         List batchTimes = formData['batchTime'] ?? [];
+        int index = itemTitles.indexOf(itemTitle);
 
         for (String day in batchDays) {
           for (String time in batchTimes) {
@@ -85,7 +95,7 @@ class CourseService {
             CourseModel newCourse = CourseModel(
               courseId: itemId,
               courseTitle: itemTitle,
-              imageUrl: imageUrl,
+              imageUrl: imageUrls[index],
               shortDescription: formData['shortDescription'],
               aboutDescription: formData['aboutDescription'],
               batchDay: day,
@@ -128,7 +138,6 @@ class CourseService {
           .collection(subCategory)
           .snapshots()
           .map((querySnapshot) {
-        print(querySnapshot.docs.length);
         return querySnapshot.docs
             .map((doc) =>
                 CourseModel.fromJson(doc.data() as Map<String, dynamic>))

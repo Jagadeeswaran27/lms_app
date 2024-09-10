@@ -45,7 +45,6 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.selectedTime);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),

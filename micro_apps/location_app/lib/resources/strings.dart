@@ -62,7 +62,7 @@ class Strings {
   static const String itemList = 'Item List';
   static const String courses = 'Courses';
   static const String aboutDescription = 'About Description';
-  static const String batchOferred = 'Batch Oferred';
+  static const String batchOffered = 'Batch Offered';
   static const String days = 'Days';
   static const String about = 'About';
   static const String time = 'Time';

@@ -22,7 +22,7 @@ class _AddItemContainerState extends State<AddItemContainer> {
   bool _isLoading = false;
   final CourseService _courseService = CourseService();
 
-  Future<void> addItem(Map<String, dynamic> formData, File image) async {
+  Future<void> addItem(Map<String, dynamic> formData, List<File> image) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     setState(() {
       _isLoading = true;

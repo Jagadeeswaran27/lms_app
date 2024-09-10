@@ -61,13 +61,13 @@ class Strings {
   static const String itemList = 'Item List';
   static const String courses = 'Courses';
   static const String aboutDescription = 'About Description';
-  static const String batchOferred = 'Batch Oferred';
+  static const String batchOffered = 'Batch Offered';
   static const String days = 'Days';
   static const String about = 'About';
   static const String time = 'Time';
   static const String receptionEnquiry = 'Reception Enquiry';
   static const String item = 'Item';
-  static const String addTitle = 'Add Title';
+  static const String addTitle = 'Add Title(s)';
   static const String amountDetails = 'Amount Details';
   static const String shortDescription = 'Short Description';
   static const String addBatchOffered = 'Add Batch Offered';

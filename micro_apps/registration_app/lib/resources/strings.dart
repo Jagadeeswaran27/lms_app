@@ -63,7 +63,7 @@ class Strings {
   static const String itemList = 'Item List';
   static const String courses = 'Courses';
   static const String aboutDescription = 'About Description';
-  static const String batchOferred = 'Batch Oferred';
+  static const String batchOffered = 'Batch Offered';
   static const String days = 'Days';
   static const String about = 'About';
   static const String time = 'Time';
@@ -76,7 +76,7 @@ class Strings {
   static const String addItem = 'Add Item';
   static const String addToCart = 'Add to cart';
   static const String cart = 'Cart';
-  static const String proceedToCheckout = 'Go to checkout';
+  static const String proceedToCheckout = 'checkout';
   static const String emailOfStudent = 'Email of Student :';
   static const String enterUserName = 'Enter User Name : ';
   static const String contactInfo = 'Contact Info : ';
