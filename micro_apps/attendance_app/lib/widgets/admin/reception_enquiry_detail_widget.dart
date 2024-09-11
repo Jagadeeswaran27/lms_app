@@ -48,7 +48,6 @@ class _ReceptionEnquiryDetailWidgetState
       _formKey.currentState!.save();
       final response = await widget.onSendMessage(message);
       if (response) {
-        print(response);
         _formKey.currentState!.reset();
         _scrollToBottom();
       }
@@ -56,7 +55,6 @@ class _ReceptionEnquiryDetailWidgetState
   }
 
   void _scrollToBottom() {
-    print("happened");
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,

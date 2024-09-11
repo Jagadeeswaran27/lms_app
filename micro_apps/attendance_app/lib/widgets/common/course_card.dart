@@ -1,4 +1,5 @@
 import 'package:attendance_app/models/courses/course_model.dart';
+import 'package:attendance_app/resources/strings.dart';
 import 'package:flutter/material.dart';
 
 import 'package:attendance_app/themes/colors.dart';
@@ -71,11 +72,24 @@ class CourseCard extends StatelessWidget {
                             .bodyMediumTitleBrownSemiBold,
                       ),
                       const SizedBox(height: 8.0),
-                      Text(
-                        course.aboutDescription,
-                        style: Theme.of(context).textTheme.displaySmall,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        children: [
+                          Text(
+                            Strings.duration,
+                            style:
+                                Theme.of(context).textTheme.bodyMediumPrimary,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            '${course.totalHours} Hrs',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMediumTitleBrownSemiBold,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ),
                     ],
                   ),

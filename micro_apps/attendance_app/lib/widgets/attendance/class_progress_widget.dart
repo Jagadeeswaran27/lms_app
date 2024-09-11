@@ -10,11 +10,14 @@ class ClassProgressWidget extends StatelessWidget {
     super.key,
     required this.totalHours,
     required this.attenedHours,
+    required this.buttonText,
+    this.onPressed,
   });
 
   final int totalHours;
   final int attenedHours;
-
+  final String buttonText;
+  final void Function()? onPressed;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -69,7 +72,10 @@ class ClassProgressWidget extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 30),
-                  const ContinueButton(),
+                  ContinueButton(
+                    text: buttonText,
+                    onPressed: onPressed,
+                  ),
                 ],
               ),
             ),

@@ -71,14 +71,15 @@ class CartCard extends StatelessWidget {
                       title,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    IconButton(
-                      onPressed: onRemoveFromCart,
-                      icon: Icon(
-                        Icons.delete,
-                        color: ThemeColors.primary,
-                        size: 20,
+                    if (onRemoveFromCart != null)
+                      IconButton(
+                        onPressed: onRemoveFromCart,
+                        icon: Icon(
+                          Icons.delete,
+                          color: ThemeColors.primary,
+                          size: 20,
+                        ),
                       ),
-                    )
                   ],
                 ),
                 if (description != null)

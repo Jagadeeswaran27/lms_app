@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'package:attendance_app/resources/strings.dart';
 import 'package:attendance_app/themes/colors.dart';
 
 class ContinueButton extends StatelessWidget {
-  const ContinueButton({super.key});
+  const ContinueButton({
+    super.key,
+    required this.text,
+    this.onPressed,
+  });
+
+  final String text;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -27,13 +33,13 @@ class ContinueButton extends StatelessWidget {
           ),
           padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
         ),
-        onPressed: () {},
+        onPressed: onPressed ?? () {},
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              Strings.continueTheCourse,
+              text,
               style: Theme.of(context).textTheme.bodySmall,
             ),
             const SizedBox(width: 10),

@@ -119,7 +119,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
         'batchDay': widget.subCategory == 'courses' ? _selectedDays : null,
         'batchTime': widget.subCategory == 'courses' ? _batchTime : null,
         'amount': _amountDetails,
-        'totalHours': _totalHours,
+        'totalHours': int.parse(_totalHours),
       };
       widget.addItem({...formData}, _image.whereType<File>().toList());
       resetForm();

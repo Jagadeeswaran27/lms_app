@@ -100,6 +100,7 @@ class CourseService {
               aboutDescription: formData['aboutDescription'],
               batchDay: day,
               batchTime: time,
+              totalHours: formData['totalHours'],
               amount: double.parse(formData['amount']),
             );
 

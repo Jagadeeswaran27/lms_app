@@ -1,10 +1,9 @@
-import 'package:attendance_app/core/services/attendance/attendance_service.dart';
-import 'package:attendance_app/models/courses/course_model.dart';
-import 'package:attendance_app/providers/auth_provider.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
+import 'package:attendance_app/core/services/attendance/attendance_service.dart';
 import 'package:attendance_app/widgets/attendance/attendance_widget.dart';
-import 'package:provider/provider.dart';
+import 'package:attendance_app/models/courses/course_model.dart';
 
 class AttendanceContainer extends StatefulWidget {
   const AttendanceContainer({
@@ -15,37 +14,40 @@ class AttendanceContainer extends StatefulWidget {
   final CourseModel course;
 
   @override
-  State<AttendanceContainer> createState() => _AttendanceContainerState();
+  State<AttendanceContainer> createState() => _ItemDetailContainerState();
 }
 
-class _AttendanceContainerState extends State<AttendanceContainer> {
+class _ItemDetailContainerState extends State<AttendanceContainer> {
   AttendanceService attendanceService = AttendanceService();
+  Map<String, bool> studentsAttendanceStatus = {};
   bool isLoading = false;
-  int totalHours = 0;
-  int attendedHours = 0;
-
-  void getData() async {
-    setState(() {
-      isLoading = true;
-    });
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    try {
-      totalHours = await attendanceService.getTotalHours(
-          authProvider.selectedinstituteCode, widget.course.courseId);
-      attendedHours = await attendanceService.attendedHours(
-          authProvider.currentUser!.uid, widget.course.courseId);
-    } catch (e) {
-      print(e);
-    }
-    setState(() {
-      isLoading = false;
-    });
-  }
+  String _date = DateFormat('ddMMyyyy').format(DateTime.now());
+  String _displayFormatDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
 
   @override
   void initState() {
     super.initState();
-    getData();
+    fetchAttendance(_date, _displayFormatDate);
+  }
+
+  void fetchAttendance(String date, String displayFormatDate) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    Map<String, bool> attendanceStatus = {
+      for (var student in widget.course.students!) student.keys.first: false,
+    };
+    studentsAttendanceStatus = await attendanceService.getAttendance(
+      widget.course.courseId,
+      date,
+      attendanceStatus,
+    );
+    setState(() {
+      _date = date;
+      isLoading = false;
+      _displayFormatDate = displayFormatDate;
+    });
   }
 
   @override
@@ -55,9 +57,10 @@ class _AttendanceContainerState extends State<AttendanceContainer> {
             child: CircularProgressIndicator(),
           )
         : AttendanceWidget(
+            displayFormatDate: _displayFormatDate,
             course: widget.course,
-            attendedHours: attendedHours,
-            totalHours: totalHours,
+            studentsAttendanceStatus: studentsAttendanceStatus,
+            fetchAttendance: fetchAttendance,
           );
   }
 }

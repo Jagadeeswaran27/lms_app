@@ -18,39 +18,42 @@ class ItemDetailContainer extends StatefulWidget {
 }
 
 class _ItemDetailContainerState extends State<ItemDetailContainer> {
-  late String todayDate;
   AttendanceService attendanceService = AttendanceService();
   Map<String, bool> studentsAttendanceStatus = {};
   bool isLoading = false;
+  String _date = DateFormat('ddMMyyyy').format(DateTime.now());
+  String _displayFormatDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
 
   @override
   void initState() {
     super.initState();
-    todayDate = DateFormat('ddMMyyyy').format(DateTime.now());
-    fetchAttendance();
+    fetchAttendance(_date, _displayFormatDate);
   }
 
-  void fetchAttendance() async {
+  void fetchAttendance(String date, String displayFormatDate) async {
     setState(() {
       isLoading = true;
     });
+
     Map<String, bool> attendanceStatus = {
       for (var student in widget.course.students!) student.keys.first: false,
     };
     studentsAttendanceStatus = await attendanceService.getAttendance(
       widget.course.courseId,
-      todayDate,
+      date,
       attendanceStatus,
     );
     setState(() {
+      _date = date;
       isLoading = false;
+      _displayFormatDate = displayFormatDate;
     });
   }
 
   Future<bool> onMarkAttendance(Map<String, bool> attendanceStatus) async {
     try {
       final bool response = await attendanceService.markAttendance(
-          attendanceStatus, widget.course.courseId, todayDate);
+          attendanceStatus, widget.course.courseId, _date);
       if (response) {
         setState(() {
           studentsAttendanceStatus = attendanceStatus;
@@ -71,9 +74,11 @@ class _ItemDetailContainerState extends State<ItemDetailContainer> {
             child: CircularProgressIndicator(),
           )
         : ItemDetailWidget(
+            displayFormatDate: _displayFormatDate,
             course: widget.course,
             onMarkAttendance: onMarkAttendance,
             studentsAttendanceStatus: studentsAttendanceStatus,
+            fetchAttendance: fetchAttendance,
           );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:attendance_app/models/courses/attendance_model.dart';
 import 'package:attendance_app/models/courses/course_model.dart';
+import 'package:attendance_app/models/courses/display_attendance_model.dart';
 import 'package:attendance_app/utils/logger/logger.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -21,20 +22,17 @@ class AttendanceService {
   Future<List<CourseModel>> getCourses(
       String userId, String instituteId) async {
     try {
-      // Step 1: Fetch the user document
+      // Fetch the user document
       DocumentSnapshot userSnapshot =
           await _firestore.collection('lms-users').doc(userId).get();
 
       if (userSnapshot.exists) {
-        // Explicitly cast the data to a Map
         Map<String, dynamic> userData =
             userSnapshot.data() as Map<String, dynamic>;
 
-        // Step 2: Extract registeredCourses from user data
         List<String> registeredCourses =
             List<String>.from(userData['registeredCourses']);
 
-        // Step 3: Fetch each course details
         List<CourseModel> courses = [];
         if (registeredCourses.isNotEmpty) {
           for (String courseId in registeredCourses) {
@@ -46,9 +44,32 @@ class AttendanceService {
                 .get();
 
             if (courseSnapshot.exists) {
-              // Convert Firestore data to CourseModel
-              courses.add(CourseModel.fromJson(
-                  courseSnapshot.data() as Map<String, dynamic>));
+              Map<String, dynamic> courseData =
+                  courseSnapshot.data() as Map<String, dynamic>;
+
+              // Fetch the number of registrations
+              QuerySnapshot registrationSnapshot = await _firestore
+                  .collection('institutes')
+                  .doc(instituteId)
+                  .collection('students-registrations')
+                  .where('courseId', isEqualTo: courseId)
+                  .get();
+
+              int noOfRegistrations = registrationSnapshot.size;
+
+              // Extract user names from the registrations
+              List<Map<String, String>> userNames =
+                  registrationSnapshot.docs.map((registrationDoc) {
+                String studentId = registrationDoc['registeredBy'] as String;
+                String studentName = registrationDoc['userName'] as String;
+                return {studentId: studentName};
+              }).toList();
+
+              courseData['noOfRegistrations'] = noOfRegistrations;
+              courseData['students'] = userNames;
+
+              // Convert to CourseModel and add to list
+              courses.add(CourseModel.fromJson(courseData));
             }
           }
         }
@@ -196,6 +217,112 @@ class AttendanceService {
       // Handle any errors
       print(e);
       return 0;
+    }
+  }
+
+  Future<String> getStudentName(String userId) async {
+    try {
+      // Fetch the user's document from the 'lms-users' collection
+      DocumentSnapshot userDoc =
+          await _firestore.collection('lms-users').doc(userId).get();
+
+      // Check if the document exists
+      if (userDoc.exists) {
+        // Extract the user's name (ensure 'name' is the correct field)
+        String userName = userDoc['name'];
+        return userName;
+      } else {
+        return 'User not found';
+      }
+    } catch (e) {
+      // Handle any errors
+      print('Error fetching user name: $e');
+      return 'Error fetching name';
+    }
+  }
+
+  Future<List<DisplayAttendanceModel>> getStudentAttendance(
+    String userId,
+    String courseId,
+  ) async {
+    List<DisplayAttendanceModel> attendanceList = [];
+    try {
+      // Fetch the attendance collection for the specified user and course
+      CollectionReference attendanceRef = _firestore
+          .collection('lms-users')
+          .doc(userId)
+          .collection('courses')
+          .doc(courseId)
+          .collection('attendance');
+
+      QuerySnapshot attendanceSnapshot = await attendanceRef.get();
+
+      // Iterate through each document in the attendance collection
+      for (var doc in attendanceSnapshot.docs) {
+        // Use the document ID as the date
+        String date = doc.id;
+
+        // Extract the 'status' field from the document data
+        bool status = doc['status'];
+
+        // Create a DisplayAttendanceModel and add it to the list
+
+        attendanceList.add(DisplayAttendanceModel(
+          status: status,
+          date: date,
+        ));
+      }
+      return attendanceList;
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
+  Future<int> updateStudentAttendance(
+    String userId,
+    String courseId,
+    List<DisplayAttendanceModel> attendanceUpdates,
+  ) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    try {
+      // Update the attendance records
+      for (var attendance in attendanceUpdates) {
+        // Path to the attendance document in Firestore
+        DocumentReference attendanceDocRef = firestore
+            .collection('lms-users')
+            .doc(userId)
+            .collection('courses')
+            .doc(courseId)
+            .collection('attendance')
+            .doc(attendance.date); // Document ID is the date
+
+        // Create a map to store the new attendance status
+        Map<String, dynamic> updatedAttendance = {
+          'status': attendance.status,
+        };
+
+        // Update the attendance document with the new status
+        await attendanceDocRef.set(updatedAttendance, SetOptions(merge: true));
+      }
+
+      // Count the number of documents with status = true
+      final attendanceCollectionRef = firestore
+          .collection('lms-users')
+          .doc(userId)
+          .collection('courses')
+          .doc(courseId)
+          .collection('attendance');
+
+      final snapshot =
+          await attendanceCollectionRef.where('status', isEqualTo: true).get();
+
+      // Return the count of documents with status = true
+      return snapshot.size;
+    } catch (e) {
+      print('Error updating attendance: $e');
+      return 0; // Return 0 in case of an error
     }
   }
 }

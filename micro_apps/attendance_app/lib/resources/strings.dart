@@ -142,4 +142,9 @@ class Strings {
   static const String resolve = 'Resolve';
   static const String noEnquiriesFound = 'No Enquiries found';
   static const String attendanceEnquiry = 'Attendance Enquiry';
+  static const String dashBoard = 'Dashboard';
+  static const String studentDetailView = 'Student Detail View';
+  static const String attendanceChanges = 'Attendance Changes';
+  static const String attendanceUpdatedSuccessfully =
+      'Attendance Updated Successfully';
 }
