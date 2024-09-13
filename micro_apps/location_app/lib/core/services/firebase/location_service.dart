@@ -28,4 +28,16 @@ class LocationService {
       return null;
     }
   }
+
+  Future<LocationModel?> getInstituteLocation(String instituteId) async {
+    try {
+      DocumentSnapshot querySnapshot =
+          await _firestore.collection('institutes').doc(instituteId).get();
+      return LocationModel.fromJson(
+          querySnapshot.data() as Map<String, dynamic>);
+    } catch (e) {
+      log.e('Error getting location: $e');
+      return null;
+    }
+  }
 }

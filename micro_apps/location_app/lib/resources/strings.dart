@@ -139,8 +139,8 @@ class Strings {
   static const String enterYourLocation = 'Enter your location ';
   static const String useMyLocation = 'Use my location';
   static const String or = 'Or';
-  static const String searchOnGoogleMaps = 'Search by Institute name ';
-  static const String enterYourLocationOrLink = 'Enter your location or Link';
+  static const String searchOnGoogleMaps = 'Search in Google maps ';
+  static const String enterYourLocationOrLink = 'Enter your location Link';
   static const String fetchInstitutes = 'Fetch Institutes';
   static const String myLocation = 'My Location';
   static const String saveLocation = 'Save Location';

@@ -10,4 +10,13 @@ class LocationModel {
     required this.latitude,
     required this.longitude,
   });
+
+  factory LocationModel.fromJson(Map<String, dynamic> json) {
+    return LocationModel(
+      name: json['name'],
+      placeId: json['placeId'],
+      latitude: json['latitude'],
+      longitude: json['longitude'],
+    );
+  }
 }
