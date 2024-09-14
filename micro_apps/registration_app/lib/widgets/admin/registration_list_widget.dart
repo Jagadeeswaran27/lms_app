@@ -24,6 +24,21 @@ class RegistrationListWidget extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  InkWell(
+                    child: Row(
+                      children: [
+                        Text(
+                          "Model",
+                          style:
+                              Theme.of(context).textTheme.bodyMediumTitleBrown,
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.of(context).pushNamed(AdminRoutes.modelScreen);
+                    },
+                  ),
+                  const SizedBox(height: 20),
                   Row(
                     children: [
                       Text(
