@@ -10,4 +10,5 @@ class Icons {
   static const String resolve = 'assets/icon/resolve.svg';
   static const String send = 'assets/icon/send.svg';
   static const String prev = 'assets/icon/prev.svg';
+  static const String sort = 'assets/icon/sort.svg';
 }

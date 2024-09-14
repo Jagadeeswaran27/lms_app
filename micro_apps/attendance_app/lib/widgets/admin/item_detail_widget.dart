@@ -85,19 +85,14 @@ class _ItemDetailWidgetState extends State<ItemDetailWidget> {
                       Theme.of(context).textTheme.bodyMediumTitleBrownSemiBold,
                 ),
                 const Spacer(),
-                InkWell(
-                  child: Text(
-                    Strings.dashBoard,
-                    style:
-                        Theme.of(context).textTheme.bodyMediumPrimary.copyWith(
-                              decoration: TextDecoration.underline,
-                              decorationColor: ThemeColors.brown,
-                            ),
-                  ),
-                  onTap: () {
+                IconTextButton(
+                  text: Strings.dashBoard,
+                  onPressed: () {
                     Navigator.of(context).pushNamed(AdminRoutes.courseDashboard,
                         arguments: widget.course);
                   },
+                  color: ThemeColors.primary,
+                  iconHorizontalPadding: 10,
                 ),
               ],
             ),
