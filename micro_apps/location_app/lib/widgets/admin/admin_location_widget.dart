@@ -34,9 +34,28 @@ class _AdminLocationWidgetState extends State<AdminLocationWidget> {
   TextEditingController urlController = TextEditingController();
   LocationModel? locationData;
 
+  static Future<String> expandShortUrl(String shortUrl) async {
+    final client = http.Client();
+    final request = http.Request('GET', Uri.parse(shortUrl))
+      ..followRedirects = false;
+    final response = await client.send(request);
+    return response.isRedirect
+        ? response.headers['location'] ?? shortUrl
+        : shortUrl;
+  }
+
   Future<void> _extractFromGoogleMapsLink() async {
-    String url =
-        "https://www.google.com/maps/place/Asha+Tiffins/@12.9614549,77.7108679,15z/data=!4m6!3m5!1s0x3bae122463d8d8b3:0x572809340116f59d!8m2!3d12.9645397!4d77.7144272!16s%2Fg%2F11hcysbb83?entry=ttu&g_ep=EgoyMDI0MDgyNi4wIKXMDSoASAFQAw%3D%3D";
+    String url = urlController.text;
+
+    if (url.contains('goo.gl')) {
+      String? longUrl = await expandShortUrl(url);
+      if (longUrl != null) {
+        url = longUrl;
+      } else {
+        print('Failed to get long URL');
+        return;
+      }
+    }
 
     RegExp regex = RegExp(r'!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)');
     Match? match = regex.firstMatch(url);

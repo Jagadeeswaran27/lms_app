@@ -37,8 +37,51 @@ class _StudentTeacherLocationUpdatedState
   LocationModel? locationData;
   bool isLoading = false;
 
+  Future<String?> getRedirectURL(String strURL) async {
+    try {
+      final response = await http.get(Uri.parse(strURL));
+
+      if (response.statusCode == 301 || response.statusCode == 302) {
+        print('302');
+        return response.headers['location'];
+      } else if (response.statusCode == 200) {
+        final body = response.body;
+        final match =
+            RegExp(r'https://www\.google\.com/maps/[^"]+').firstMatch(body);
+        if (match != null) {
+          // print(match.group(0));
+          return match.group(0);
+        }
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
+
+    return null;
+  }
+
+  static Future<String> expandShortUrl(String shortUrl) async {
+    final client = http.Client();
+    final request = http.Request('GET', Uri.parse(shortUrl))
+      ..followRedirects = false;
+    final response = await client.send(request);
+    return response.isRedirect
+        ? response.headers['location'] ?? shortUrl
+        : shortUrl;
+  }
+
   Future<void> _extractFromGoogleMapsLink() async {
     String url = urlController.text;
+
+    if (url.contains('goo.gl')) {
+      String? longUrl = await expandShortUrl(url);
+      if (longUrl != null) {
+        url = longUrl;
+      } else {
+        print('Failed to get long URL');
+        return;
+      }
+    }
 
     RegExp regex = RegExp(r'!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)');
     Match? match = regex.firstMatch(url);
