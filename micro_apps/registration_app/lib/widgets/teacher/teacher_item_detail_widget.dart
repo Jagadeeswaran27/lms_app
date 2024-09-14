@@ -1,16 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:registration_app/models/registration/course_model.dart';
 
 import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/routes/teacher_routes.dart';
 import 'package:registration_app/themes/colors.dart';
 import 'package:registration_app/themes/fonts.dart';
+import 'package:registration_app/utils/show_snackbar.dart';
 import 'package:registration_app/widgets/common/batch_card.dart';
 import 'package:registration_app/widgets/common/icon_text_button.dart';
 import 'package:registration_app/resources/icons.dart' as icons;
 import 'package:registration_app/widgets/common/item_detail_card.dart';
 
-class TeacherItemDetailWidget extends StatelessWidget {
-  const TeacherItemDetailWidget({super.key});
+class TeacherItemDetailWidget extends StatefulWidget {
+  const TeacherItemDetailWidget({super.key, required this.course});
+
+  final CourseModel course;
+
+  @override
+  State<TeacherItemDetailWidget> createState() =>
+      _TeacherItemDetailWidgetState();
+}
+
+class _TeacherItemDetailWidgetState extends State<TeacherItemDetailWidget> {
+  String selectedBatchDay = 'Weekend';
+  String selectedBatchTime = 'Morning';
+
+  void onPressed(BuildContext context) {
+    if (selectedBatchDay == '' || selectedBatchTime == '') {
+      showSnackbar(context, 'Please select a batch day and time');
+      return;
+    }
+
+    Navigator.of(context).pushNamed(
+      TeacherRoutes.register,
+      arguments: {
+        'course': widget.course,
+        'batchDay': selectedBatchDay,
+        'batchTime': selectedBatchTime,
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,48 +50,74 @@ class TeacherItemDetailWidget extends StatelessWidget {
         width: screenWidth * 0.9,
         margin: const EdgeInsets.only(top: 20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const ItemDetailCard(),
+            ItemDetailCard(course: widget.course),
+            const SizedBox(height: 20),
+            Text(
+              Strings.aboutDescription,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMediumPrimary
+                  .copyWith(fontSize: 20),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              widget.course.aboutDescription,
+              style:
+                  Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 16),
+            ),
             const SizedBox(height: 20),
             Row(
               children: [
                 Text(
-                  Strings.aboutDescription,
-                  style: Theme.of(context).textTheme.bodyMediumPrimary,
+                  Strings.batchOffered,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMediumPrimary
+                      .copyWith(fontSize: 20),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            BatchCard(course: widget.course),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Text(
+                  Strings.amountDetails,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMediumPrimary
+                      .copyWith(fontSize: 20),
                 ),
               ],
             ),
             const SizedBox(height: 20),
             Text(
-              Strings.loremIpsum,
-              style: Theme.of(context).textTheme.bodySmall,
+              widget.course.amount.toString(),
+              maxLines: 2,
+              style:
+                  Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 16),
             ),
             const SizedBox(height: 20),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  Strings.batchOferred,
-                  style: Theme.of(context).textTheme.bodyMediumPrimary,
+                SizedBox(
+                  width: screenWidth * 0.7,
+                  height: 50,
+                  child: IconTextButton(
+                    iconHorizontalPadding: 7,
+                    radius: 20,
+                    text: Strings.proceed,
+                    onPressed: () => onPressed(context),
+                    color: ThemeColors.primary,
+                    buttonTextStyle: Theme.of(context).textTheme.bodyMedium,
+                    svgIcon: icons.Icons.cartIconSvg,
+                  ),
                 ),
               ],
-            ),
-            const SizedBox(height: 20),
-            const BatchCard(),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: screenWidth * 0.7,
-              height: 50,
-              child: IconTextButton(
-                iconHorizontalPadding: 7,
-                radius: 20,
-                text: Strings.proceed,
-                onPressed: () {
-                  Navigator.of(context).pushNamed(TeacherRoutes.register);
-                },
-                color: ThemeColors.primary,
-                buttonTextStyle: Theme.of(context).textTheme.bodyMedium,
-                svgIcon: icons.Icons.cartIconSvg,
-              ),
             ),
             const SizedBox(height: 20),
           ],

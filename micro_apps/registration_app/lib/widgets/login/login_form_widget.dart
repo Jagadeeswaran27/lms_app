@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-
 import 'package:registration_app/constants/enums/button_size.dart';
-import 'package:registration_app/resources/images.dart';
 import 'package:registration_app/resources/strings.dart';
-import 'package:registration_app/screens/admin/admin_app.dart';
 import 'package:registration_app/screens/auth/signup_screen.dart';
-import 'package:registration_app/screens/student/student_app.dart';
-import 'package:registration_app/screens/teacher/teacher_app.dart';
 import 'package:registration_app/themes/colors.dart';
-import 'package:registration_app/themes/fonts.dart';
 import 'package:registration_app/widgets/common/custom_elevated_button.dart';
 import 'package:registration_app/widgets/common/form_input.dart';
-import 'package:registration_app/widgets/common/svg_lodder.dart';
+import 'package:registration_app/themes/fonts.dart';
 
 class LoginFormWidget extends StatefulWidget {
-  const LoginFormWidget({super.key});
+  const LoginFormWidget({
+    super.key,
+    required this.isLoading,
+    required this.onSignIn,
+  });
+
+  final Future<void> Function(String email, String password, bool isGoogle)
+      onSignIn;
+  final bool isLoading;
 
   @override
   State<LoginFormWidget> createState() => _LoginFormWidgetState();
@@ -23,7 +25,16 @@ class LoginFormWidget extends StatefulWidget {
 
 class _LoginFormWidgetState extends State<LoginFormWidget> {
   final _formKey = GlobalKey<FormState>();
+  String _userEmail = '';
+  String _userPassword = '';
   bool isPasswordVisible = true;
+
+  void _handleSignIn() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState?.save();
+      widget.onSignIn(_userEmail, _userPassword, false);
+    }
+  }
 
   void _revealPassword() {
     setState(() {
@@ -42,10 +53,26 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
         key: _formKey,
         child: Column(
           children: [
-            const FormInput(text: Strings.enterYourEmailOrPhoneNo),
+            FormInput(
+              text: Strings.enterYourEmailOrPhoneNo,
+              onSaved: (value) => {_userEmail = value!},
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return Strings.invalidEmailOrPhone;
+                }
+                return null;
+              },
+            ),
             const SizedBox(height: 20),
             FormInput(
               text: Strings.enterYourPassword,
+              onSaved: (value) => {_userPassword = value!},
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return Strings.invalidPassword;
+                }
+                return null;
+              },
               suffixIcon: InkWell(
                 onTap: _revealPassword,
                 child: isPasswordVisible
@@ -54,45 +81,30 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               ),
               obscureText: isPasswordVisible,
             ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Text(
-                    Strings.forgetYourPassword,
-                    style: Theme.of(context).textTheme.displayMediumPrimary,
-                  ),
-                )
-              ],
-            ),
+            // const SizedBox(height: 20),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.end,
+            //   children: [
+            //     GestureDetector(
+            //       onTap: () {},
+            //       child: Text(
+            //         Strings.forgetYourPassword,
+            //         style: Theme.of(context)
+            //             .textTheme
+            //             .displayMediumPrimary
+            //             .copyWith(fontSize: 14.0),
+            //       ),
+            //     )
+            //   ],
+            // ),
             const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: CustomElevatedButton(
                 text: Strings.login,
                 buttonSize: ButtonSize.large,
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    //change the app here
-                    MaterialPageRoute(
-                      builder: (ctx) => const AdminApp(),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              Strings.orLoginWithGoogleAccount,
-              style: Theme.of(context).textTheme.displayMedium,
-            ),
-            const SizedBox(height: 20),
-            InkWell(
-              onTap: () {},
-              child: const SVGLoader(
-                image: Images.google,
+                isLoading: widget.isLoading,
+                onPressed: _handleSignIn,
               ),
             ),
             const SizedBox(height: 20),
@@ -101,14 +113,20 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 children: [
                   TextSpan(
                     text: Strings.haveAnAccount,
-                    style: Theme.of(context).textTheme.displayMedium,
+                    style: Theme.of(context)
+                        .textTheme
+                        .displayMedium!
+                        .copyWith(fontSize: 15),
                   ),
                   const WidgetSpan(
                     child: SizedBox(width: 5),
                   ),
                   TextSpan(
                     text: Strings.registerNow,
-                    style: Theme.of(context).textTheme.displayMediumBold,
+                    style: Theme.of(context)
+                        .textTheme
+                        .displayMediumBold
+                        .copyWith(fontSize: 15),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         Navigator.of(context).push(

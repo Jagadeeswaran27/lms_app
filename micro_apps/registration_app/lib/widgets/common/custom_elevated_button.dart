@@ -50,10 +50,18 @@ class CustomElevatedButton extends StatelessWidget {
           child: Container(
             padding: getElevatedButtonPadding(buttonSize),
             alignment: Alignment.center,
-            child: Text(
-              text,
-              style: buttonTextStyle ?? Theme.of(context).textTheme.bodyMedium,
-            ),
+            child: (isLoading != null && isLoading == true)
+                ? CircularProgressIndicator(
+                    color: ThemeColors.white,
+                    strokeWidth: 2,
+                  )
+                : Text(
+                    text,
+                    style: buttonTextStyle ??
+                        Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontSize: 18.0,
+                            ),
+                  ),
           ),
         ),
       ),

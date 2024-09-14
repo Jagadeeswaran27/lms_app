@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:enquiry_app/screens/auth/options_screen.dart';
 import 'package:enquiry_app/constants/enums/button_size.dart';
 import 'package:enquiry_app/resources/strings.dart';
-import 'package:enquiry_app/routes/routes.dart';
 import 'package:enquiry_app/widgets/common/custom_elevated_button.dart';
 
 class WelcomeScreenWidget extends StatelessWidget {
@@ -26,7 +26,7 @@ class WelcomeScreenWidget extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                Strings.enquiry,
+                Strings.enquiryApp,
                 style: Theme.of(context).textTheme.headlineLarge,
               ),
               Container(
@@ -36,7 +36,7 @@ class WelcomeScreenWidget extends StatelessWidget {
                 ),
                 child: Text(
                   textAlign: TextAlign.center,
-                  Strings.loremIpsum,
+                  "Effortlessly manage and organize all your inquiries with our intuitive app. Stay on top of responses, track progress, and enhance communication for better customer satisfaction and productivity.",
                   style: Theme.of(context).textTheme.displayMedium!.copyWith(
                         height: 1.4,
                       ),
@@ -47,8 +47,11 @@ class WelcomeScreenWidget extends StatelessWidget {
                 child: CustomElevatedButton(
                   text: Strings.getStarted,
                   onPressed: () {
-                    Navigator.of(context)
-                        .pushReplacementNamed(Routes.optionsScreen);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => const OptionsScreen(),
+                      ),
+                    );
                   },
                   buttonSize: ButtonSize.large,
                 ),

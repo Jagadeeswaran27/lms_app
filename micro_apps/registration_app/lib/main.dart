@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-import 'package:registration_app/routes/routes.dart';
-import 'package:registration_app/themes/themes.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:registration_app/app.dart';
 
-//change the app in login_widget.dart file to see the admin,student and teacher app
+import 'package:registration_app/core/services/firebase/firebase_options.dart';
 
-void main() => runApp(const RegistrationApp());
-
-class RegistrationApp extends StatelessWidget {
-  const RegistrationApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: Themes.buildLightTheme(context),
-      routes: Routes.buildRoutes,
-      initialRoute: Routes.initialRoute,
-    );
-  }
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const RegistrationApp());
 }

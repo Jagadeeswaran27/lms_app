@@ -14,7 +14,7 @@ class AddItemCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        height: 100,
+        height: 50,
         margin: const EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
           color: ThemeColors.cardColor,

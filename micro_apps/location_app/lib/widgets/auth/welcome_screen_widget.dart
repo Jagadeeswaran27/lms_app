@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:location_app/constants/enums/button_size.dart';
 import 'package:location_app/resources/strings.dart';
-import 'package:location_app/routes/routes.dart';
+import 'package:location_app/screens/auth/options_screen.dart';
 import 'package:location_app/widgets/common/custom_elevated_button.dart';
 
 class WelcomeScreenWidget extends StatelessWidget {
@@ -26,7 +26,7 @@ class WelcomeScreenWidget extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                Strings.location,
+                Strings.locationApp,
                 style: Theme.of(context).textTheme.headlineLarge,
               ),
               Container(
@@ -36,7 +36,7 @@ class WelcomeScreenWidget extends StatelessWidget {
                 ),
                 child: Text(
                   textAlign: TextAlign.center,
-                  Strings.loremIpsum,
+                  "Discover and share locations with ease. Our app helps you find, save, and navigate to your favorite places seamlessly, with real-time updates and personalized recommendations.",
                   style: Theme.of(context).textTheme.displayMedium!.copyWith(
                         height: 1.4,
                       ),
@@ -47,8 +47,11 @@ class WelcomeScreenWidget extends StatelessWidget {
                 child: CustomElevatedButton(
                   text: Strings.getStarted,
                   onPressed: () {
-                    Navigator.of(context)
-                        .pushReplacementNamed(Routes.optionsScreen);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => const OptionsScreen(),
+                      ),
+                    );
                   },
                   buttonSize: ButtonSize.large,
                 ),

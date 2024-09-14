@@ -7,7 +7,7 @@ class Strings {
   static const String loremIpsum =
       'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type';
   static const String getStarted = 'GET STARTED';
-  static const String homeText = 'Your Education, Your Comfort,\nAt Your Home';
+  static const String homeText = 'Your Comfort,\nAt Your Home';
   static const signIn = "Sign In";
   static const String register = 'Register';
   static const String enterSignInDetails =
@@ -28,6 +28,8 @@ class Strings {
   static const String registerAs = 'Register as';
   static const String teacher = 'Teacher';
   static const String student = 'Student';
+  static const String user = 'User';
+  static const String admin = 'Admin';
   static const String password = 'Password';
   static const String confirmPassword = 'Confirm password';
   static const String iAgreeWithThe = 'I agree with the ';
@@ -45,6 +47,7 @@ class Strings {
   static const String invalidEmail = 'Invalid Email';
   static const String invalidMobileNumber = 'Invalid mobile number';
   static const String pleaseSelectRole = 'Please select a role';
+  static const String errorLoggingOut = 'Error logging out';
 
   //app related
   static const String attendance = 'Attendance';
@@ -60,7 +63,7 @@ class Strings {
   static const String itemList = 'Item List';
   static const String courses = 'Courses';
   static const String aboutDescription = 'About Description';
-  static const String batchOferred = 'Batch Oferred';
+  static const String batchOffered = 'Batch Offered';
   static const String days = 'Days';
   static const String about = 'About';
   static const String time = 'Time';
@@ -73,7 +76,7 @@ class Strings {
   static const String addItem = 'Add Item';
   static const String addToCart = 'Add to cart';
   static const String cart = 'Cart';
-  static const String proceedToCheckout = 'Proceed to checkout';
+  static const String proceedToCheckout = 'Checkout';
   static const String emailOfStudent = 'Email of Student :';
   static const String enterUserName = 'Enter User Name : ';
   static const String contactInfo = 'Contact Info : ';
@@ -101,4 +104,37 @@ class Strings {
   static const String confirm = 'Confirm';
   static const String acknowledgment = 'Acknowledgment';
   static const String registration = 'Registration';
+  static const String registrationApp = 'Registration App';
+  static const String invalidCredentials = 'Invalid credentials';
+  static const String anErrorOccurred = 'An error occurred';
+  static const String pleaseVerifyYourEmail = 'Please verify your email';
+  static const String forgetPassword = 'Forget Password';
+  static const String invalidEmailOrPhone = 'Invalid email or phone';
+  static const String invalidPassword = 'Invalid password';
+  static const String gallery = 'Gallery';
+  static const String camera = 'Camera';
+  static const String save = 'Save';
+  static const String verifyYourEmail = 'Verify your email';
+  static const String institute = 'Institute';
+  static const String courseAlreadyInCart = 'Course already in cart';
+  static const String courseAddedToCart = 'Course added to cart';
+  static const String update = "Update : ";
+  static const String feeReceipt = 'Fee receipt';
+  static const String applicationReceipt = 'Application receipt';
+  static const String proceedToPayment = 'Proceed to payment';
+  static const String ticketNo = 'Ticket no : ';
+  static const String myTicket = 'My Ticket';
+  static const String facingIssue = 'Facing issue : ';
+  static const String describedIssue = 'Described issue : ';
+  static const String view = 'View';
+  static const String acknowledged = 'Acknowledged';
+  static const String toAcknowledge = 'To Acknowledge';
+  static const String resolved = 'Resolved';
+  static const String toResolve = 'To Resolve';
+  static const String subject = 'Subject : ';
+  static const String file = 'File';
+  static const String resolve = 'Resolve';
+  static const String noEnquiriesFound = 'No enquiries found';
+  static const String itemCategory = 'Item Category';
+  static const String registrationEnquiry = 'Registration Enquiry';
 }

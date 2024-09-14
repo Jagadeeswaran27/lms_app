@@ -3,20 +3,32 @@ import 'package:flutter/material.dart';
 
 import 'package:menu_app/config/auth/user_role.dart';
 import 'package:menu_app/constants/enums/button_size.dart';
-import 'package:menu_app/resources/images.dart';
 import 'package:menu_app/resources/regex.dart';
 import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/screens/auth/login_screen.dart';
-import 'package:menu_app/screens/auth/verification_successfull_screen.dart';
-import 'package:menu_app/screens/menu/my_courses_screen.dart';
 import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
 import 'package:menu_app/widgets/common/custom_elevated_button.dart';
 import 'package:menu_app/widgets/common/form_input.dart';
-import 'package:menu_app/widgets/common/svg_lodder.dart';
 
 class SignupFormWidget extends StatefulWidget {
-  const SignupFormWidget({super.key});
+  final void Function({
+    required BuildContext context,
+    required String userName,
+    required String email,
+    required String phone,
+    required String password,
+    required String role,
+  }) onSignup;
+  final bool? isLoading;
+  final void Function() onGoogleSignin;
+
+  const SignupFormWidget({
+    super.key,
+    required this.onSignup,
+    this.isLoading,
+    required this.onGoogleSignin,
+  });
 
   @override
   State<SignupFormWidget> createState() => _SignupFormWidgetState();
@@ -65,32 +77,27 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
   }
 
   void _handleSignup() {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (ctx) => const VerificationSuccessfullScreen(),
-      ),
-    );
-    // if (_formKey.currentState!.validate() &&
-    //     _role != null &&
-    //     _isTermsAccepted) {
-    //   _formKey.currentState?.save();
-    //   // widget.onSignup(
-    //   //   context: context,
-    //   //   userName: _userName,
-    //   //   email: _userEmail,
-    //   //   phone: _phone,
-    //   //   password: _userPassword,
-    //   //   role: _role!,
-    //   // );
-    // } else if (_role == null) {
-    //   setState(() {
-    //     _roleError = Strings.pleaseSelectRole;
-    //   });
-    // } else if (!_isTermsAccepted) {
-    //   setState(() {
-    //     _isTermsAcceptedError = "Please read the terms and agree!";
-    //   });
-    // }
+    if (_formKey.currentState!.validate() &&
+        _role != null &&
+        _isTermsAccepted) {
+      _formKey.currentState?.save();
+      widget.onSignup(
+        context: context,
+        userName: _userName,
+        email: _userEmail,
+        phone: _phone,
+        password: _userPassword,
+        role: _role!,
+      );
+    } else if (_role == null) {
+      setState(() {
+        _roleError = Strings.pleaseSelectRole;
+      });
+    } else if (!_isTermsAccepted) {
+      setState(() {
+        _isTermsAcceptedError = "Please read the terms and agree!";
+      });
+    }
   }
 
   @override
@@ -99,7 +106,7 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30), color: ThemeColors.white),
       padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 15),
-      margin: const EdgeInsets.only(left: 15, right: 15, top: 120),
+      margin: const EdgeInsets.only(left: 15, right: 15, top: 40),
       child: Form(
         key: _formKey,
         child: Column(
@@ -149,8 +156,10 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
                   margin: const EdgeInsets.only(left: 10),
                   child: Text(
                     Strings.registerAs,
-                    style:
-                        Theme.of(context).textTheme.displayMediumBrownSemiBold,
+                    style: Theme.of(context)
+                        .textTheme
+                        .displayMediumBrownSemiBold
+                        .copyWith(fontSize: 15.0),
                   ),
                 ),
               ],
@@ -162,7 +171,10 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
                   child: RadioListTile(
                     title: Text(
                       role.roleName,
-                      style: Theme.of(context).textTheme.displayMediumBoldBrown,
+                      style: Theme.of(context)
+                          .textTheme
+                          .displayMediumBoldBrown
+                          .copyWith(fontSize: 15.0),
                     ),
                     value: role.roleConstant,
                     groupValue: _role,
@@ -176,11 +188,17 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
               }).toList(),
             ),
             if (_roleError != null)
-              Padding(
-                padding: const EdgeInsets.only(left: 10, top: 5),
-                child: Text(
-                  _roleError!,
-                  style: TextStyle(color: ThemeColors.errorColor, fontSize: 12),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, top: 0, bottom: 20),
+                  child: Text(
+                    _roleError!,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: ThemeColors.primary),
+                  ),
                 ),
               ),
             FormInput(
@@ -237,12 +255,17 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
                       children: [
                         TextSpan(
                           text: Strings.iAgreeWithThe,
-                          style: Theme.of(context).textTheme.displayMediumBlack,
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayMediumBlack
+                              .copyWith(fontSize: 15.0),
                         ),
                         TextSpan(
                           text: Strings.termsAndConditions,
-                          style:
-                              Theme.of(context).textTheme.displayMediumPrimary,
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayMediumPrimary
+                              .copyWith(fontSize: 15.0),
                           recognizer: TapGestureRecognizer()..onTap = () {},
                         )
                       ],
@@ -253,25 +276,26 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
             ),
             if (_isTermsAcceptedError != null)
               Padding(
-                padding: const EdgeInsets.only(left: 10, top: 5),
-                child: Text(
-                  _isTermsAcceptedError!,
-                  style: TextStyle(color: ThemeColors.errorColor, fontSize: 12),
+                padding: const EdgeInsets.only(left: 10, top: 10),
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    _isTermsAcceptedError!,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall!
+                        .copyWith(color: ThemeColors.primary),
+                  ),
                 ),
               ),
+            const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: CustomElevatedButton(
                 text: Strings.register,
                 buttonSize: ButtonSize.large,
                 onPressed: _handleSignup,
-              ),
-            ),
-            const SizedBox(height: 20),
-            InkWell(
-              onTap: () {},
-              child: const SVGLoader(
-                image: Images.google,
+                isLoading: widget.isLoading,
               ),
             ),
             const SizedBox(height: 20),
@@ -280,14 +304,20 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
                 children: [
                   TextSpan(
                     text: Strings.alreadyHaveAnAccount,
-                    style: Theme.of(context).textTheme.displayMedium,
+                    style: Theme.of(context)
+                        .textTheme
+                        .displayMedium!
+                        .copyWith(fontSize: 15.0),
                   ),
                   const WidgetSpan(
                     child: SizedBox(width: 5),
                   ),
                   TextSpan(
                     text: Strings.loginNow,
-                    style: Theme.of(context).textTheme.displayMediumBold,
+                    style: Theme.of(context)
+                        .textTheme
+                        .displayMediumBold
+                        .copyWith(fontSize: 15.0),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
                         Navigator.of(context).push(

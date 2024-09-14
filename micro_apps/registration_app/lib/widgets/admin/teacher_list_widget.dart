@@ -1,77 +1,58 @@
 import 'package:flutter/material.dart';
 
-import 'package:registration_app/resources/strings.dart';
-import 'package:registration_app/utils/widgets/show_success_modal.dart';
+import 'package:registration_app/models/registration/teacher_registration_model.dart';
+import 'package:registration_app/themes/colors.dart';
 import 'package:registration_app/widgets/admin/action_card.dart';
 
 class TeacherListWidget extends StatelessWidget {
-  const TeacherListWidget({super.key});
+  const TeacherListWidget({
+    super.key,
+    required this.isLoading,
+    required this.registrationList,
+    required this.onApproveTeacher,
+    required this.onRejectTeacher,
+  });
+
+  final bool isLoading;
+  final List<TeacherRegistrationModel> registrationList;
+  final void Function(String) onApproveTeacher;
+  final void Function(String) onRejectTeacher;
 
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
 
+    if (isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    if (registrationList.isEmpty) {
+      return Center(
+        child: Text('No teachers registered yet',
+            style: TextStyle(
+              fontSize: 20,
+              color: ThemeColors.primary,
+            )),
+      );
+    }
+
     return Container(
       width: screenSize.width * 0.9,
-      margin: const EdgeInsets.only(top: 5),
+      margin: const EdgeInsets.only(top: 10),
       child: ListView(
-        children: [
-          ActionCard(
-            imageUrl: Strings.url,
-            name: "XXXXX",
-            courseName: "XXXXXX",
-            paymentDone: true,
-            onAccept: () {
-              showSuccessModal(
-                  context, Strings.acknowledgment, () {}, ["000000000"]);
-            },
-            onReject: () {},
-          ),
-          ActionCard(
-            imageUrl: Strings.url,
-            name: "XXXXX",
-            courseName: "XXXXXX",
-            paymentDone: true,
-            onAccept: () {
-              showSuccessModal(
-                  context, Strings.acknowledgment, () {}, ["000000000"]);
-            },
-            onReject: () {},
-          ),
-          ActionCard(
-            imageUrl: Strings.url,
-            name: "XXXXX",
-            courseName: "XXXXXX",
-            paymentDone: true,
-            onAccept: () {
-              showSuccessModal(
-                  context, Strings.acknowledgment, () {}, ["000000000"]);
-            },
-            onReject: () {},
-          ),
-          ActionCard(
-            imageUrl: Strings.url,
-            name: "XXXXX",
-            courseName: "XXXXXX",
-            paymentDone: true,
-            onAccept: () {
-              showSuccessModal(
-                  context, Strings.acknowledgment, () {}, ["000000000"]);
-            },
-            onReject: () {},
-          ),
-          ActionCard(
-            imageUrl: Strings.url,
-            name: "XXXXX",
-            courseName: "XXXXXX",
-            paymentDone: false,
-            onAccept: () {
-              showSuccessModal(
-                  context, Strings.acknowledgment, () {}, ["000000000"]);
-            },
-            onReject: () {},
-          ),
-        ],
+        padding: const EdgeInsets.all(0),
+        children: registrationList
+            .map((teacher) => ActionCard(
+                  imageUrl: teacher.imageUrl,
+                  name: teacher.userName,
+                  courseName: teacher.courseName,
+                  paymentDone: teacher.paymentStatus == 'Paid',
+                  onAccept: () => onApproveTeacher(teacher.registrationId),
+                  onReject: () => onRejectTeacher(teacher.registrationId),
+                ))
+            .toList(),
       ),
     );
   }

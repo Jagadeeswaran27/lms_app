@@ -41,11 +41,11 @@ class ActionButton extends StatelessWidget {
             )
           ],
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 5),
+        padding: const EdgeInsets.only(left: 10, right: 5, top: 5, bottom: 5),
         width: width ?? 80,
         height: height ?? 30,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               text,

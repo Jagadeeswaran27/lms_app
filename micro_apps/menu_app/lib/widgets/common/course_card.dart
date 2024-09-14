@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 
+import 'package:menu_app/models/courses/course_model.dart';
 import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
 
 class CourseCard extends StatelessWidget {
-  const CourseCard({super.key, required this.onPressed});
+  const CourseCard({super.key, required this.onPressed, required this.course});
 
   final Function() onPressed;
+  final CourseModel course;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.0),
           color: ThemeColors.cardColor,
@@ -27,7 +29,7 @@ class CourseCard extends StatelessWidget {
           ],
         ),
         child: SizedBox(
-          height: 120.0,
+          height: 150.0,
           child: Row(
             children: [
               Expanded(
@@ -53,21 +55,38 @@ class CourseCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  padding: const EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.all(18.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'XXXXXX',
+                        course.courseTitle,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyMediumTitleBrownSemiBold,
+                            .bodyMediumTitleBrownSemiBold
+                            .copyWith(fontSize: 18),
+                      ),
+                      const SizedBox(height: 8.0),
+                      SizedBox(
+                        height: 30,
+                        child: Text(
+                          course.shortDescription,
+                          style: Theme.of(context)
+                              .textTheme
+                              .displaySmall!
+                              .copyWith(fontSize: 12),
+                          maxLines: 5,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       const SizedBox(height: 8.0),
                       Text(
-                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
-                        style: Theme.of(context).textTheme.displaySmall,
+                        'Rs.${course.amount.toString()}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .displaySmall!
+                            .copyWith(fontSize: 16),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
@@ -84,7 +103,7 @@ class CourseCard extends StatelessWidget {
                     bottomRight: Radius.circular(16.0),
                   ),
                   child: Image.network(
-                    'https://via.placeholder.com/150',
+                    course.imageUrl,
                     fit: BoxFit.cover,
                     height: double.infinity,
                   ),

@@ -1,3 +1,6 @@
+import 'package:enquiry_app/screens/student_teacher_app/access_code_screen.dart';
+import 'package:enquiry_app/screens/student_teacher_app/my_ticket_screen.dart';
+import 'package:enquiry_app/screens/student_teacher_app/my_tickets_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:enquiry_app/screens/student_teacher_app/enquiry_reception_screen.dart';
@@ -8,15 +11,21 @@ class StudentTeacherRoutes {
 
   static const raiseEnquiry = '/raise-enquiry';
   static const enquiryReception = '/enquiry-reception';
+  static const myTickets = '/my-tickets';
+  static const myTicket = '/my-ticket';
+  static const accessCode = '/access-code';
 
   static Map<String, WidgetBuilder> get buildStudentTeacherRoutes {
     return {
       raiseEnquiry: (context) => const RaiseEnquiryScreen(),
       enquiryReception: (context) => const EnquiryReceptionScreen(),
+      myTickets: (context) => const MyTicketsScreen(),
+      myTicket: (context) => const MyTicketScreen(),
+      accessCode: (context) => const AccessCodeScreen(),
     };
   }
 
   static String get initialRoute {
-    return StudentTeacherRoutes.raiseEnquiry;
+    return StudentTeacherRoutes.accessCode;
   }
 }

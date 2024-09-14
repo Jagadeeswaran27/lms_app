@@ -11,6 +11,7 @@ class TeacherItemListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const ScreenLayout(
       topBarText: Strings.itemList,
+      showBackButton: false,
       child: TeacherItemListContainer(),
     );
   }

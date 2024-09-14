@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:registration_app/models/registration/course_model.dart';
 import 'package:registration_app/themes/colors.dart';
 import 'package:registration_app/themes/fonts.dart';
 
 class ItemCard extends StatelessWidget {
-  const ItemCard({super.key, required this.onPressed});
+  const ItemCard({super.key, required this.onPressed, required this.course});
 
   final void Function() onPressed;
+  final CourseModel course;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.0),
           color: ThemeColors.cardColor,
@@ -52,21 +54,25 @@ class ItemCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  padding: const EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.all(18.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'XXXXXX',
+                        course.courseTitle,
                         style: Theme.of(context)
                             .textTheme
-                            .bodyMediumTitleBrownSemiBold,
+                            .bodyMediumTitleBrownSemiBold
+                            .copyWith(fontSize: 20),
                       ),
                       const SizedBox(height: 8.0),
                       Text(
-                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
-                        style: Theme.of(context).textTheme.displaySmall,
+                        course.aboutDescription,
+                        style: Theme.of(context)
+                            .textTheme
+                            .displaySmall!
+                            .copyWith(fontSize: 14),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
@@ -83,7 +89,7 @@ class ItemCard extends StatelessWidget {
                     bottomRight: Radius.circular(16.0),
                   ),
                   child: Image.network(
-                    'https://media.istockphoto.com/id/1399611777/photo/portrait-of-a-smiling-little-brown-haired-boy-looking-at-the-camera-happy-kid-with-good.jpg?s=612x612&w=0&k=20&c=qZ63xODwrnc81wKK0dwc3tOEf2lghkQQKmotbF11q7Q=',
+                    course.imageUrl,
                     fit: BoxFit.cover,
                     height: double.infinity,
                   ),

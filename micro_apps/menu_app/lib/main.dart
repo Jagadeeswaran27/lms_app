@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-import 'package:menu_app/routes/routes.dart';
-import 'package:menu_app/themes/themes.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(const MenuApp());
+import 'package:menu_app/app.dart';
+import 'package:menu_app/core/services/firebase/firebase_options.dart';
 
-class MenuApp extends StatelessWidget {
-  const MenuApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: Themes.buildLightTheme(context),
-      home: Routes.initialScreen,
-    );
-  }
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MenuApp());
 }

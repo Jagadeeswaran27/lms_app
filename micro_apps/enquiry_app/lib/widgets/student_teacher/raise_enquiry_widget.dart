@@ -7,6 +7,12 @@ import 'package:enquiry_app/themes/colors.dart';
 import 'package:enquiry_app/widgets/common/enquiry_card.dart';
 import 'package:enquiry_app/widgets/common/icon_text_button.dart';
 
+class EnquiryArguments {
+  final String title;
+
+  EnquiryArguments(this.title);
+}
+
 class RaiseEnquiryWidget extends StatelessWidget {
   const RaiseEnquiryWidget({super.key});
 
@@ -25,36 +31,55 @@ class RaiseEnquiryWidget extends StatelessWidget {
                   EnquiryCard(
                     text: Strings.reception,
                     onTap: () {
-                      Navigator.of(context)
-                          .pushNamed(StudentTeacherRoutes.enquiryReception);
+                      Navigator.of(context).pushNamed(
+                        StudentTeacherRoutes.enquiryReception,
+                        arguments: EnquiryArguments(Strings.reception),
+                      );
                     },
                   ),
                   EnquiryCard(
-                    text: Strings.teacher,
+                    text: Strings.registration,
                     onTap: () {
-                      Navigator.of(context)
-                          .pushNamed(StudentTeacherRoutes.enquiryReception);
+                      Navigator.of(context).pushNamed(
+                        StudentTeacherRoutes.enquiryReception,
+                        arguments: EnquiryArguments(Strings.registration),
+                      );
                     },
                   ),
                   EnquiryCard(
-                    text: Strings.instituteAdmin,
+                    text: Strings.attendance,
                     onTap: () {
-                      Navigator.of(context)
-                          .pushNamed(StudentTeacherRoutes.enquiryReception);
+                      Navigator.of(context).pushNamed(
+                        StudentTeacherRoutes.enquiryReception,
+                        arguments: EnquiryArguments(Strings.attendance),
+                      );
+                    },
+                  ),
+                  EnquiryCard(
+                    text: Strings.location,
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        StudentTeacherRoutes.enquiryReception,
+                        arguments: EnquiryArguments(Strings.location),
+                      );
                     },
                   ),
                   EnquiryCard(
                     text: Strings.owner,
                     onTap: () {
-                      Navigator.of(context)
-                          .pushNamed(StudentTeacherRoutes.enquiryReception);
+                      Navigator.of(context).pushNamed(
+                        StudentTeacherRoutes.enquiryReception,
+                        arguments: EnquiryArguments(Strings.owner),
+                      );
                     },
                   ),
                   EnquiryCard(
-                    text: Strings.hospitalityEnquiry,
+                    text: Strings.custom,
                     onTap: () {
-                      Navigator.of(context)
-                          .pushNamed(StudentTeacherRoutes.enquiryReception);
+                      Navigator.of(context).pushNamed(
+                        StudentTeacherRoutes.enquiryReception,
+                        arguments: EnquiryArguments(Strings.custom),
+                      );
                     },
                   ),
                 ],
@@ -70,7 +95,7 @@ class RaiseEnquiryWidget extends StatelessWidget {
               radius: 20,
               text: Strings.myTickets,
               onPressed: () {
-                // Navigator.of(context).pushNamed(StudentRoutes.register);
+                Navigator.of(context).pushNamed(StudentTeacherRoutes.myTickets);
               },
               color: ThemeColors.primary,
               buttonTextStyle: Theme.of(context).textTheme.bodyMedium,

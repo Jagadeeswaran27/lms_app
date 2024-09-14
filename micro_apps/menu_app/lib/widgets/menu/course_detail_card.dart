@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'package:menu_app/models/courses/course_model.dart';
 import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
 
 class CourseDetailCard extends StatelessWidget {
-  const CourseDetailCard({super.key});
+  const CourseDetailCard({super.key, required this.course});
+
+  final CourseModel course;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,7 @@ class CourseDetailCard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(50.0),
                     child: Image.network(
-                      'https://via.placeholder.com/100',
+                      course.imageUrl,
                       height: 100,
                       width: 100,
                       fit: BoxFit.cover,
@@ -49,7 +52,7 @@ class CourseDetailCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        Strings.english,
+                        course.courseTitle,
                         style: Theme.of(context).textTheme.bodyLargeTitleBrown,
                       ),
                       const SizedBox(height: 10),
@@ -62,11 +65,16 @@ class CourseDetailCard extends StatelessWidget {
                                 .displayMediumTitleBrownSemiBold,
                           ),
                           const SizedBox(height: 30),
-                          Text(
-                            '3245',
-                            style: Theme.of(context)
-                                .textTheme
-                                .displayMediumPrimarySemiBold,
+                          SizedBox(
+                            width: 70, // Adjust this value as needed
+                            child: Text(
+                              course.courseId,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displayMediumPrimarySemiBold,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
                           ),
                         ],
                       ),
@@ -80,7 +88,7 @@ class CourseDetailCard extends StatelessWidget {
                                 .displayMediumTitleBrownSemiBold,
                           ),
                           Text(
-                            '64 Hours',
+                            '${course.totalHours} Hours',
                             style: Theme.of(context)
                                 .textTheme
                                 .displayMediumPrimarySemiBold,
@@ -93,8 +101,11 @@ class CourseDetailCard extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type',
-                style: Theme.of(context).textTheme.displaySmall,
+                course.shortDescription,
+                style: Theme.of(context)
+                    .textTheme
+                    .displaySmall!
+                    .copyWith(fontSize: 13),
               ),
             ],
           ),

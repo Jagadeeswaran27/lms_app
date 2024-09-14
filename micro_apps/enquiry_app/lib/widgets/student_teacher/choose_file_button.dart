@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
-import 'package:enquiry_app/resources/strings.dart';
 import 'package:enquiry_app/themes/colors.dart';
 import 'package:enquiry_app/themes/fonts.dart';
 
 class ChooseFileButton extends StatelessWidget {
-  const ChooseFileButton({super.key, required this.onTap});
+  const ChooseFileButton({
+    super.key,
+    required this.onTap,
+    required this.text,
+  });
 
   final void Function() onTap;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +32,11 @@ class ChooseFileButton extends StatelessWidget {
             color: ThemeColors.primary,
             borderRadius: BorderRadius.circular(5),
           ),
-          child: Text(
-            Strings.chooseFile,
-            style: Theme.of(context).textTheme.titleSmallWhite,
+          child: Center(
+            child: Text(
+              text,
+              style: Theme.of(context).textTheme.titleSmallWhite,
+            ),
           ),
         ),
       ),

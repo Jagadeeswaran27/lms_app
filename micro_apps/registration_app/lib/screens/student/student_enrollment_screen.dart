@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:registration_app/containers/student/student_enrollment_container.dart';
 import 'package:registration_app/resources/strings.dart';
+import 'package:registration_app/routes/student_routes.dart';
 import 'package:registration_app/widgets/common/screen_layout.dart';
 
 class StudentEnrollmentScreen extends StatelessWidget {
@@ -9,9 +10,21 @@ class StudentEnrollmentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ScreenLayout(
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final registrationIds = args['registrationIds'];
+    final courses = args['courses'];
+
+    return ScreenLayout(
       topBarText: Strings.enrollmentInitiated,
-      child: StudentEnrollmentContainer(),
+      onBack: () {
+        print(".......");
+        Navigator.of(context).pushNamed(StudentRoutes.itemList);
+      },
+      child: StudentEnrollmentContainer(
+        registrationIds: registrationIds,
+        courses: courses,
+      ),
     );
   }
 }

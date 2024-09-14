@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:registration_app/constants/enums/button_size.dart';
 import 'package:registration_app/resources/strings.dart';
-import 'package:registration_app/routes/routes.dart';
+import 'package:registration_app/screens/auth/options_screen.dart';
+import 'package:registration_app/themes/colors.dart';
 import 'package:registration_app/widgets/common/custom_elevated_button.dart';
 
 class WelcomeScreenWidget extends StatelessWidget {
@@ -22,12 +23,16 @@ class WelcomeScreenWidget extends StatelessWidget {
             children: [
               Text(
                 Strings.welcomeTo,
-                style: Theme.of(context).textTheme.headlineLarge,
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                      color: ThemeColors.primary,
+                    ),
               ),
               const SizedBox(height: 10),
               Text(
-                Strings.registration,
-                style: Theme.of(context).textTheme.headlineLarge,
+                Strings.registrationApp,
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                      color: ThemeColors.primary,
+                    ),
               ),
               Container(
                 margin: const EdgeInsets.symmetric(
@@ -36,7 +41,7 @@ class WelcomeScreenWidget extends StatelessWidget {
                 ),
                 child: Text(
                   textAlign: TextAlign.center,
-                  Strings.loremIpsum,
+                  'Register effortlessly with our app! Secure, user-friendly, and quick. Join now to unlock exclusive features and personalized experiences.',
                   style: Theme.of(context).textTheme.displayMedium!.copyWith(
                         height: 1.4,
                       ),
@@ -47,8 +52,11 @@ class WelcomeScreenWidget extends StatelessWidget {
                 child: CustomElevatedButton(
                   text: Strings.getStarted,
                   onPressed: () {
-                    Navigator.of(context)
-                        .pushReplacementNamed(Routes.optionsScreen);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => const OptionsScreen(),
+                      ),
+                    );
                   },
                   buttonSize: ButtonSize.large,
                 ),

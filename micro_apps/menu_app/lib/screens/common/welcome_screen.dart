@@ -28,17 +28,17 @@ class WelcomeScreen extends StatelessWidget {
         children: [
           const Spacer(),
           Padding(
-            padding: const EdgeInsets.only(bottom: 30),
+            padding: const EdgeInsets.only(bottom: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   Strings.welcomeTo,
-                  style: Theme.of(context).textTheme.headlineLarge,
+                  style: Theme.of(context).textTheme.headlineLarge!,
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  Strings.courseMenu,
+                  Strings.menuApp,
                   style: Theme.of(context).textTheme.headlineLarge,
                 ),
                 Container(
@@ -48,9 +48,10 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   child: Text(
                     textAlign: TextAlign.center,
-                    Strings.loremIpsum,
+                    'Welcome to the Menu App! This platform allows administrators to add and manage content for the applications. Customize your app to fit your needs and streamline your operations.',
                     style: Theme.of(context).textTheme.displayMedium!.copyWith(
                           height: 1.4,
+                          fontSize: 14,
                         ),
                   ),
                 ),
@@ -59,7 +60,7 @@ class WelcomeScreen extends StatelessWidget {
                   child: CustomElevatedButton(
                     text: Strings.getStarted,
                     onPressed: () {
-                      Navigator.of(context).pushReplacement(
+                      Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (ctx) => const OptionsScreen(),
                         ),

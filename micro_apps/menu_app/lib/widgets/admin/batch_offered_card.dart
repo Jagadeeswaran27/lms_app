@@ -5,15 +5,43 @@ import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
 
 class BatchOfferedCard extends StatefulWidget {
-  const BatchOfferedCard({super.key});
+  final List<String> selectedDays;
+  final List<String> selectedTime;
+  final ValueChanged<List<String>> onSelectedDaysChanged;
+  final ValueChanged<List<String>> onSelectedTimeChanged;
+
+  const BatchOfferedCard({
+    super.key,
+    required this.selectedDays,
+    required this.selectedTime,
+    required this.onSelectedDaysChanged,
+    required this.onSelectedTimeChanged,
+  });
 
   @override
   BatchOfferedCardState createState() => BatchOfferedCardState();
 }
 
 class BatchOfferedCardState extends State<BatchOfferedCard> {
-  String _selectedDay = 'weekend';
-  String _selectedTime = 'morning';
+  void _handleDayChange(String day, bool isSelected) {
+    final newSelectedDays = List<String>.from(widget.selectedDays);
+    if (isSelected) {
+      newSelectedDays.add(day);
+    } else {
+      newSelectedDays.remove(day);
+    }
+    widget.onSelectedDaysChanged(newSelectedDays);
+  }
+
+  void _handleTimeChange(String time, bool isSelected) {
+    final newSelectedTime = List<String>.from(widget.selectedTime);
+    if (isSelected) {
+      newSelectedTime.add(time);
+    } else {
+      newSelectedTime.remove(time);
+    }
+    widget.onSelectedTimeChanged(newSelectedTime);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,28 +71,31 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
             style: Theme.of(context).textTheme.bodyMediumTitleBrownSemiBold,
           ),
           const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          Wrap(
+            runSpacing: 20,
+            // mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              _CustomRadioButton(
+              _CustomCheckbox(
                 text: 'Weekend',
-                value: 'weekend',
-                groupValue: _selectedDay,
-                onChanged: (value) {
-                  setState(() {
-                    _selectedDay = value!;
-                  });
+                value: widget.selectedDays.contains('Weekend'),
+                onChanged: (bool? newValue) {
+                  _handleDayChange('Weekend', newValue!);
                 },
               ),
               const SizedBox(width: 20),
-              _CustomRadioButton(
+              _CustomCheckbox(
                 text: 'Weekday',
-                value: 'weekday',
-                groupValue: _selectedDay,
-                onChanged: (value) {
-                  setState(() {
-                    _selectedDay = value!;
-                  });
+                value: widget.selectedDays.contains('Weekday'),
+                onChanged: (bool? newValue) {
+                  _handleDayChange('Weekday', newValue!);
+                },
+              ),
+              const SizedBox(width: 20),
+              _CustomCheckbox(
+                text: 'Custom',
+                value: widget.selectedDays.contains('Custom'),
+                onChanged: (bool? newValue) {
+                  _handleDayChange('Custom', newValue!);
                 },
               ),
             ],
@@ -75,28 +106,31 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
             style: Theme.of(context).textTheme.bodyMediumTitleBrownSemiBold,
           ),
           const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          Wrap(
+            // mainAxisAlignment: MainAxisAlignment.start,
+            runSpacing: 20,
             children: [
-              _CustomRadioButton(
+              _CustomCheckbox(
                 text: 'Morning',
-                value: 'morning',
-                groupValue: _selectedTime,
-                onChanged: (value) {
-                  setState(() {
-                    _selectedTime = value!;
-                  });
+                value: widget.selectedTime.contains('Morning'),
+                onChanged: (bool? newValue) {
+                  _handleTimeChange('Morning', newValue!);
                 },
               ),
               const SizedBox(width: 20),
-              _CustomRadioButton(
+              _CustomCheckbox(
                 text: 'Evening',
-                value: 'evening',
-                groupValue: _selectedTime,
-                onChanged: (value) {
-                  setState(() {
-                    _selectedTime = value!;
-                  });
+                value: widget.selectedTime.contains('Evening'),
+                onChanged: (bool? newValue) {
+                  _handleTimeChange('Evening', newValue!);
+                },
+              ),
+              const SizedBox(width: 20),
+              _CustomCheckbox(
+                text: 'Custom',
+                value: widget.selectedTime.contains('Custom'),
+                onChanged: (bool? newValue) {
+                  _handleTimeChange('Custom', newValue!);
                 },
               ),
             ],
@@ -107,16 +141,14 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
   }
 }
 
-class _CustomRadioButton extends StatelessWidget {
+class _CustomCheckbox extends StatelessWidget {
   final String text;
-  final String value;
-  final String groupValue;
-  final ValueChanged<String?> onChanged;
+  final bool value;
+  final ValueChanged<bool?> onChanged;
 
-  const _CustomRadioButton({
+  const _CustomCheckbox({
     required this.text,
     required this.value,
-    required this.groupValue,
     required this.onChanged,
   });
 
@@ -144,9 +176,8 @@ class _CustomRadioButton extends StatelessWidget {
             text,
             style: Theme.of(context).textTheme.titleSmall,
           ),
-          Radio<String>(
+          Checkbox(
             value: value,
-            groupValue: groupValue,
             onChanged: onChanged,
             activeColor: ThemeColors.titleBrown,
           ),

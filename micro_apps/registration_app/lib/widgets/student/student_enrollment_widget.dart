@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:registration_app/models/registration/course_model.dart';
 
 import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/themes/colors.dart';
@@ -8,7 +9,14 @@ import 'package:registration_app/widgets/student/cart_card.dart';
 import 'package:registration_app/resources/icons.dart' as icons;
 
 class StudentEnrollmentWidget extends StatelessWidget {
-  const StudentEnrollmentWidget({super.key});
+  const StudentEnrollmentWidget({
+    super.key,
+    required this.registrationIds,
+    required this.courses,
+  });
+
+  final List<String> registrationIds;
+  final List<CourseModel> courses;
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +57,8 @@ class StudentEnrollmentWidget extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMediumTitleBrown,
               ),
               Text(
-                "000000000000",
-                style: Theme.of(context).textTheme.bodyMediumPrimary,
+                registrationIds[0],
+                style: Theme.of(context).textTheme.displayMediumPrimary,
               ),
             ],
           ),
@@ -61,42 +69,30 @@ class StudentEnrollmentWidget extends StatelessWidget {
             child: ListView(
               shrinkWrap: true,
               children: [
-                const CartCard(
-                  imageUrl: Strings.url,
-                  title: "XXXXX",
-                  amount: "10000",
-                  description: Strings.loremIpsum,
-                  discount: 10,
-                ),
-                const CartCard(
-                  imageUrl: Strings.url,
-                  title: "XXXXX",
-                  amount: "10000",
-                  description: Strings.loremIpsum,
-                  discount: 10,
-                ),
-                const CartCard(
-                  imageUrl: Strings.url,
-                  title: "XXXXX",
-                  amount: "10000",
-                  description: Strings.loremIpsum,
-                  discount: 10,
-                ),
+                ...courses
+                    .map((course) => CartCard(
+                          imageUrl: course.imageUrl,
+                          title: course.courseTitle,
+                          amount: course.amount.toString(),
+                          description: course.aboutDescription,
+                          discount: 10,
+                        ))
+                    .toList(),
                 const SizedBox(height: 20),
-                Row(
-                  children: [
-                    Text(
-                      "Total Amount : ",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMediumTitleBrownSemiBold,
-                    ),
-                    Text(
-                      "Rs 30000",
-                      style: Theme.of(context).textTheme.bodyMediumPrimary,
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Text(
+                //       "Total Amount : ",
+                //       style: Theme.of(context)
+                //           .textTheme
+                //           .bodyMediumTitleBrownSemiBold,
+                //     ),
+                //     Text(
+                //       "Rs 30000",
+                //       style: Theme.of(context).textTheme.bodyMediumPrimary,
+                //     ),
+                //   ],
+                // ),
                 const SizedBox(height: 20),
                 Align(
                   alignment: Alignment.center,
@@ -106,7 +102,7 @@ class StudentEnrollmentWidget extends StatelessWidget {
                     child: IconTextButton(
                       iconHorizontalPadding: 7,
                       radius: 20,
-                      text: Strings.proceedToCheckout,
+                      text: Strings.proceedToPayment,
                       onPressed: () {},
                       color: ThemeColors.primary,
                       buttonTextStyle: Theme.of(context).textTheme.bodyMedium,

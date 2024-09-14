@@ -9,9 +9,11 @@ class AddItemScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MenuLayout(
+    final subCategory = ModalRoute.of(context)?.settings.arguments as String;
+
+    return MenuLayout(
       topBarText: Strings.item,
-      child: AddItemContainer(),
+      child: AddItemContainer(subCategory: subCategory),
     );
   }
 }

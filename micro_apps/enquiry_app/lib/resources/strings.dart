@@ -7,7 +7,7 @@ class Strings {
   static const String loremIpsum =
       'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type';
   static const String getStarted = 'GET STARTED';
-  static const String homeText = 'Your Education, Your Comfort,\nAt Your Home';
+  static const String homeText = 'Your Comfort,\nAt Your Home';
   static const signIn = "Sign In";
   static const String register = 'Register';
   static const String enterSignInDetails =
@@ -26,8 +26,8 @@ class Strings {
   static const String email = 'Email';
   static const String mobileNumber = 'Mobile number';
   static const String registerAs = 'Register as';
-  static const String teacher = 'Teacher';
-  static const String student = 'Student';
+  static const String user = 'User';
+  static const String admin = 'Admin';
   static const String password = 'Password';
   static const String confirmPassword = 'Confirm password';
   static const String iAgreeWithThe = 'I agree with the ';
@@ -45,10 +45,12 @@ class Strings {
   static const String invalidEmail = 'Invalid Email';
   static const String invalidMobileNumber = 'Invalid mobile number';
   static const String pleaseSelectRole = 'Please select a role';
+  static const String errorLoggingOut = 'Error logging out';
 
   //app related
   static const String attendance = 'Attendance';
   static const String enquiry = 'Enquiry';
+  static const String enquiryApp = 'Enquiry App';
   static const String myCourses = 'My Courses';
   static const String english = 'English';
   static const String courseCode = 'Course code : ';
@@ -61,11 +63,11 @@ class Strings {
   static const String itemList = 'Item List';
   static const String courses = 'Courses';
   static const String aboutDescription = 'About Description';
-  static const String batchOferred = 'Batch Oferred';
+  static const String batchOffered = 'Batch Offered';
   static const String days = 'Days';
   static const String about = 'About';
   static const String time = 'Time';
-  static const String receptionEnquiry = 'Reception Enquiry';
+  static const String receptionEnquiry = 'Enquiries';
   static const String item = 'Item';
   static const String addTitle = 'Add Title :';
   static const String amountDetails = 'Amount Details';
@@ -107,13 +109,34 @@ class Strings {
   static const String reception = 'Reception';
   static const String instituteAdmin = 'Institute Admin';
   static const String owner = 'Owner';
+  static const String custom = 'Custom';
   static const String hospitalityEnquiry = 'Hospital Enquiry';
   static const String whatAreYouFacingIssueWith =
       'What are you facing issue with ? ';
-  static const String subject = 'Subject ';
+  static const String subject = 'Subject : ';
   static const String describeTheIssue = 'Describe the issue ';
   static const String file = 'File';
   static const String supportedFiles = 'Supported files : jpg,svg,png.....';
   static const String chooseFile = 'Choose file';
   static const String required = '(required)';
+  static const String anErrorOccurred = 'An error occurred';
+  static const String invalidCredentials = 'Invalid credentials';
+  static const String pleaseVerifyYourEmail = 'Please verify your email';
+  static const String invalidEmailOrPhone = 'Invalid email or phone number';
+  static const String invalidPassword = 'Invalid password';
+  static const String verifyYourEmail = 'Verify your email';
+  static const String ticketCreatedSuccessfully = 'Ticket created successfully';
+  static const String ticketCreationFailed = 'Ticket creation failed';
+  static const String ticketNo = 'Ticket no : ';
+  static const String myTicket = 'My Ticket';
+  static const String facingIssue = 'Facing issue : ';
+  static const String describedIssue = 'Described issue : ';
+  static const String view = 'View';
+  static const String acknowledged = 'Acknowledged';
+  static const String toAcknowledge = 'To Acknowledge';
+  static const String resolved = 'Resolved';
+  static const String toResolve = 'To Resolve';
+  static const String location = 'Location';
+  static const String noEnquiriesFound = 'No Enquiries Found';
+  static const String resolve = 'Resolve';
 }

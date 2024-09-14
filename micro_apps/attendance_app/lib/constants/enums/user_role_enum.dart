@@ -1,12 +1,12 @@
-enum UserRoleEnum { student, teacher }
+enum UserRoleEnum { admin, user }
 
 extension UserRoleEnumExtension on UserRoleEnum {
   String get roleName {
     switch (this) {
-      case UserRoleEnum.student:
-        return 'Student';
-      case UserRoleEnum.teacher:
-        return 'Teacher';
+      case UserRoleEnum.user:
+        return 'User';
+      case UserRoleEnum.admin:
+        return 'Admin';
       default:
         return '';
     }

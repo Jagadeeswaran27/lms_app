@@ -9,3 +9,15 @@ class RoleModel {
     required this.roleConstant,
   });
 }
+
+class RoleTypeModel {
+  final int roleTypeId;
+  final String roleTypeName;
+  final String roleTypeConstant;
+
+  RoleTypeModel({
+    required this.roleTypeId,
+    required this.roleTypeName,
+    required this.roleTypeConstant,
+  });
+}

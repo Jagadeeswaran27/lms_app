@@ -5,16 +5,24 @@ import 'package:registration_app/themes/colors.dart';
 import 'package:registration_app/themes/fonts.dart';
 
 class BatchOfferedCard extends StatefulWidget {
-  const BatchOfferedCard({super.key});
+  const BatchOfferedCard({
+    super.key,
+    required this.selectedBatchDay,
+    required this.selectedBatchTime,
+    required this.onBatchDayChanged,
+    required this.onBatchTimeChanged,
+  });
+
+  final String selectedBatchDay;
+  final String selectedBatchTime;
+  final ValueChanged<String> onBatchDayChanged;
+  final ValueChanged<String> onBatchTimeChanged;
 
   @override
   BatchOfferedCardState createState() => BatchOfferedCardState();
 }
 
 class BatchOfferedCardState extends State<BatchOfferedCard> {
-  String _selectedDay = 'weekend';
-  String _selectedTime = 'morning';
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,23 +56,19 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
             children: [
               _CustomRadioButton(
                 text: 'Weekend',
-                value: 'weekend',
-                groupValue: _selectedDay,
+                value: 'Weekend',
+                groupValue: widget.selectedBatchDay,
                 onChanged: (value) {
-                  setState(() {
-                    _selectedDay = value!;
-                  });
+                  widget.onBatchDayChanged(value!);
                 },
               ),
               const SizedBox(width: 20),
               _CustomRadioButton(
                 text: 'Weekday',
-                value: 'weekday',
-                groupValue: _selectedDay,
+                value: 'Weekday',
+                groupValue: widget.selectedBatchDay,
                 onChanged: (value) {
-                  setState(() {
-                    _selectedDay = value!;
-                  });
+                  widget.onBatchDayChanged(value!);
                 },
               ),
             ],
@@ -80,23 +84,19 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
             children: [
               _CustomRadioButton(
                 text: 'Morning',
-                value: 'morning',
-                groupValue: _selectedTime,
+                value: 'Morning',
+                groupValue: widget.selectedBatchTime,
                 onChanged: (value) {
-                  setState(() {
-                    _selectedTime = value!;
-                  });
+                  widget.onBatchTimeChanged(value!);
                 },
               ),
               const SizedBox(width: 20),
               _CustomRadioButton(
                 text: 'Evening',
-                value: 'evening',
-                groupValue: _selectedTime,
+                value: 'Evening',
+                groupValue: widget.selectedBatchTime,
                 onChanged: (value) {
-                  setState(() {
-                    _selectedTime = value!;
-                  });
+                  widget.onBatchTimeChanged(value!);
                 },
               ),
             ],

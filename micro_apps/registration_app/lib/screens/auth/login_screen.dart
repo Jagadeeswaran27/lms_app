@@ -11,42 +11,46 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    final EdgeInsets padding = MediaQuery.of(context).padding;
-    final double safeHeight = screenSize.height - padding.top - padding.bottom;
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            height: safeHeight,
-            width: screenSize.width,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(Images.loginBackgroundPng),
-                fit: BoxFit.cover,
-              ),
+    // final EdgeInsets padding = MediaQuery.of(context).padding;
+    // final double safeHeight = screenSize.height - padding.top - padding.bottom;
+
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
+          height: screenSize.height,
+          width: screenSize.width,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(Images.loginBackgroundPng),
+              fit: BoxFit.cover,
             ),
-            child: Center(
-              child: Container(
-                margin: const EdgeInsets.only(top: 70),
-                child: Column(
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          Strings.signIn,
-                          style: Theme.of(context).textTheme.headlineMedium,
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          Strings.enterSignInDetails,
-                          style:
-                              Theme.of(context).textTheme.displayMediumSemiBold,
-                        ),
-                      ],
-                    ),
-                    const LoginFormContainer(),
-                  ],
-                ),
+          ),
+          child: Center(
+            child: Container(
+              margin: const EdgeInsets.only(top: 70),
+              child: Column(
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        Strings.signIn,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineMedium!
+                            .copyWith(fontSize: 32.0),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        Strings.enterSignInDetails,
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayMediumSemiBold
+                            .copyWith(fontSize: 15.0),
+                      ),
+                    ],
+                  ),
+                  const LoginFormContainer(),
+                ],
               ),
             ),
           ),

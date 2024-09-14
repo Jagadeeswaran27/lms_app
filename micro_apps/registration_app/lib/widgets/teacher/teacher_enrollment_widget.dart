@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:registration_app/models/registration/course_model.dart';
 
 import 'package:registration_app/resources/strings.dart';
+import 'package:registration_app/routes/teacher_routes.dart';
 import 'package:registration_app/themes/colors.dart';
 import 'package:registration_app/themes/fonts.dart';
 import 'package:registration_app/widgets/common/form_input.dart';
@@ -10,18 +12,25 @@ import 'package:registration_app/resources/icons.dart' as icons;
 import 'package:registration_app/widgets/teacher/status_progress_indicator.dart';
 
 class TeacherEnrollmentWidget extends StatelessWidget {
-  final bool isApproved;
-  final bool isReady;
+  final CourseModel course;
+  final String regId;
 
   const TeacherEnrollmentWidget({
     super.key,
-    required this.isApproved,
-    required this.isReady,
+    required this.course,
+    required this.regId,
   });
 
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
+
+    void onPressed() {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        TeacherRoutes.itemList,
+        (route) => false,
+      );
+    }
 
     return Column(
       children: [
@@ -58,8 +67,8 @@ class TeacherEnrollmentWidget extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMediumTitleBrown,
               ),
               Text(
-                "000000000000",
-                style: Theme.of(context).textTheme.bodyMediumPrimary,
+                regId,
+                style: Theme.of(context).textTheme.displayMediumPrimary,
               ),
             ],
           ),
@@ -68,14 +77,14 @@ class TeacherEnrollmentWidget extends StatelessWidget {
           child: SizedBox(
             width: screenSize.width * 0.9,
             child: ListView(
+              padding: const EdgeInsets.all(10),
               shrinkWrap: true,
               children: [
-                const CartCard(
-                  imageUrl: Strings.url,
-                  title: "XXXXX",
-                  amount: "10000",
-                  description: Strings.loremIpsum,
-                  discount: 10,
+                CartCard(
+                  imageUrl: course.imageUrl,
+                  title: course.courseTitle,
+                  description: course.shortDescription,
+                  batchTime: course.batchTime,
                 ),
                 const SizedBox(height: 20),
                 Row(
@@ -88,45 +97,33 @@ class TeacherEnrollmentWidget extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  Strings.loremIpsum,
+                  course.aboutDescription,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 const SizedBox(height: 20),
                 Text(Strings.status,
                     style: Theme.of(context).textTheme.bodyMediumTitleBrown),
                 const SizedBox(height: 30),
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Column(
                       children: [
                         SizedBox(
-                          width: 200,
+                          width: 180,
                           child: FormInput(
-                            text: "",
-                            hintText: isApproved
-                                ? Strings.approved
-                                : Strings.toBeApproved,
-                            readOnly: true,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        SizedBox(
-                          width: 200,
-                          child: FormInput(
-                            text: "",
-                            hintText: isReady
-                                ? Strings.readyForClass
-                                : Strings.preparingClasses,
+                            text: "Status",
+                            hintText: 'Pending',
+                            initialValue: 'Pending',
                             readOnly: true,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(width: 10),
+                    SizedBox(width: 10),
                     StatusProgressIndicator(
-                      isApproved: isApproved,
-                      isReady: isReady,
+                      isApproved: true,
+                      isReady: false,
                     ),
                   ],
                 ),
@@ -140,7 +137,7 @@ class TeacherEnrollmentWidget extends StatelessWidget {
                       iconHorizontalPadding: 7,
                       radius: 20,
                       text: Strings.continueText,
-                      onPressed: () {},
+                      onPressed: onPressed,
                       color: ThemeColors.primary,
                       buttonTextStyle: Theme.of(context).textTheme.bodyMedium,
                       svgIcon: icons.Icons.cap,

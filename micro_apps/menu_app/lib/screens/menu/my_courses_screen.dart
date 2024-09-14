@@ -11,6 +11,7 @@ class MyCoursesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MenuLayout(
       topBarText: Strings.itemList,
+      showBackButton: false,
       child: MyCoursesContainer(),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:menu_app/themes/fonts.dart';
 import 'package:flutter/material.dart';
 
 import 'package:menu_app/themes/colors.dart';
@@ -17,12 +18,14 @@ class FormInput extends StatelessWidget {
     this.onTap,
     this.prefixIcon,
     this.suffixIcon,
+    this.hintTextStyle,
     this.initialValue,
     this.hintText,
     this.enabled,
     this.fillColor,
     this.borderWidth,
-    this.hasShadow = false, // Add this line for conditional shadow
+    this.hasShadow = false,
+    this.isDescription = false,
   });
 
   final String text;
@@ -33,6 +36,7 @@ class FormInput extends StatelessWidget {
   final TextEditingController? controller;
   final void Function(String)? onChanged;
   final bool? readOnly;
+  final TextStyle? hintTextStyle;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final Color? borderColor;
@@ -42,11 +46,13 @@ class FormInput extends StatelessWidget {
   final bool? enabled;
   final Color? fillColor;
   final double? borderWidth;
-  final bool hasShadow; // Add this line for conditional shadow
+  final bool hasShadow;
+  final bool isDescription;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: isDescription ? 200 : null,
       decoration: hasShadow
           ? BoxDecoration(
               boxShadow: [
@@ -61,12 +67,17 @@ class FormInput extends StatelessWidget {
             )
           : null, // No shadow if hasShadow is false
       child: TextFormField(
+        expands: isDescription ? true : false,
+        minLines: isDescription ? null : 1,
+        maxLines: isDescription ? null : 1,
+        textAlignVertical: TextAlignVertical.top,
         keyboardType: keyboardType,
         initialValue: initialValue,
         obscureText: obscureText ?? false,
         onTap: onTap,
         onSaved: onSaved,
         onChanged: onChanged,
+        style: Theme.of(context).textTheme.titleSmallTitleBrown,
         decoration: InputDecoration(
           fillColor: fillColor,
           filled: true,
@@ -90,12 +101,20 @@ class FormInput extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     text,
-                    style: Theme.of(context).textTheme.displaySmall,
+                    style: Theme.of(context)
+                        .textTheme
+                        .displaySmall!
+                        .copyWith(fontSize: 14.0),
                   ),
                 )
               : null, // Conditionally display the label if text is not null
           labelStyle: Theme.of(context).textTheme.displaySmall,
           hintText: hintText,
+          hintStyle: hintTextStyle,
+          errorStyle: Theme.of(context)
+              .textTheme
+              .bodySmall!
+              .copyWith(color: ThemeColors.primary),
         ),
         validator: validator,
         controller: controller,

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:registration_app/models/registration/course_model.dart';
 
 import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/themes/colors.dart';
 import 'package:registration_app/themes/fonts.dart';
 
 class ItemDetailCard extends StatelessWidget {
-  const ItemDetailCard({super.key});
+  const ItemDetailCard({super.key, required this.course});
+
+  final CourseModel course;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,7 @@ class ItemDetailCard extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(50.0),
                     child: Image.network(
-                      'https://media.istockphoto.com/id/1399611777/photo/portrait-of-a-smiling-little-brown-haired-boy-looking-at-the-camera-happy-kid-with-good.jpg?s=612x612&w=0&k=20&c=qZ63xODwrnc81wKK0dwc3tOEf2lghkQQKmotbF11q7Q=',
+                      course.imageUrl,
                       height: 100,
                       width: 100,
                       fit: BoxFit.cover,
@@ -49,7 +52,7 @@ class ItemDetailCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        Strings.english,
+                        course.courseTitle,
                         style: Theme.of(context).textTheme.bodyLargeTitleBrown,
                       ),
                       const SizedBox(height: 10),
@@ -62,11 +65,16 @@ class ItemDetailCard extends StatelessWidget {
                                 .displayMediumTitleBrownSemiBold,
                           ),
                           const SizedBox(height: 30),
-                          Text(
-                            '3245',
-                            style: Theme.of(context)
-                                .textTheme
-                                .displayMediumPrimarySemiBold,
+                          SizedBox(
+                            width: 70, // Adjust this value as needed
+                            child: Text(
+                              course.courseId,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displayMediumPrimarySemiBold,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
                           ),
                         ],
                       ),
@@ -80,7 +88,7 @@ class ItemDetailCard extends StatelessWidget {
                                 .displayMediumTitleBrownSemiBold,
                           ),
                           Text(
-                            '64 Hours',
+                            '${course.totalHours} Hours',
                             style: Theme.of(context)
                                 .textTheme
                                 .displayMediumPrimarySemiBold,
@@ -93,8 +101,11 @@ class ItemDetailCard extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                Strings.loremIpsum,
-                style: Theme.of(context).textTheme.displaySmall,
+                course.shortDescription,
+                style: Theme.of(context)
+                    .textTheme
+                    .displaySmall!
+                    .copyWith(fontSize: 13),
               ),
             ],
           ),

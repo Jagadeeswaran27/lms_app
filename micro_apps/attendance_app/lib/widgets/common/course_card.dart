@@ -1,19 +1,26 @@
+import 'package:attendance_app/models/courses/course_model.dart';
+import 'package:attendance_app/resources/strings.dart';
 import 'package:flutter/material.dart';
 
 import 'package:attendance_app/themes/colors.dart';
 import 'package:attendance_app/themes/fonts.dart';
 
 class CourseCard extends StatelessWidget {
-  const CourseCard({super.key, required this.onTap});
+  const CourseCard({
+    super.key,
+    required this.onTap,
+    required this.course,
+  });
 
   final Function() onTap;
+  final CourseModel course;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        margin: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.0),
           color: ThemeColors.cardColor,
@@ -59,17 +66,30 @@ class CourseCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'XXXXXX',
+                        course.courseTitle,
                         style: Theme.of(context)
                             .textTheme
                             .bodyMediumTitleBrownSemiBold,
                       ),
                       const SizedBox(height: 8.0),
-                      Text(
-                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry',
-                        style: Theme.of(context).textTheme.displaySmall,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
+                      Row(
+                        children: [
+                          Text(
+                            Strings.duration,
+                            style:
+                                Theme.of(context).textTheme.bodyMediumPrimary,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            '${course.totalHours} Hrs',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMediumTitleBrownSemiBold,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -83,7 +103,7 @@ class CourseCard extends StatelessWidget {
                     bottomRight: Radius.circular(16.0),
                   ),
                   child: Image.network(
-                    'https://via.placeholder.com/150',
+                    course.imageUrl,
                     fit: BoxFit.cover,
                     height: double.infinity,
                   ),

@@ -64,21 +64,31 @@ class IconTextButton extends StatelessWidget {
               horizontal: iconHorizontalPadding,
             ),
             alignment: Alignment.center,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 12),
-                    child: Text(
-                      text,
-                      textAlign: TextAlign.center,
-                      style: buttonTextStyle ??
-                          Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ),
-                ),
-                if (icon != null || svgIcon != null)
-                  CircleAvatar(
+            child: Stack(children: [
+              Align(
+                alignment: Alignment.center,
+                child: (isLoading != null && isLoading == true)
+                    ? Center(
+                        child: SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: CircularProgressIndicator(
+                          color: ThemeColors.white,
+                        ),
+                      ))
+                    : Text(
+                        text,
+                        textAlign: TextAlign.center,
+                        style: buttonTextStyle ??
+                            Theme.of(context).textTheme.bodyMedium,
+                      ),
+              ),
+              if (icon != null || svgIcon != null)
+                Positioned(
+                  top: 0,
+                  bottom: 0,
+                  right: 0,
+                  child: CircleAvatar(
                     radius: radius,
                     backgroundColor: iconBackgroundColor ?? ThemeColors.white,
                     child: icon != null
@@ -93,8 +103,8 @@ class IconTextButton extends StatelessWidget {
                             height: 20,
                           ),
                   ),
-              ],
-            ),
+                ),
+            ]),
           ),
         ),
       ),

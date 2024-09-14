@@ -12,4 +12,6 @@ class Images {
   static const String cartIcon = 'assets/images/cart_icon.png';
   static const String teacherCard = 'assets/images/teacher_card.png';
   static const String studentCard = 'assets/images/student_card.png';
+  static const String student = 'assets/images/student.png';
+  static const String teacher = 'assets/images/teacher.png';
 }

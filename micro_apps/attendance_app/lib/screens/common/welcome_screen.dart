@@ -1,6 +1,6 @@
-import 'package:attendance_app/routes/routes.dart';
 import 'package:flutter/material.dart';
 
+import 'package:attendance_app/screens/auth/options_screen.dart';
 import 'package:attendance_app/constants/enums/button_size.dart';
 import 'package:attendance_app/resources/images.dart';
 import 'package:attendance_app/resources/strings.dart';
@@ -38,7 +38,7 @@ class WelcomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  Strings.attendance,
+                  Strings.attendanceApp,
                   style: Theme.of(context).textTheme.headlineLarge,
                 ),
                 Container(
@@ -48,7 +48,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   child: Text(
                     textAlign: TextAlign.center,
-                    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make',
+                    'Efficiently manage and track attendance with our intuitive app, ensuring accurate records, easy reporting, and seamless user experience for educators and Users.',
                     style: Theme.of(context).textTheme.displayMedium!.copyWith(
                           height: 1.4,
                         ),
@@ -59,9 +59,9 @@ class WelcomeScreen extends StatelessWidget {
                   child: CustomElevatedButton(
                     text: Strings.getStarted,
                     onPressed: () {
-                      Navigator.of(context).pushReplacementNamed(
-                        Routes.optionsScreen,
-                      );
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (ctx) => const OptionsScreen(),
+                      ));
                     },
                     buttonSize: ButtonSize.large,
                   ),

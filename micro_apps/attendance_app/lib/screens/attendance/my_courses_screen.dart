@@ -12,6 +12,7 @@ class MyCoursesScreen extends StatelessWidget {
     return const AttendanceLayout(
       topBarText: Strings.attendance,
       bottomText: Strings.myCourses,
+      showBackButton: false,
       child: MyCoursesContainer(),
     );
   }
