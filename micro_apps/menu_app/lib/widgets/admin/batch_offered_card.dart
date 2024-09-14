@@ -71,8 +71,9 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
             style: Theme.of(context).textTheme.bodyMediumTitleBrownSemiBold,
           ),
           const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          Wrap(
+            runSpacing: 20,
+            // mainAxisAlignment: MainAxisAlignment.start,
             children: [
               _CustomCheckbox(
                 text: 'Weekend',
@@ -89,6 +90,14 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
                   _handleDayChange('Weekday', newValue!);
                 },
               ),
+              const SizedBox(width: 20),
+              _CustomCheckbox(
+                text: 'Custom',
+                value: widget.selectedDays.contains('Custom'),
+                onChanged: (bool? newValue) {
+                  _handleDayChange('Custom', newValue!);
+                },
+              ),
             ],
           ),
           const SizedBox(height: 20),
@@ -97,8 +106,9 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
             style: Theme.of(context).textTheme.bodyMediumTitleBrownSemiBold,
           ),
           const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+          Wrap(
+            // mainAxisAlignment: MainAxisAlignment.start,
+            runSpacing: 20,
             children: [
               _CustomCheckbox(
                 text: 'Morning',
@@ -113,6 +123,14 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
                 value: widget.selectedTime.contains('Evening'),
                 onChanged: (bool? newValue) {
                   _handleTimeChange('Evening', newValue!);
+                },
+              ),
+              const SizedBox(width: 20),
+              _CustomCheckbox(
+                text: 'Custom',
+                value: widget.selectedTime.contains('Custom'),
+                onChanged: (bool? newValue) {
+                  _handleTimeChange('Custom', newValue!);
                 },
               ),
             ],
