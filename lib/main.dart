@@ -1,9 +1,6 @@
+import 'package:attendance_app/app.dart';
+import 'package:enquiry_app/app.dart';
 import 'package:flutter/material.dart';
-
-import 'package:attendance_app/main.dart';
-import 'package:enquiry_app/main.dart';
-import 'package:menu_app/main.dart';
-import 'package:registration_app/main.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,6 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -57,21 +55,21 @@ class MyHomePage extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (ctx) => const MenuApp(),
-                    ),
-                  );
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (ctx) => const MenuApp(),
+                  //   ),
+                  // );
                 },
                 child: const Text("Menu App"),
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (ctx) => const RegistrationApp(),
-                    ),
-                  );
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (ctx) => const RegistrationApp(),
+                  //   ),
+                  // );
                 },
                 child: const Text("Registration App"),
               ),

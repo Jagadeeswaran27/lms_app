@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:attendance_app/constants/enums/button_size.dart';
 
 EdgeInsetsGeometry getElevatedButtonPadding(ButtonSize? buttonSize) {

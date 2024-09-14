@@ -1,7 +1,8 @@
+import 'package:flutter/material.dart';
+
+import 'package:attendance_app/constants/enums/button_size.dart';
 import 'package:attendance_app/themes/colors.dart';
 import 'package:attendance_app/utils/widgets/get_elevated_button_padding.dart';
-import 'package:flutter/material.dart';
-import 'package:attendance_app/constants/enums/button_size.dart';
 
 class CustomElevatedButton extends StatelessWidget {
   const CustomElevatedButton({
@@ -49,10 +50,18 @@ class CustomElevatedButton extends StatelessWidget {
           child: Container(
             padding: getElevatedButtonPadding(buttonSize),
             alignment: Alignment.center,
-            child: Text(
-              text,
-              style: buttonTextStyle ?? Theme.of(context).textTheme.bodyMedium,
-            ),
+            child: (isLoading != null && isLoading == true)
+                ? CircularProgressIndicator(
+                    color: ThemeColors.white,
+                    strokeWidth: 2,
+                  )
+                : Text(
+                    text,
+                    style: buttonTextStyle ??
+                        Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              fontSize: 18.0,
+                            ),
+                  ),
           ),
         ),
       ),

@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-void main() => runApp(const MenuApp());
+import 'package:firebase_core/firebase_core.dart';
 
-class MenuApp extends StatelessWidget {
-  const MenuApp({super.key});
+import 'package:menu_app/app.dart';
+import 'package:menu_app/core/services/firebase/firebase_options.dart';
 
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const Center(
-        child: Text("Menu App"),
-      ),
-    );
-  }
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MenuApp());
 }

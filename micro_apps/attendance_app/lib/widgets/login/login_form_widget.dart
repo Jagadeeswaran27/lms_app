@@ -3,15 +3,24 @@ import 'package:flutter/gestures.dart';
 
 import 'package:attendance_app/constants/enums/button_size.dart';
 import 'package:attendance_app/resources/images.dart';
-import 'package:attendance_app/widgets/common/custom_elevated_button.dart';
-import 'package:attendance_app/widgets/common/svg_lodder.dart';
-import 'package:attendance_app/screens/auth/strings.dart';
+import 'package:attendance_app/resources/strings.dart';
+import 'package:attendance_app/screens/auth/signup_screen.dart';
 import 'package:attendance_app/themes/colors.dart';
 import 'package:attendance_app/themes/fonts.dart';
+import 'package:attendance_app/widgets/common/custom_elevated_button.dart';
 import 'package:attendance_app/widgets/common/form_input.dart';
+import 'package:attendance_app/widgets/common/svg_lodder.dart';
 
 class LoginFormWidget extends StatefulWidget {
-  const LoginFormWidget({super.key});
+  const LoginFormWidget({
+    super.key,
+    required this.isLoading,
+    required this.onSignIn,
+  });
+
+  final Future<void> Function(String email, String password, bool isGoogle)
+      onSignIn;
+  final bool isLoading;
 
   @override
   State<LoginFormWidget> createState() => _LoginFormWidgetState();
@@ -19,6 +28,23 @@ class LoginFormWidget extends StatefulWidget {
 
 class _LoginFormWidgetState extends State<LoginFormWidget> {
   final _formKey = GlobalKey<FormState>();
+  String _userEmail = '';
+  String _userPassword = '';
+  bool isPasswordVisible = true;
+
+  void _handleSignIn() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState?.save();
+      widget.onSignIn(_userEmail, _userPassword, false);
+    }
+  }
+
+  void _revealPassword() {
+    setState(() {
+      isPasswordVisible = !isPasswordVisible;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,41 +56,58 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
         key: _formKey,
         child: Column(
           children: [
-            const FormInput(text: Strings.enterYourEmailOrPhoneNo),
-            const SizedBox(height: 20),
-            const FormInput(text: Strings.enterYourPassword),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Text(
-                    Strings.forgetYourPassword,
-                    style: Theme.of(context).textTheme.displaySmallPrimary,
-                  ),
-                )
-              ],
+            FormInput(
+              text: Strings.enterYourEmailOrPhoneNo,
+              onSaved: (value) => {_userEmail = value!},
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return Strings.invalidEmailOrPhone;
+                }
+                return null;
+              },
             ),
+            const SizedBox(height: 20),
+            FormInput(
+              text: Strings.enterYourPassword,
+              onSaved: (value) => {_userPassword = value!},
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return Strings.invalidPassword;
+                }
+                return null;
+              },
+              suffixIcon: InkWell(
+                onTap: _revealPassword,
+                child: isPasswordVisible
+                    ? const Icon(Icons.visibility_off_outlined)
+                    : const Icon(Icons.remove_red_eye_outlined),
+              ),
+              obscureText: isPasswordVisible,
+            ),
+            // const SizedBox(height: 20),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.end,
+            //   children: [
+            //     GestureDetector(
+            //       onTap: () {},
+            //       child: Text(
+            //         Strings.forgetYourPassword,
+            //         style: Theme.of(context)
+            //             .textTheme
+            //             .displayMediumPrimary
+            //             .copyWith(fontSize: 14.0),
+            //       ),
+            //     )
+            //   ],
+            // ),
             const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: CustomElevatedButton(
                 text: Strings.login,
                 buttonSize: ButtonSize.large,
-                onPressed: () {},
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              Strings.orLoginWithGoogleAccount,
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
-            const SizedBox(height: 20),
-            InkWell(
-              onTap: () {},
-              child: const SVGLoader(
-                image: Images.google,
+                onPressed: _handleSignIn,
+                isLoading: widget.isLoading,
               ),
             ),
             const SizedBox(height: 20),
@@ -73,15 +116,28 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                 children: [
                   TextSpan(
                     text: Strings.haveAnAccount,
-                    style: Theme.of(context).textTheme.displaySmall,
+                    style: Theme.of(context)
+                        .textTheme
+                        .displayMedium!
+                        .copyWith(fontSize: 15),
                   ),
                   const WidgetSpan(
                     child: SizedBox(width: 5),
                   ),
                   TextSpan(
                     text: Strings.registerNow,
-                    style: Theme.of(context).textTheme.displaySmallBold,
-                    recognizer: TapGestureRecognizer()..onTap = () {},
+                    style: Theme.of(context)
+                        .textTheme
+                        .displayMediumBold
+                        .copyWith(fontSize: 15),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (ctx) => const SignupScreen(),
+                          ),
+                        );
+                      },
                   )
                 ],
               ),
