@@ -11,21 +11,22 @@ class UserModel {
   final String? state;
   final List<String> registeredCourses;
   final String roleType;
+  final bool? isFaceRecognized;
 
-  UserModel({
-    required this.uid,
-    required this.name,
-    required this.email,
-    required this.role,
-    required this.phone,
-    required this.institute,
-    this.profileUrl,
-    this.address,
-    this.state,
-    this.city,
-    this.registeredCourses = const [],
-    this.roleType = '',
-  });
+  UserModel(
+      {required this.uid,
+      required this.name,
+      required this.email,
+      required this.role,
+      required this.phone,
+      required this.institute,
+      this.profileUrl,
+      this.address,
+      this.state,
+      this.city,
+      this.registeredCourses = const [],
+      this.roleType = '',
+      this.isFaceRecognized = false});
 
   factory UserModel.fromMap(Map<String, dynamic> data) {
     return UserModel(
@@ -41,6 +42,7 @@ class UserModel {
       institute: List<String>.from(data['institute'] ?? []),
       registeredCourses: List<String>.from(data['registeredCourses'] ?? []),
       roleType: data['roleType'] ?? '',
+      isFaceRecognized: data['isFaceRecognized'] ?? false,
     );
   }
 
@@ -58,6 +60,7 @@ class UserModel {
       institute: [],
       registeredCourses: [],
       roleType: '',
+      isFaceRecognized: false,
     );
   }
 
@@ -75,6 +78,7 @@ class UserModel {
       'profileUrl': profileUrl,
       'registeredCourses': registeredCourses,
       'roleType': roleType,
+      'isFaceRecognized': isFaceRecognized,
     };
   }
 }

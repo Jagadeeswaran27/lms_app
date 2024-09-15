@@ -7,6 +7,7 @@ import 'package:registration_app/models/auth/auth_model.dart';
 import 'package:registration_app/providers/auth_provider.dart';
 import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/screens/admin/admin_app.dart';
+import 'package:registration_app/screens/auth/face_recognition_screen.dart';
 import 'package:registration_app/screens/auth/role_type_selection_screen.dart';
 import 'package:registration_app/screens/student/student_app.dart';
 import 'package:registration_app/screens/teacher/teacher_app.dart';
@@ -85,6 +86,14 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                   builder: (context) => const RoleTypeSelectionScreen()),
+            );
+            return;
+          }
+          if (authProvider.currentUser!.isFaceRecognized! == false) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (ctx) => const FaceRecognitionScreen(),
+              ),
             );
             return;
           }

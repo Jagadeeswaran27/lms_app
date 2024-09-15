@@ -67,6 +67,7 @@ class AuthProvider with ChangeNotifier {
         city: _currentUser!.city,
         registeredCourses: [..._currentUser!.registeredCourses, ...courseIds],
         roleType: _currentUser!.roleType,
+        isFaceRecognized: _currentUser!.isFaceRecognized ?? false,
       );
     }
     notifyListeners();
@@ -86,6 +87,7 @@ class AuthProvider with ChangeNotifier {
       city: _currentUser!.city,
       registeredCourses: _currentUser!.registeredCourses,
       roleType: roleType,
+      isFaceRecognized: _currentUser!.isFaceRecognized ?? false,
     );
     notifyListeners();
   }
@@ -126,6 +128,7 @@ class AuthProvider with ChangeNotifier {
           address: loggedUser.address,
           registeredCourses: loggedUser.registeredCourses,
           roleType: loggedUser.roleType,
+          isFaceRecognized: loggedUser.isFaceRecognized ?? false,
         );
       }
       _loggedInStatus = loggedInStatus;
@@ -193,6 +196,7 @@ class AuthProvider with ChangeNotifier {
           profileUrl: userCredential.user!.photoURL,
           registeredCourses: loggedUser.registeredCourses,
           roleType: loggedUser.roleType,
+          isFaceRecognized: loggedUser.isFaceRecognized ?? false,
         );
         if (loggedUser.uid != '') {
           return AuthModel.success(
@@ -258,6 +262,7 @@ class AuthProvider with ChangeNotifier {
           profileUrl: url,
           registeredCourses: loggedUser.registeredCourses,
           roleType: loggedUser.roleType,
+          isFaceRecognized: loggedUser.isFaceRecognized ?? false,
         );
 
         notifyListeners();
@@ -301,6 +306,7 @@ class AuthProvider with ChangeNotifier {
           profileUrl: user.photoURL,
           registeredCourses: loggedUser.registeredCourses,
           roleType: loggedUser.roleType,
+          isFaceRecognized: loggedUser.isFaceRecognized ?? false,
         );
         _user = user;
         _loggedInStatus = true;
@@ -414,6 +420,7 @@ class AuthProvider with ChangeNotifier {
           institute: [instituteCode, ...currentUser!.institute],
           profileUrl: user!.photoURL,
           roleType: currentUser!.roleType,
+          isFaceRecognized: currentUser!.isFaceRecognized ?? false,
         );
         notifyListeners();
         return true;

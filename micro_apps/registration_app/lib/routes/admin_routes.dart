@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:registration_app/screens/admin/model_screen.dart';
 import 'package:registration_app/screens/admin/reception_enquiry_detail_screen.dart';
 import 'package:registration_app/screens/admin/reception_enquiry_screen.dart';
 
@@ -17,7 +16,6 @@ class AdminRoutes {
   static const String uploadReceipt = '/upload-receipt';
   static const String receptionEnquiry = '/reception-enquiry';
   static const String receptionEnquiryDetail = '/reception-enquiry-detail';
-  static const String modelScreen = '/model-screen';
 
   static Map<String, WidgetBuilder> get buildAdminRoutes {
     return {
@@ -27,7 +25,6 @@ class AdminRoutes {
       uploadReceipt: (context) => const UploadStudentReceiptScreen(),
       receptionEnquiry: (context) => const ReceptionEnquiryScreen(),
       receptionEnquiryDetail: (context) => const ReceptionEnquiryDetailScreen(),
-      modelScreen: (context) => const ModelScreen(),
     };
   }
 
