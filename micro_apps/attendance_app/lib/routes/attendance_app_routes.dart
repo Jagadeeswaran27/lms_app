@@ -1,3 +1,4 @@
+import 'package:attendance_app/screens/attendance/face_recognition_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:attendance_app/screens/attendance/access_code_screen.dart';
@@ -14,6 +15,7 @@ class AttendanceAppRoutes {
   static const attendance = '/attendance';
   static const studentCourseDashboard = '/student-course-dashboard';
   static const studentDetailViewStudent = '/student-detail-view-student';
+  static const faceRecognition = '/face-recognition';
 
   static Map<String, WidgetBuilder> get buildAttendanceAppRoutes {
     return {
@@ -23,10 +25,11 @@ class AttendanceAppRoutes {
       studentCourseDashboard: (context) => const StudentCourseDashboardScreen(),
       studentDetailViewStudent: (context) =>
           const StudentDetailViewScreenStudent(),
+      faceRecognition: (context) => const FaceRecognitionScreen(),
     };
   }
 
   static String get initialRoute {
-    return AttendanceAppRoutes.accessCode;
+    return AttendanceAppRoutes.faceRecognition;
   }
 }

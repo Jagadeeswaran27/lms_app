@@ -11,4 +11,5 @@ class Icons {
   static const String send = 'assets/icon/send.svg';
   static const String prev = 'assets/icon/prev.svg';
   static const String sort = 'assets/icon/sort.svg';
+  static const String addFile = 'assets/icon/add_file.svg';
 }

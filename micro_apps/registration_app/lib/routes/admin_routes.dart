@@ -24,7 +24,7 @@ class AdminRoutes {
       teacherList: (context) => const TeacherListScreen(),
       uploadReceipt: (context) => const UploadStudentReceiptScreen(),
       receptionEnquiry: (context) => const ReceptionEnquiryScreen(),
-      receptionEnquiryDetail: (context) => const ReceptionEnquiryDetailScreen()
+      receptionEnquiryDetail: (context) => const ReceptionEnquiryDetailScreen(),
     };
   }
 
