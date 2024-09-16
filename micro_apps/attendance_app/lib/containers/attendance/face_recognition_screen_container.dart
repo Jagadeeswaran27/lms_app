@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:attendance_app/core/services/face_recognition/face_recognition.dart';
 import 'package:attendance_app/providers/auth_provider.dart';
 import 'package:attendance_app/routes/attendance_app_routes.dart';
+import 'package:attendance_app/utils/error/show_snackbar.dart';
 import 'package:attendance_app/widgets/attendance/face_recognition_screen_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +33,7 @@ class _FaceRecignitionScreenContainerState
       _isLoading = false;
     });
     if (response) {
+      showSnackbar(context, "Face recognition successful");
       Navigator.of(context)
           .pushReplacementNamed(AttendanceAppRoutes.accessCode);
     }

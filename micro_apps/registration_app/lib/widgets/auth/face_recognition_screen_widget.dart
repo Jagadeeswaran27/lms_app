@@ -69,7 +69,7 @@ class _ModelScreenWidgetState extends State<FaceRecognitionScreenWidget> {
                         ? CustomDashedInput(
                             text: 'Face ${index + 1}',
                             onTap: () =>
-                                onMediaSelected(ImageSource.gallery, index),
+                                onMediaSelected(ImageSource.camera, index),
                           )
                         : Row(
                             children: [
