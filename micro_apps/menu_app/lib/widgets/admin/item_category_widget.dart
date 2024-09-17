@@ -42,7 +42,7 @@ class ItemCategoryWidget extends StatelessWidget {
               onTap: () => navigateToItemList("food"),
             ),
             CategoryItemCard(
-              icon: icons.Icons.food,
+              icon: icons.Icons.custom,
               title: "Custom",
               onTap: () => navigateToItemList("custom"),
             ),

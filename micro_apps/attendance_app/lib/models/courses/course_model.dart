@@ -10,6 +10,8 @@ class CourseModel {
   final String batchTime;
   final double amount;
   final int totalHours;
+  final List<String>? customDays;
+  final String? customTime;
   final int? noOfRegistrations;
   final List<Map<String, String>>? students;
 
@@ -25,6 +27,8 @@ class CourseModel {
     required this.totalHours,
     this.noOfRegistrations,
     this.students,
+    this.customDays,
+    this.customTime,
   });
 
   factory CourseModel.fromJson(Map<String, dynamic> json) {
@@ -40,6 +44,10 @@ class CourseModel {
       noOfRegistrations: json['noOfRegistrations'] ?? 0,
       students: json['students'] ?? [],
       totalHours: json['totalHours'] ?? 0,
+      customDays: json['customDays'] != null
+          ? List<String>.from(json['customDays'] as List<dynamic>)
+          : [],
+      customTime: json['customTime'] ?? '',
     );
   }
 
@@ -56,6 +64,8 @@ class CourseModel {
       'noOfRegistrations': noOfRegistrations,
       'students': students,
       'totalHours': totalHours,
+      'customDays': customDays,
+      'customTime': customTime,
     };
   }
 

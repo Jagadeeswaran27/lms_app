@@ -3,17 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
+import 'package:menu_app/utils/show_snackbar.dart';
 
 class BatchOfferedCard extends StatefulWidget {
   final List<String> selectedDays;
   final List<String> selectedTime;
   final ValueChanged<List<String>> onSelectedDaysChanged;
   final ValueChanged<List<String>> onSelectedTimeChanged;
+  final void Function(List<String>) onSaveCustomDays;
+  final void Function(String) onSaveCustomTime;
 
   const BatchOfferedCard({
     super.key,
     required this.selectedDays,
     required this.selectedTime,
+    required this.onSaveCustomTime,
+    required this.onSaveCustomDays,
     required this.onSelectedDaysChanged,
     required this.onSelectedTimeChanged,
   });
@@ -23,6 +28,96 @@ class BatchOfferedCard extends StatefulWidget {
 }
 
 class BatchOfferedCardState extends State<BatchOfferedCard> {
+  final List<String> _daysOfWeek = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday'
+  ];
+
+  List<String> customDays = [];
+  String? customTime;
+  String? customDaysErr;
+
+  void _showCustomDayPickerDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Select Days'),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ..._daysOfWeek.map((day) {
+                      return CheckboxListTile(
+                        title: Text(day),
+                        value: customDays.contains(day),
+                        onChanged: (bool? isChecked) {
+                          setState(() {
+                            if (isChecked == true) {
+                              customDays.add(day);
+                            } else {
+                              customDays.remove(day);
+                            }
+                          });
+                        },
+                      );
+                    }),
+                  ],
+                ),
+              );
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  widget.selectedDays.remove("Custom");
+                });
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (customDays.isEmpty) {
+                  showSnackbar(context, "At least select one day");
+                  return;
+                }
+                widget.onSaveCustomDays(customDays);
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showCustomTimePicker() async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+
+    if (pickedTime != null) {
+      customTime = pickedTime.format(context);
+      widget.onSaveCustomTime(customTime!);
+    } else {
+      setState(() {
+        widget.selectedTime.remove("Custom");
+      });
+    }
+  }
+
   void _handleDayChange(String day, bool isSelected) {
     final newSelectedDays = List<String>.from(widget.selectedDays);
     if (isSelected) {
@@ -73,7 +168,6 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
           const SizedBox(height: 10),
           Wrap(
             runSpacing: 20,
-            // mainAxisAlignment: MainAxisAlignment.start,
             children: [
               _CustomCheckbox(
                 text: 'Weekend',
@@ -96,6 +190,9 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
                 value: widget.selectedDays.contains('Custom'),
                 onChanged: (bool? newValue) {
                   _handleDayChange('Custom', newValue!);
+                  if (newValue) {
+                    _showCustomDayPickerDialog(context);
+                  }
                 },
               ),
             ],
@@ -107,7 +204,6 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
           ),
           const SizedBox(height: 10),
           Wrap(
-            // mainAxisAlignment: MainAxisAlignment.start,
             runSpacing: 20,
             children: [
               _CustomCheckbox(
@@ -131,6 +227,9 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
                 value: widget.selectedTime.contains('Custom'),
                 onChanged: (bool? newValue) {
                   _handleTimeChange('Custom', newValue!);
+                  if (newValue) {
+                    _showCustomTimePicker();
+                  }
                 },
               ),
             ],

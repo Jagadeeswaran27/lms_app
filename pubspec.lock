@@ -31,7 +31,7 @@ packages:
       path: "micro_apps/attendance_app"
       relative: true
     source: path
-    version: "1.0.0+1"
+    version: "1.0.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -627,7 +627,7 @@ packages:
       path: "micro_apps/registration_app"
       relative: true
     source: path
-    version: "1.0.0+1"
+    version: "1.0.2"
   shared_preferences:
     dependency: transitive
     description:

@@ -44,6 +44,8 @@ class AddItemWidgetState extends State<AddItemWidget> {
   List<String> _batchTime = [];
   String _amountDetails = '';
   String _totalHours = '';
+  List<String> _customDays = [];
+  String _customTime = '';
 
   void _handleBatchOfferedDaysChange(List<String> days) {
     setState(() {
@@ -64,6 +66,14 @@ class AddItemWidgetState extends State<AddItemWidget> {
       _image = files;
       _isUploadValid = !files.contains(null);
     });
+  }
+
+  void saveCustomDays(List<String> customDays) {
+    _customDays = customDays;
+  }
+
+  void saveCustomTime(String time) {
+    _customTime = time;
   }
 
   void resetForm() {
@@ -120,7 +130,10 @@ class AddItemWidgetState extends State<AddItemWidget> {
         'batchTime': widget.subCategory == 'courses' ? _batchTime : null,
         'amount': _amountDetails,
         'totalHours': int.parse(_totalHours),
+        'customDays': _selectedDays.contains('Custom') ? _customDays : null,
+        'customTime': _batchTime.contains('Custom') ? _customTime : null,
       };
+
       widget.addItem({...formData}, _image.whereType<File>().toList());
       resetForm();
     }
@@ -250,6 +263,8 @@ class AddItemWidgetState extends State<AddItemWidget> {
                             selectedTime: _batchTime,
                             onSelectedDaysChanged:
                                 _handleBatchOfferedDaysChange,
+                            onSaveCustomDays: saveCustomDays,
+                            onSaveCustomTime: saveCustomTime,
                             onSelectedTimeChanged:
                                 _handleBatchOfferedTimeChange,
                           ),
