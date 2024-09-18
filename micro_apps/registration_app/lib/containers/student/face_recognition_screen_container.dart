@@ -7,7 +7,7 @@ import 'package:registration_app/core/services/face_recognition/face_recignition
 import 'package:registration_app/core/services/face_recognition/face_recognition.dart';
 import 'package:registration_app/providers/auth_provider.dart';
 import 'package:registration_app/screens/student/student_app.dart';
-import 'package:registration_app/widgets/auth/face_recognition_screen_widget.dart';
+import 'package:registration_app/widgets/student/face_recognition_screen_widget.dart';
 
 class FaceRecignitionScreenContainer extends StatefulWidget {
   const FaceRecignitionScreenContainer({super.key});

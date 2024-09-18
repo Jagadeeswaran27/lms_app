@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import 'package:registration_app/constants/enums/user_role_enum.dart';
 import 'package:registration_app/providers/auth_provider.dart';
-import 'package:registration_app/screens/auth/face_recognition_screen.dart';
 import 'package:registration_app/screens/auth/login_screen.dart';
 import 'package:registration_app/screens/auth/role_type_selection_screen.dart';
 import 'package:registration_app/screens/auth/welcome_screen.dart';
@@ -59,14 +58,14 @@ class _InitScreenState extends State<InitScreen> {
               );
               return;
             }
-            if (authProvider.currentUser!.isFaceRecognized! == false) {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (ctx) => const FaceRecognitionScreen(),
-                ),
-              );
-              return;
-            }
+            // if (authProvider.currentUser!.isFaceRecognized! == false) {
+            //   Navigator.of(context).pushReplacement(
+            //     MaterialPageRoute(
+            //       builder: (ctx) => const FaceRecognitionScreen(),
+            //     ),
+            //   );
+            //   return;
+            // }
             if (authProvider.currentUser!.roleType ==
                 UserRoleTypeEnum.student.roleName) {
               Navigator.of(context).pushReplacement(
