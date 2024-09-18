@@ -82,6 +82,70 @@ class _TeacherItemDetailWidgetState extends State<TeacherItemDetailWidget> {
             const SizedBox(height: 20),
             BatchCard(course: widget.course),
             const SizedBox(height: 20),
+            if (widget.course.customDays != null &&
+                widget.course.customDays!.isNotEmpty)
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Days",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMediumPrimary
+                            .copyWith(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
+                        ...widget.course.customDays!.map(
+                          (day) => Container(
+                            margin: const EdgeInsets.only(bottom: 7),
+                            child: Text(
+                              day,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            if (widget.course.customTime != null &&
+                widget.course.customTime!.isNotEmpty)
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Timing : ",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMediumPrimary
+                            .copyWith(fontSize: 20),
+                      ),
+                      Text(
+                        widget.course.customTime!,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(fontSize: 16),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
             Row(
               children: [
                 Text(

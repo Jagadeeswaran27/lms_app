@@ -79,6 +79,68 @@ class StudentItemDetailWidget extends StatelessWidget {
             const SizedBox(height: 20),
             BatchCard(course: course),
             const SizedBox(height: 20),
+            if (course.customDays != null && course.customDays!.isNotEmpty)
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Days",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMediumPrimary
+                            .copyWith(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
+                        ...course.customDays!.map(
+                          (day) => Container(
+                            margin: const EdgeInsets.only(bottom: 7),
+                            child: Text(
+                              day,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            if (course.customTime != null && course.customTime!.isNotEmpty)
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Timing : ",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMediumPrimary
+                            .copyWith(fontSize: 20),
+                      ),
+                      Text(
+                        course.customTime!,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(fontSize: 16),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
             Row(
               children: [
                 Text(
