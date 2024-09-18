@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:registration_app/screens/student/cart_screen.dart';
 import 'package:registration_app/screens/student/face_recognition_screen.dart';
+import 'package:registration_app/screens/student/kid_enrollment_screen.dart';
 import 'package:registration_app/screens/student/kid_registration_screen.dart';
 import 'package:registration_app/screens/student/student_access_code_screen.dart';
 import 'package:registration_app/screens/student/student_enrollment_screen.dart';
@@ -20,6 +21,7 @@ class StudentRoutes {
   static const String enrollment = '/enrollment';
   static const String kidRegistration = '/kid-registration';
   static const String faceRecognition = '/face-recognition';
+  static const String kidEnrollment = '/kid-enrollment';
 
   static Map<String, WidgetBuilder> get buildStudentRoutes {
     return {
@@ -31,6 +33,7 @@ class StudentRoutes {
       enrollment: (context) => const StudentEnrollmentScreen(),
       kidRegistration: (context) => const KidRegistrationScreen(),
       faceRecognition: (ctx) => const FaceRecognitionScreen(),
+      kidEnrollment: (ctx) => const KidEnrollmentScreen(),
     };
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:registration_app/core/services/registration/registration_service.dart';
+import 'package:registration_app/models/registration/course_model.dart';
 import 'package:registration_app/providers/auth_provider.dart';
 import 'package:registration_app/routes/student_routes.dart';
 import 'package:registration_app/utils/show_snackbar.dart';
@@ -41,12 +42,13 @@ class _StudentRegisterContainerState extends State<StudentRegisterContainer> {
       );
       if (response.isNotEmpty) {
         authProvider.updateRegisteredCoursesList(courseIds);
+        final List<CourseModel> courseData = authProvider.cart;
         authProvider.cart = [];
         showSnackbar(context, 'Course registered successfully');
         Navigator.of(context)
             .pushReplacementNamed(StudentRoutes.enrollment, arguments: {
           'registrationIds': response,
-          'courses': authProvider.cart,
+          'courses': courseData,
         });
       } else {
         showSnackbar(context, 'Failed to register course');

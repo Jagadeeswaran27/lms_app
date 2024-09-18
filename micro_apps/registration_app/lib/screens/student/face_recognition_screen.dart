@@ -7,9 +7,12 @@ class FaceRecognitionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ScreenLayout(
+    final String? uid = ModalRoute.of(context)!.settings.arguments as String?;
+    return ScreenLayout(
       topBarText: "Face Recognition",
-      child: FaceRecignitionScreenContainer(),
+      child: FaceRecignitionScreenContainer(
+        kidUid: uid,
+      ),
     );
   }
 }

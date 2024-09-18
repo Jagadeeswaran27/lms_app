@@ -33,6 +33,7 @@ class KidRegistrationContainer extends StatefulWidget {
 
 class _KidRegistrationContainerState extends State<KidRegistrationContainer> {
   bool _isLoading = false;
+  String uid = '';
 
   void registerKid(
     String userName,
@@ -56,7 +57,7 @@ class _KidRegistrationContainerState extends State<KidRegistrationContainer> {
           'email': userEmail,
           'password': userPassword,
         });
-        final uid = result.data['uid'];
+        uid = result.data['uid'];
         await authProvider.createLMSUser(
             uid, userName, userEmail, 'student', phone);
       }
@@ -75,12 +76,15 @@ class _KidRegistrationContainerState extends State<KidRegistrationContainer> {
 
       if (registrationIds.isNotEmpty) {
         showSnackbar(context, 'Courses registered successfully');
+        final List<CourseModel> courseData = authProvider.cart;
         authProvider.cart = [];
         Navigator.pushNamedAndRemoveUntil(
-          context,
-          StudentRoutes.itemList,
-          (route) => false,
-        );
+            context, StudentRoutes.kidEnrollment, (route) => false,
+            arguments: {
+              'registrationIds': registrationIds,
+              'courses': courseData,
+              'uid': uid,
+            });
       } else {
         showSnackbar(context, 'Error registering courses for kid');
       }

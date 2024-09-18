@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:registration_app/models/registration/course_model.dart';
+
 import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/themes/colors.dart';
 import 'package:registration_app/themes/fonts.dart';
@@ -8,8 +8,8 @@ import 'package:registration_app/widgets/common/icon_text_button.dart';
 import 'package:registration_app/widgets/student/cart_card.dart';
 import 'package:registration_app/resources/icons.dart' as icons;
 
-class StudentEnrollmentWidget extends StatelessWidget {
-  const StudentEnrollmentWidget({
+class KidEnrollmentWidget extends StatelessWidget {
+  const KidEnrollmentWidget({
     super.key,
     required this.registrationIds,
     required this.courses,
