@@ -132,9 +132,14 @@ class Strings {
   static const String resolved = 'Resolved';
   static const String toResolve = 'To Resolve';
   static const String subject = 'Subject : ';
-  static const String file = 'File';
-  static const String resolve = 'Resolve';
+  static const String file = 'Image';
+  static const String resolve = 'Resolved';
   static const String noEnquiriesFound = 'No enquiries found';
   static const String itemCategory = 'Item Category';
   static const String registrationEnquiry = 'Registration Enquiry';
+  static const String resolvedHistory = 'Resolved History';
+  static const String passwordResetEmailSent = 'Password Reset Email Sent';
+  static const String anErrorOccurredPleaseTryAgainLater =
+      'An error occurred. Please try again later';
+  static const String submit = 'Submit';
 }

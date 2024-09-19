@@ -86,6 +86,7 @@ class EnquiryService {
           .doc(instituteId)
           .collection('enquiries')
           .where('userId', isEqualTo: userId)
+          .where("status", isEqualTo: "created")
           .get();
 
       // Convert each document to EnquiryModel and return as a list
@@ -97,6 +98,34 @@ class EnquiryService {
     } catch (e) {
       log.e('Error fetching user enquiries: $e');
       return [];
+    }
+  }
+
+  Stream<List<EnquiryModel>> getMyResolvedEnquiries(
+    String userId,
+    String instituteId,
+  ) async* {
+    try {
+      // Query Firestore for enquiries with the matching userId
+      Stream<QuerySnapshot> enquiriesStream = await _firestore
+          .collection('institutes')
+          .doc(instituteId)
+          .collection('enquiries')
+          .where('userId', isEqualTo: userId)
+          .where("status", isEqualTo: "resolved")
+          .snapshots();
+
+      // Convert each document to EnquiryModel and return as a list
+      await for (QuerySnapshot querySnapshot in enquiriesStream) {
+        List<EnquiryModel> enquiries = querySnapshot.docs.map((doc) {
+          return EnquiryModel.fromJson(doc.data() as Map<String, dynamic>);
+        }).toList();
+
+        yield enquiries;
+      }
+    } catch (e) {
+      log.e('Error fetching user enquiries: $e');
+      yield [];
     }
   }
 }

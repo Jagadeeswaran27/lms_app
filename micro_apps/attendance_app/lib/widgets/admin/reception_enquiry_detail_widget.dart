@@ -135,13 +135,16 @@ class _ReceptionEnquiryDetailWidgetState
                     ],
                   ),
                   const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Text(
-                        widget.enquiry.description,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ],
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Wrap(
+                      children: [
+                        Text(
+                          widget.enquiry.description,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 30),
                   Row(
@@ -182,7 +185,9 @@ class _ReceptionEnquiryDetailWidgetState
                     width: screenSize.width * 0.7,
                     child: IconTextButton(
                       text: Strings.resolve,
-                      onPressed: widget.onResolveEnquiry,
+                      onPressed: widget.enquiry.status == "resolved"
+                          ? () {}
+                          : widget.onResolveEnquiry,
                       color: ThemeColors.primary,
                       iconHorizontalPadding: 5,
                       svgIcon: icons.Icons.resolve,

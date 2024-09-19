@@ -23,6 +23,7 @@ class AttendanceLayout extends StatelessWidget {
     this.showBackButton = true,
     this.showBottomBar = true,
     this.showAccessCode,
+    this.showLogout = true,
   });
 
   final Widget child;
@@ -33,6 +34,7 @@ class AttendanceLayout extends StatelessWidget {
   final bool? showBackButton;
   final bool showBottomBar;
   final bool? showAccessCode;
+  final bool showLogout;
 
   @override
   Widget build(BuildContext context) {
@@ -100,19 +102,20 @@ class AttendanceLayout extends StatelessWidget {
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                   ),
-                Positioned(
-                  right: 10,
-                  top: -5,
-                  bottom: 0,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.logout_outlined,
-                      color: ThemeColors.primary,
-                      size: 20,
+                if (showLogout)
+                  Positioned(
+                    right: 10,
+                    top: -5,
+                    bottom: 0,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.logout_outlined,
+                        color: ThemeColors.primary,
+                        size: 20,
+                      ),
+                      onPressed: () => logout(context),
                     ),
-                    onPressed: () => logout(context),
                   ),
-                ),
                 Align(
                   alignment: Alignment.center,
                   child: Column(

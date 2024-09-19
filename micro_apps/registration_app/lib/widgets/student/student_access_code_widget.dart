@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:registration_app/resources/images.dart';
 import 'package:registration_app/themes/colors.dart';
 import 'package:registration_app/themes/fonts.dart';
@@ -8,25 +7,42 @@ import 'package:registration_app/widgets/common/form_input.dart';
 
 class StudentAccessCodeWidget extends StatefulWidget {
   final bool isLoading;
-  final Function(String clinicCode) onInstituteSelection;
+  final String? existingAccessCode;
+  final Function(String accessCode) onInstituteSelection;
+
   const StudentAccessCodeWidget({
     super.key,
     required this.onInstituteSelection,
     required this.isLoading,
+    this.existingAccessCode,
   });
 
   @override
-  State<StudentAccessCodeWidget> createState() =>
-      _StudentAccessCodeWidgetState();
+  State<StudentAccessCodeWidget> createState() => _AccessCodeWidgetState();
 }
 
-class _StudentAccessCodeWidgetState extends State<StudentAccessCodeWidget> {
+class _AccessCodeWidgetState extends State<StudentAccessCodeWidget> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _accessCodeController = TextEditingController();
   String _instituteCode = '';
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.existingAccessCode != null) {
+      _accessCodeController.text = widget.existingAccessCode!;
+    }
+  }
 
   void onSubmit() {
     _formKey.currentState?.save();
     widget.onInstituteSelection(_instituteCode);
+  }
+
+  @override
+  void dispose() {
+    _accessCodeController.dispose();
+    super.dispose();
   }
 
   @override
@@ -90,9 +106,18 @@ class _StudentAccessCodeWidgetState extends State<StudentAccessCodeWidget> {
                       const SizedBox(height: 20.0),
                       SizedBox(
                         width: screenSize.width * 0.8,
-                        child: FormInput(
-                          text: "Enter Access Code",
-                          onSaved: (value) => {_instituteCode = value!},
+                        child: Focus(
+                          onFocusChange: (hasFocus) {
+                            if (hasFocus && widget.existingAccessCode != null) {
+                              _accessCodeController.text =
+                                  widget.existingAccessCode!;
+                            }
+                          },
+                          child: FormInput(
+                            text: "Enter Access Code",
+                            controller: _accessCodeController,
+                            onSaved: (value) => {_instituteCode = value!},
+                          ),
                         ),
                       ),
                       const SizedBox(height: 20.0),

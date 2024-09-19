@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:registration_app/constants/constants.dart';
 
 import 'package:registration_app/providers/auth_provider.dart';
 import 'package:registration_app/routes/student_routes.dart';
+import 'package:registration_app/utils/shared_preference/shared_preference.dart';
 import 'package:registration_app/utils/show_snackbar.dart';
 import 'package:registration_app/widgets/student/student_access_code_widget.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +19,7 @@ class StudentAccessCodeContainer extends StatefulWidget {
 class _StudentAccessCodeContainerState
     extends State<StudentAccessCodeContainer> {
   bool _isLoading = false;
+  String? existingAccessCode;
 
   void navigateToHomeNavigation() {
     Navigator.of(context).pushNamed(StudentRoutes.itemList);
@@ -33,6 +36,10 @@ class _StudentAccessCodeContainerState
     setState(() {
       _isLoading = false;
     });
+    await SharedPreferencesUtils()
+        .addMapPrefs(accessCodeConstants.accessCodeFlag, {
+      "accessCode": instituteCode,
+    });
     if (response) {
       navigateToHomeNavigation();
     } else {
@@ -40,11 +47,37 @@ class _StudentAccessCodeContainerState
     }
   }
 
+  void checkExistingAccessCode() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final accessCodeStatus = await SharedPreferencesUtils().getMapPrefs(
+      accessCodeConstants.accessCodeFlag,
+    );
+    setState(() {
+      existingAccessCode = accessCodeStatus.value != null
+          ? accessCodeStatus.value['accessCode']
+          : null;
+      _isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkExistingAccessCode();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return StudentAccessCodeWidget(
-      isLoading: _isLoading,
-      onInstituteSelection: onInstituteSelection,
-    );
+    return _isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : StudentAccessCodeWidget(
+            isLoading: _isLoading,
+            onInstituteSelection: onInstituteSelection,
+            existingAccessCode: existingAccessCode,
+          );
   }
 }

@@ -21,6 +21,8 @@ class LoginFormContainer extends StatefulWidget {
 
 class _LoginFormContainerState extends State<LoginFormContainer> {
   bool _isLoading = false;
+  bool _isprefLoading = false;
+  String? existingPassword;
 
   Future<void> onSignIn(
       String userEmail, String userPassword, bool isGoogle) async {
@@ -55,6 +57,10 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
       final loggedInStatuses = await SharedPreferencesUtils().getMapPrefs(
         constants.loggedInStatusFlag,
       );
+      await SharedPreferencesUtils()
+          .addMapPrefs(passwordConstants.passwordFlag, {
+        "password": userPassword,
+      });
       if (loggedInStatuses.value == null ||
           loggedInStatuses.value[user.userId] == null ||
           loggedInStatuses.value[user.userId] == false) {
@@ -90,11 +96,37 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
     }
   }
 
+  void checkExistingPassword() async {
+    setState(() {
+      _isprefLoading = true;
+    });
+    final passwordStatus = await SharedPreferencesUtils().getMapPrefs(
+      passwordConstants.passwordFlag,
+    );
+    setState(() {
+      existingPassword = passwordStatus.value != null
+          ? passwordStatus.value['password']
+          : null;
+      _isprefLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkExistingPassword();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return LoginFormWidget(
-      isLoading: _isLoading,
-      onSignIn: onSignIn,
-    );
+    return _isprefLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : LoginFormWidget(
+            isLoading: _isLoading,
+            onSignIn: onSignIn,
+            existingPassword: existingPassword,
+          );
   }
 }

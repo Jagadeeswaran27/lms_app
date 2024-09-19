@@ -12,6 +12,11 @@ class CourseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String dayString = (course.customDays!.isNotEmpty)
+        ? course.customDays!.join(',')
+        : course.batchDay;
+    final String timeString =
+        course.customTime!.isNotEmpty ? course.customTime! : course.batchTime!;
     return InkWell(
       onTap: onPressed,
       child: Container(
@@ -68,19 +73,42 @@ class CourseCard extends StatelessWidget {
                             .copyWith(fontSize: 18),
                       ),
                       const SizedBox(height: 8.0),
-                      SizedBox(
-                        height: 30,
-                        child: Text(
-                          course.shortDescription,
-                          style: Theme.of(context)
-                              .textTheme
-                              .displaySmall!
-                              .copyWith(fontSize: 12),
-                          maxLines: 5,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                      Wrap(
+                        children: [
+                          Text(
+                            "Day : ",
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayMediumPrimary,
+                          ),
+                          Text(
+                            dayString,
+                            style: Theme.of(context)
+                                .textTheme
+                                .displaySmall!
+                                .copyWith(fontSize: 12),
+                          ),
+                        ],
                       ),
-                      const SizedBox(height: 8.0),
+                      const SizedBox(height: 10.0),
+                      Row(
+                        children: [
+                          Text(
+                            "Time : ",
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayMediumPrimary,
+                          ),
+                          Text(
+                            timeString,
+                            style: Theme.of(context)
+                                .textTheme
+                                .displaySmall!
+                                .copyWith(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10.0),
                       Text(
                         'Rs.${course.amount.toString()}',
                         style: Theme.of(context)

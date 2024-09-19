@@ -1,7 +1,7 @@
-import 'package:attendance_app/models/courses/course_model.dart';
-import 'package:attendance_app/resources/strings.dart';
 import 'package:flutter/material.dart';
 
+import 'package:attendance_app/models/courses/course_model.dart';
+import 'package:attendance_app/resources/strings.dart';
 import 'package:attendance_app/themes/colors.dart';
 import 'package:attendance_app/themes/fonts.dart';
 
@@ -17,6 +17,11 @@ class CourseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String dayString = (course.customDays!.isNotEmpty)
+        ? course.customDays!.join(',')
+        : course.batchDay;
+    final String timeString =
+        course.customTime!.isNotEmpty ? course.customTime! : course.batchTime;
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -34,7 +39,7 @@ class CourseCard extends StatelessWidget {
           ],
         ),
         child: SizedBox(
-          height: 120.0,
+          height: 160.0,
           child: Row(
             children: [
               Expanded(
@@ -76,8 +81,9 @@ class CourseCard extends StatelessWidget {
                         children: [
                           Text(
                             Strings.duration,
-                            style:
-                                Theme.of(context).textTheme.bodyMediumPrimary,
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayMediumPrimary,
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -85,11 +91,59 @@ class CourseCard extends StatelessWidget {
                             '${course.totalHours} Hrs',
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyMediumTitleBrownSemiBold,
+                                .displaySmall!
+                                .copyWith(fontSize: 12),
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ],
+                      ),
+                      const SizedBox(height: 8.0),
+                      Wrap(
+                        children: [
+                          Text(
+                            "Day : ",
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayMediumPrimary,
+                          ),
+                          Text(
+                            dayString,
+                            style: Theme.of(context)
+                                .textTheme
+                                .displaySmall!
+                                .copyWith(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10.0),
+                      Row(
+                        children: [
+                          Text(
+                            "Time : ",
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayMediumPrimary,
+                          ),
+                          Text(
+                            timeString,
+                            style: Theme.of(context)
+                                .textTheme
+                                .displaySmall!
+                                .copyWith(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10.0),
+                      Text(
+                        'Rs.${course.amount.toString()}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .displaySmall!
+                            .copyWith(fontSize: 16),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
                       ),
                     ],
                   ),

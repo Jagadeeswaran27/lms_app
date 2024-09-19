@@ -116,9 +116,9 @@ class Strings {
       'What are you facing issue with ? ';
   static const String subject = 'Subject : ';
   static const String describeTheIssue = 'Describe the issue ';
-  static const String file = 'File';
+  static const String file = 'Image';
   static const String supportedFiles = 'Supported files : jpg,svg,png.....';
-  static const String chooseFile = 'Choose file';
+  static const String chooseFile = 'Choose Image';
   static const String required = '(required)';
   static const String anErrorOccurred = 'An error occurred';
   static const String invalidCredentials = 'Invalid credentials';
@@ -139,7 +139,7 @@ class Strings {
   static const String toResolve = 'To Resolve';
   static const String totalRegistration = 'Total Registrations: ';
   static const String studentNames = 'Student Names';
-  static const String resolve = 'Resolve';
+  static const String resolve = 'Resolved';
   static const String noEnquiriesFound = 'No Enquiries found';
   static const String attendanceEnquiry = 'Attendance Enquiry';
   static const String dashBoard = 'Dashboard';
@@ -147,4 +147,9 @@ class Strings {
   static const String attendanceChanges = 'Attendance Changes';
   static const String attendanceUpdatedSuccessfully =
       'Attendance Updated Successfully';
+  static const String resolvedHistory = 'Resolved History';
+  static const String passwordResetEmailSent = 'Password Reset Email Sent';
+  static const String anErrorOccurredPleaseTryAgainLater =
+      'An error occurred. Please try again later';
+  static const String submit = 'Submit';
 }

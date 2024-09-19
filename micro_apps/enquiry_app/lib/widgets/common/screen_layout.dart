@@ -18,6 +18,7 @@ class ScreenLayout extends StatelessWidget {
     this.onIconTap,
     this.showBackButton = true,
     this.showBottomBar = true,
+    this.showLogout = true,
   });
 
   final Widget child;
@@ -27,6 +28,7 @@ class ScreenLayout extends StatelessWidget {
   final void Function()? onIconTap;
   final bool? showBackButton;
   final bool showBottomBar;
+  final bool showLogout;
 
   @override
   Widget build(BuildContext context) {
@@ -82,19 +84,20 @@ class ScreenLayout extends StatelessWidget {
                       onPressed: () => Navigator.of(context).pop(),
                     ),
                   ),
-                Positioned(
-                  right: 10,
-                  top: -5,
-                  bottom: 0,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.logout_outlined,
-                      color: ThemeColors.primary,
-                      size: 20,
+                if (showLogout)
+                  Positioned(
+                    right: 10,
+                    top: -5,
+                    bottom: 0,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.logout_outlined,
+                        color: ThemeColors.primary,
+                        size: 20,
+                      ),
+                      onPressed: () => logout(context),
                     ),
-                    onPressed: () => logout(context),
                   ),
-                ),
                 Align(
                   alignment: Alignment.center,
                   child: Text(

@@ -97,9 +97,14 @@ class Strings {
   static const String url =
       'https://media.istockphoto.com/id/1399611777/photo/portrait-of-a-smiling-little-brown-haired-boy-looking-at-the-camera-happy-kid-with-good.jpg?s=612x612&w=0&k=20&c=qZ63xODwrnc81wKK0dwc3tOEf2lghkQQKmotbF11q7Q=';
   static const String subject = 'Subject : ';
-  static const String file = 'File';
+  static const String file = 'Image';
   static const String status = 'Status : ';
-  static const String resolve = 'Resolve';
+  static const String resolve = 'Resolved';
   static const String noEnquiriesFound = 'No enquiries found';
   static const String itemCategory = 'Item Category';
+  static const String resolvedHistory = 'Resolved History';
+  static const String passwordResetEmailSent = 'Password Reset Email Sent';
+  static const String anErrorOccurredPleaseTryAgainLater =
+      'An error occurred. Please try again later';
+  static const String submit = 'Submit';
 }

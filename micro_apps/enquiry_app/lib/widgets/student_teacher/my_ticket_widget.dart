@@ -131,13 +131,17 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                     ],
                   ),
                   const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Text(
-                        widget.enquiry.description,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ],
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Wrap(
+                      alignment: WrapAlignment.start,
+                      children: [
+                        Text(
+                          widget.enquiry.description,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 30),
                   Row(
