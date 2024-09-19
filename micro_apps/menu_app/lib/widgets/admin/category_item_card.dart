@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
-import 'package:menu_app/widgets/common/svg_lodder.dart';
 
 class CategoryItemCard extends StatelessWidget {
   const CategoryItemCard({
@@ -11,7 +10,7 @@ class CategoryItemCard extends StatelessWidget {
     this.onTap,
   });
 
-  final String icon;
+  final String icon; // URL for the network image
   final String title;
   final void Function()? onTap;
 
@@ -51,11 +50,12 @@ class CategoryItemCard extends StatelessWidget {
               const SizedBox(
                 width: 40,
               ),
-              SVGLoader(
-                image: icon,
+              Image.network(
+                icon,
                 width: 30,
                 height: 30,
-              )
+                fit: BoxFit.cover,
+              ),
             ],
           ),
         ),

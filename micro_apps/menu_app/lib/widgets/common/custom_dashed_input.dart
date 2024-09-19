@@ -8,11 +8,13 @@ import 'package:menu_app/widgets/common/svg_lodder.dart';
 class CustomDashedInput extends StatelessWidget {
   final String text;
   final Function() onTap;
+  final double radius;
 
   const CustomDashedInput({
     super.key,
     required this.text,
     required this.onTap,
+    this.radius = 10,
   });
 
   @override
@@ -20,12 +22,12 @@ class CustomDashedInput extends StatelessWidget {
     return DottedBorder(
       color: ThemeColors.primary,
       borderType: BorderType.RRect,
-      radius: const Radius.circular(10),
+      radius: Radius.circular(radius),
       dashPattern: const [8, 4],
       strokeWidth: 2,
       padding: const EdgeInsets.all(0),
       child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(radius)),
         child: GestureDetector(
           onTap: onTap,
           child: Container(
