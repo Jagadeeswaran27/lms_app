@@ -1,12 +1,16 @@
+import 'package:enquiry_app/constants/enums/user_role_enum.dart';
 import 'package:enquiry_app/screens/auth/welcome_screen.dart';
 import 'package:enquiry_app/utils/error/show_snackbar.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:enquiry_app/providers/auth_provider.dart';
 import 'package:enquiry_app/resources/strings.dart';
 
 import 'package:enquiry_app/themes/colors.dart';
 import 'package:enquiry_app/themes/fonts.dart';
+import 'package:enquiry_app/widgets/common/svg_lodder.dart';
 import 'package:provider/provider.dart';
+import 'package:enquiry_app/resources/icons.dart' as icons;
 
 class ScreenLayout extends StatelessWidget {
   const ScreenLayout({
@@ -18,6 +22,7 @@ class ScreenLayout extends StatelessWidget {
     this.onIconTap,
     this.showBackButton = true,
     this.showBottomBar = true,
+    this.showAccessCode,
     this.showLogout = true,
   });
 
@@ -28,10 +33,13 @@ class ScreenLayout extends StatelessWidget {
   final void Function()? onIconTap;
   final bool? showBackButton;
   final bool showBottomBar;
+  final bool? showAccessCode;
   final bool showLogout;
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
     void logout(BuildContext context) async {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
       final response = await authProvider.signOut();
@@ -44,6 +52,16 @@ class ScreenLayout extends StatelessWidget {
         );
       } else {
         showSnackbar(context, Strings.errorLoggingOut);
+      }
+    }
+
+    void onCopy(BuildContext context) async {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final currentUser = authProvider.currentUser!;
+      final clinicId = currentUser.institute.first;
+      await Clipboard.setData(ClipboardData(text: clinicId));
+      if (context.mounted) {
+        showSnackbar(context, 'AccessCode Code Copied');
       }
     }
 
@@ -100,9 +118,61 @@ class ScreenLayout extends StatelessWidget {
                   ),
                 Align(
                   alignment: Alignment.center,
-                  child: Text(
-                    topBarText,
-                    style: Theme.of(context).textTheme.bodyMediumPrimary,
+                  child: Column(
+                    children: [
+                      Text(
+                        topBarText,
+                        style: Theme.of(context).textTheme.bodyMediumPrimary,
+                      ),
+                      if (authProvider.currentUser?.role ==
+                          UserRoleEnum.admin.roleName)
+                        Container(
+                          margin: const EdgeInsets.only(left: 10),
+                          child: Column(
+                            children: [
+                              if (authProvider.currentUser?.role ==
+                                  UserRoleEnum.admin.roleName)
+                                Container(
+                                  margin: const EdgeInsets.only(left: 10),
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        '${authProvider.currentUser!.name.trim()}\'s institute',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMediumTitleBrown,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            authProvider.currentUser?.institute
+                                                    .first ??
+                                                '',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMediumTitleBrownSemiBold,
+                                          ),
+                                          IconButton(
+                                            icon: const SizedBox(
+                                              width: 18,
+                                              height: 18,
+                                              child: SVGLoader(
+                                                  image: icons.Icons.copy),
+                                            ),
+                                            onPressed: () => onCopy(context),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                    ],
                   ),
                 ),
                 if (icon != null)

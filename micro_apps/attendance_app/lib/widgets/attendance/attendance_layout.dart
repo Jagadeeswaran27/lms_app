@@ -128,23 +128,47 @@ class AttendanceLayout extends StatelessWidget {
                           UserRoleEnum.admin.roleName)
                         Container(
                           margin: const EdgeInsets.only(left: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          child: Column(
                             children: [
-                              Text(
-                                authProvider.currentUser?.institute.first ?? '',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMediumTitleBrownSemiBold,
-                              ),
-                              IconButton(
-                                icon: const SizedBox(
-                                  width: 18,
-                                  height: 18,
-                                  child: SVGLoader(image: icons.Icons.copy),
+                              if (authProvider.currentUser?.role ==
+                                  UserRoleEnum.admin.roleName)
+                                Container(
+                                  margin: const EdgeInsets.only(left: 10),
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        '${authProvider.currentUser!.name.trim()}\'s institute',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMediumTitleBrown,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            authProvider.currentUser?.institute
+                                                    .first ??
+                                                '',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMediumTitleBrownSemiBold,
+                                          ),
+                                          IconButton(
+                                            icon: const SizedBox(
+                                              width: 18,
+                                              height: 18,
+                                              child: SVGLoader(
+                                                  image: icons.Icons.copy),
+                                            ),
+                                            onPressed: () => onCopy(context),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                onPressed: () => onCopy(context),
-                              ),
                             ],
                           ),
                         ),
