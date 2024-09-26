@@ -73,6 +73,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
         child: Column(
           children: [
             FormInput(
+              autoFillHints: const [AutofillHints.email],
               text: Strings.enterYourEmailOrPhoneNo,
               onSaved: (value) => {_userEmail = value!},
               validator: (value) {
@@ -84,6 +85,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             ),
             const SizedBox(height: 20),
             FormInput(
+              autoFillHints: const [AutofillHints.password],
               text: Strings.enterYourPassword,
               controller: _passwordController,
               onSaved: (value) => {_userPassword = value!},

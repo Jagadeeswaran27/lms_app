@@ -141,10 +141,17 @@ class CourseService {
           .collection(subCategory)
           .snapshots()
           .map((querySnapshot) {
-        return querySnapshot.docs
+        // Convert the querySnapshot to a list of CourseModel
+        List<CourseModel> courses = querySnapshot.docs
             .map((doc) =>
                 CourseModel.fromJson(doc.data() as Map<String, dynamic>))
             .toList();
+
+        // Sort the list by courseTitle alphabetically, case-insensitively
+        courses.sort((a, b) =>
+            a.courseTitle.toLowerCase().compareTo(b.courseTitle.toLowerCase()));
+
+        return courses;
       });
     } catch (e) {
       log.e('Error getting items: $e');

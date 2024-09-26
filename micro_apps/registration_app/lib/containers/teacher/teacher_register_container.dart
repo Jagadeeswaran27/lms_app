@@ -46,7 +46,7 @@ class _TeacherRegisterContainerState extends State<TeacherRegisterContainer> {
       instituteId: authProvider.selectedinstituteCode,
     );
     if (registrationId.isNotEmpty) {
-      authProvider.updateRegisteredCourses(widget.course.courseId);
+      authProvider.updateRegisteredCoursesList([widget.course.courseId]);
       showSnackbar(context, 'Course registered successfully');
       Navigator.of(context)
           .pushReplacementNamed(TeacherRoutes.enrollment, arguments: {

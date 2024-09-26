@@ -26,6 +26,7 @@ class FormInput extends StatelessWidget {
     this.borderWidth,
     this.hasShadow = false,
     this.isDescription = false,
+    this.autofillHints,
   });
 
   final String text;
@@ -48,6 +49,7 @@ class FormInput extends StatelessWidget {
   final double? borderWidth;
   final bool hasShadow;
   final bool isDescription;
+  final Iterable<String>? autofillHints;
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +69,7 @@ class FormInput extends StatelessWidget {
             )
           : null, // No shadow if hasShadow is false
       child: TextFormField(
+        autofillHints: autofillHints,
         expands: isDescription ? true : false,
         minLines: isDescription ? null : 1,
         maxLines: isDescription ? null : 1,

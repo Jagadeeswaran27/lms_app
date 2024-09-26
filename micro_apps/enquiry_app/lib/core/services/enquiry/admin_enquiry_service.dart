@@ -82,4 +82,22 @@ class AdminEnquiryService {
       return false;
     }
   }
+
+  Future<bool> reOpenEnquiry(String enquiryId, String accessId) async {
+    try {
+      // Update the enquiry status to "resolved"
+      await _firestore
+          .collection('institutes')
+          .doc(accessId)
+          .collection('enquiries')
+          .doc(enquiryId)
+          .update({'status': 'created'});
+
+      log.i('Enquiry $enquiryId resolved successfully');
+      return true;
+    } catch (e) {
+      log.e('Error resolving enquiry: $e');
+      return false;
+    }
+  }
 }

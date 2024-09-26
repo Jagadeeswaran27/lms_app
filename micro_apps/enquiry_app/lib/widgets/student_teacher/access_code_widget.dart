@@ -1,9 +1,14 @@
+import 'package:enquiry_app/providers/auth_provider.dart';
+import 'package:enquiry_app/resources/strings.dart';
+import 'package:enquiry_app/screens/auth/welcome_screen.dart';
+import 'package:enquiry_app/utils/error/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:enquiry_app/resources/images.dart';
 import 'package:enquiry_app/themes/colors.dart';
 import 'package:enquiry_app/themes/fonts.dart';
 import 'package:enquiry_app/widgets/common/custom_elevated_button.dart';
 import 'package:enquiry_app/widgets/common/form_input.dart';
+import 'package:provider/provider.dart';
 
 class AccessCodeWidget extends StatefulWidget {
   final bool isLoading;
@@ -43,6 +48,21 @@ class _AccessCodeWidgetState extends State<AccessCodeWidget> {
   void dispose() {
     _accessCodeController.dispose();
     super.dispose();
+  }
+
+  void logout(BuildContext context) async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final response = await authProvider.signOut();
+    if (response) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const WelcomeScreen(),
+        ),
+        (Route<dynamic> route) => false,
+      );
+    } else {
+      showSnackbar(context, Strings.errorLoggingOut);
+    }
   }
 
   @override
@@ -130,6 +150,35 @@ class _AccessCodeWidgetState extends State<AccessCodeWidget> {
                         ),
                       ),
                       const SizedBox(height: 20.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: () => logout(context),
+                            child: SizedBox(
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Logout",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmallTitleBrown
+                                        .copyWith(
+                                            decoration:
+                                                TextDecoration.underline),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  const Icon(
+                                    Icons.logout_outlined,
+                                    size: 14,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                        ],
+                      )
                     ],
                   ),
                 ),

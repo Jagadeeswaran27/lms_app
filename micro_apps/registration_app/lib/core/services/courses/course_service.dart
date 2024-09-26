@@ -14,10 +14,14 @@ class CourseService {
           .collection('courses')
           .snapshots()
           .map((querySnapshot) {
-        return querySnapshot.docs
+        List<CourseModel> courses = querySnapshot.docs
             .map((doc) =>
                 CourseModel.fromJson(doc.data() as Map<String, dynamic>))
             .toList();
+        courses.sort((a, b) =>
+            a.courseTitle.toLowerCase().compareTo(b.courseTitle.toLowerCase()));
+
+        return courses;
       });
     } catch (e) {
       log.e('Error getting courses: $e');

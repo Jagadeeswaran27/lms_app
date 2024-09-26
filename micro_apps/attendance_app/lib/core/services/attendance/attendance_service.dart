@@ -44,8 +44,7 @@ class AttendanceService {
                 .get();
 
             if (courseSnapshot.exists) {
-              Map<String, dynamic> courseData =
-                  courseSnapshot.data() as Map<String, dynamic>;
+              Map<String, dynamic> courseData;
 
               // Fetch the number of registrations
               QuerySnapshot registrationSnapshot = await _firestore
@@ -53,26 +52,32 @@ class AttendanceService {
                   .doc(instituteId)
                   .collection('students-registrations')
                   .where('courseId', isEqualTo: courseId)
+                  .where('status', isEqualTo: "Approved")
                   .get();
 
-              int noOfRegistrations = registrationSnapshot.size;
+              if (registrationSnapshot.size > 0) {
+                courseData = courseSnapshot.data() as Map<String, dynamic>;
+                int noOfRegistrations = registrationSnapshot.size;
 
-              // Extract user names from the registrations
-              List<Map<String, String>> userNames =
-                  registrationSnapshot.docs.map((registrationDoc) {
-                String studentId = registrationDoc['registeredBy'] as String;
-                String studentName = registrationDoc['userName'] as String;
-                return {studentId: studentName};
-              }).toList();
+                // Extract user names from the registrations
+                List<Map<String, String>> userNames =
+                    registrationSnapshot.docs.map((registrationDoc) {
+                  String studentId = registrationDoc['registeredBy'] as String;
+                  String studentName = registrationDoc['userName'] as String;
+                  return {studentId: studentName};
+                }).toList();
 
-              courseData['noOfRegistrations'] = noOfRegistrations;
-              courseData['students'] = userNames;
+                courseData['noOfRegistrations'] = noOfRegistrations;
+                courseData['students'] = userNames;
 
-              // Convert to CourseModel and add to list
-              courses.add(CourseModel.fromJson(courseData));
+                // Convert to CourseModel and add to list
+                courses.add(CourseModel.fromJson(courseData));
+              }
             }
           }
         }
+        courses.sort((a, b) =>
+            a.courseTitle.toLowerCase().compareTo(b.courseTitle.toLowerCase()));
         return courses;
       } else {
         log.e('User with ID $userId does not exist.');

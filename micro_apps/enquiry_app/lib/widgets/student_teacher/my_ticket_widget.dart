@@ -1,3 +1,5 @@
+import 'package:enquiry_app/themes/colors.dart';
+import 'package:enquiry_app/widgets/common/icon_text_button.dart';
 import 'package:enquiry_app/widgets/common/svg_lodder.dart';
 import 'package:flutter/material.dart';
 
@@ -5,11 +7,9 @@ import 'package:enquiry_app/models/enquiry/message_model.dart';
 import 'package:enquiry_app/widgets/common/full_screen_image_viewer.dart';
 import 'package:enquiry_app/widgets/student_teacher/messages.dart';
 import 'package:enquiry_app/models/enquiry/enquiry_model.dart';
-import 'package:enquiry_app/themes/colors.dart';
 import 'package:enquiry_app/resources/strings.dart';
 import 'package:enquiry_app/themes/fonts.dart';
 import 'package:enquiry_app/widgets/common/form_input.dart';
-import 'package:enquiry_app/widgets/common/status_progress_indicator.dart';
 import 'package:enquiry_app/widgets/student_teacher/choose_file_button.dart';
 import 'package:enquiry_app/widgets/student_teacher/enquiry_reception_title_card.dart';
 import 'package:enquiry_app/resources/icons.dart' as icons;
@@ -20,11 +20,17 @@ class MyTicketWidget extends StatefulWidget {
     required this.enquiry,
     required this.onSendMessage,
     required this.messages,
+    required this.isLoading,
+    required this.onResolveEnquiry,
+    required this.onReOpenEnquiry,
   });
 
   final EnquiryModel enquiry;
   final Future<bool> Function(String) onSendMessage;
   final List<MessageModel> messages;
+  final bool isLoading;
+  final void Function() onResolveEnquiry;
+  final void Function() onReOpenEnquiry;
 
   @override
   State<MyTicketWidget> createState() => _MyTicketWidgetState();
@@ -67,8 +73,6 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final isAcknowledged = widget.enquiry.status == 'acknowledged';
-    final isResolved = widget.enquiry.status == 'resolved';
     final Size screenSize = MediaQuery.of(context).size;
 
     return Column(
@@ -177,62 +181,34 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                     ],
                   ),
                   const SizedBox(height: 30),
-                  Row(
-                    children: [
-                      Text(
-                        Strings.status,
-                        style: Theme.of(context).textTheme.bodyMediumTitleBrown,
+                  if (widget.enquiry.status != "resolved")
+                    SizedBox(
+                      height: 50,
+                      width: screenSize.width * 0.7,
+                      child: IconTextButton(
+                        text: Strings.resolve,
+                        onPressed: widget.onResolveEnquiry,
+                        color: ThemeColors.primary,
+                        iconHorizontalPadding: 5,
+                        svgIcon: icons.Icons.resolve,
+                        iconColor: ThemeColors.white,
+                        isLoading: widget.isLoading,
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          SizedBox(
-                            width: 200,
-                            child: FormInput(
-                              text: "",
-                              hintText: isAcknowledged || isResolved
-                                  ? Strings.acknowledged
-                                  : Strings.toAcknowledge,
-                              readOnly: true,
-                              fillColor: isAcknowledged || isResolved
-                                  ? ThemeColors.primary
-                                  : null,
-                              hintTextStyle: isAcknowledged || isResolved
-                                  ? Theme.of(context).textTheme.bodyMedium
-                                  : null,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          SizedBox(
-                            width: 200,
-                            child: FormInput(
-                              text: "",
-                              hintText: isResolved
-                                  ? Strings.resolved
-                                  : Strings.toResolve,
-                              readOnly: true,
-                              fillColor:
-                                  isResolved ? ThemeColors.primary : null,
-                              hintTextStyle: isResolved
-                                  ? Theme.of(context).textTheme.bodyMedium
-                                  : null,
-                            ),
-                          ),
-                        ],
+                    ),
+                  if (widget.enquiry.status == "resolved")
+                    SizedBox(
+                      height: 50,
+                      width: screenSize.width * 0.7,
+                      child: IconTextButton(
+                        text: Strings.reOpen,
+                        onPressed: widget.onReOpenEnquiry,
+                        color: ThemeColors.primary,
+                        iconHorizontalPadding: 5,
+                        svgIcon: icons.Icons.resolve,
+                        iconColor: ThemeColors.white,
+                        isLoading: widget.isLoading,
                       ),
-                      const SizedBox(width: 10),
-                      StatusProgressIndicator(
-                        isAcknowledged:
-                            isAcknowledged || isResolved ? true : false,
-                        isResolved: isResolved ? true : false,
-                      ),
-                    ],
-                  ),
+                    ),
                   const SizedBox(height: 30),
                   if (widget.messages.isNotEmpty)
                     Messages(
@@ -247,7 +223,7 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
         SizedBox(
           width: screenSize.width * 0.9,
           child: Form(
-            key: _formKey, // Assign the form key here
+            key: _formKey,
             child: Row(
               children: [
                 Expanded(

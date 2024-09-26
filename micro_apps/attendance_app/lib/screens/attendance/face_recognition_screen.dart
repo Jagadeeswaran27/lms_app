@@ -9,7 +9,9 @@ class FaceRecognitionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const AttendanceLayout(
+      showInstituteName: false,
       topBarText: "Face Recognition",
+      showBackButton: false,
       child: FaceRecignitionScreenContainer(),
     );
   }

@@ -48,8 +48,21 @@ class AuthProvider with ChangeNotifier {
   }
 
   void updateRegisteredCourses(String courseId) {
-    _currentUser!.registeredCourses.add(courseId);
     notifyListeners();
+  }
+
+  Future<String> getInstituteName(String accessCode) async {
+    try {
+      final instituteRef =
+          FirebaseFirestore.instance.collection('institutes').doc(accessCode);
+
+      final docSnapshot = await instituteRef.get();
+
+      final data = docSnapshot.data();
+      return data!['instituteName'];
+    } catch (e) {
+      return "";
+    }
   }
 
   void updateRegisteredCoursesList(List<String> courseIds) {

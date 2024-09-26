@@ -1,4 +1,3 @@
-import 'package:attendance_app/utils/error/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance_app/core/services/enquiry/enquiry_service.dart';
 import 'package:attendance_app/core/services/enquiry/messages_service.dart';
@@ -26,25 +25,6 @@ class _ReceptionEnquiryDetailContainerState
   bool _isLoading = false;
   List<MessageModel> messages = [];
   final EnquiryService enquiryService = EnquiryService();
-
-  void onResolveEnquiry() async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    setState(() {
-      _isLoading = true;
-    });
-    final status = await enquiryService.resolveEnquiry(
-        widget.enquiry.enquiryId, authProvider.currentUser!.institute[0]);
-    setState(() {
-      _isLoading = false;
-    });
-
-    if (status) {
-      showSnackbar(context, 'Enquiry resolved successfully');
-      Navigator.of(context).pop();
-    } else {
-      showSnackbar(context, 'Failed to resolve enquiry');
-    }
-  }
 
   Future<void> fetchMessages() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -103,7 +83,6 @@ class _ReceptionEnquiryDetailContainerState
             child: ReceptionEnquiryDetailWidget(
               enquiry: widget.enquiry,
               isLoading: _isLoading,
-              onResolveEnquiry: onResolveEnquiry,
               messages: messages,
               onSendMessage: sendMessage,
             ),

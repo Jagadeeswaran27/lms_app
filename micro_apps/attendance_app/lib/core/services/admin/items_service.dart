@@ -37,6 +37,7 @@ class ItemsService {
             .doc(instituteId)
             .collection('students-registrations')
             .where('courseId', isEqualTo: courseData['courseId'])
+            .where('status', isEqualTo: 'Approved')
             .get();
 
         // Extract user names from the registrations with student ID as the key
@@ -58,7 +59,8 @@ class ItemsService {
         // Convert the course data to an CourseModel and add it to the list
         courses.add(CourseModel.fromJson(courseData));
       }
-
+      courses.sort((a, b) =>
+          a.courseTitle.toLowerCase().compareTo(b.courseTitle.toLowerCase()));
       return courses;
     } catch (e) {
       log.e('Error fetching courses: $e');

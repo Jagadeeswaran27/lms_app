@@ -12,7 +12,7 @@ import 'package:registration_app/widgets/common/svg_lodder.dart';
 import 'package:provider/provider.dart';
 import 'package:registration_app/resources/icons.dart' as icons;
 
-class ScreenLayout extends StatelessWidget {
+class ScreenLayout extends StatefulWidget {
   const ScreenLayout({
     super.key,
     required this.child,
@@ -39,36 +39,59 @@ class ScreenLayout extends StatelessWidget {
   final bool showLogout;
 
   @override
-  Widget build(BuildContext context) {
+  State<ScreenLayout> createState() => _ScreenLayoutState();
+}
+
+class _ScreenLayoutState extends State<ScreenLayout> {
+  String instituteName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    handleGetInstitute();
+  }
+
+  void logout(BuildContext context) async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final response = await authProvider.signOut();
+    if (response) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const WelcomeScreen(),
+        ),
+        (Route<dynamic> route) => false,
+      );
+    } else {
+      showSnackbar(context, Strings.errorLoggingOut);
+    }
+  }
+
+  void onCopy(BuildContext context) async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final currentUser = authProvider.currentUser!;
+    final clinicId = currentUser.institute.first;
+    await Clipboard.setData(ClipboardData(text: clinicId));
+    if (context.mounted) {
+      showSnackbar(context, 'AccessCode Code Copied');
+    }
+  }
+
+  void handleGetInstitute() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
-    void logout(BuildContext context) async {
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      final response = await authProvider.signOut();
-      if (response) {
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => const WelcomeScreen(),
-          ),
-          (Route<dynamic> route) => false,
-        );
-      } else {
-        showSnackbar(context, Strings.errorLoggingOut);
-      }
-    }
+    final name =
+        await authProvider.getInstituteName(authProvider.selectedinstituteCode);
 
-    void onCopy(BuildContext context) async {
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      final currentUser = authProvider.currentUser!;
-      final clinicId = currentUser.institute.first;
-      await Clipboard.setData(ClipboardData(text: clinicId));
-      if (context.mounted) {
-        showSnackbar(context, 'AccessCode Code Copied');
-      }
-    }
+    setState(() {
+      instituteName = name;
+    });
+  }
 
-    // Detect the height of the keyboard
+  @override
+  Widget build(BuildContext context) {
     final topInset = MediaQuery.of(context).viewPadding.top + 20;
+
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -77,6 +100,10 @@ class ScreenLayout extends StatelessWidget {
           // Top Bar
           Container(
             width: double.infinity,
+            height:
+                authProvider.currentUser!.role == UserRoleEnum.admin.roleName
+                    ? null
+                    : 140,
             padding: EdgeInsets.only(top: topInset, bottom: 20),
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -90,7 +117,7 @@ class ScreenLayout extends StatelessWidget {
             ),
             child: Stack(
               children: [
-                if (showBackButton == true)
+                if (widget.showBackButton == true)
                   Positioned(
                     left: 10,
                     top: -5,
@@ -101,10 +128,11 @@ class ScreenLayout extends StatelessWidget {
                         color: ThemeColors.primary,
                         size: 20,
                       ),
-                      onPressed: onBack ?? () => Navigator.of(context).pop(),
+                      onPressed:
+                          widget.onBack ?? () => Navigator.of(context).pop(),
                     ),
                   ),
-                if (showLogout)
+                if (widget.showLogout)
                   Positioned(
                     right: 10,
                     top: -5,
@@ -123,7 +151,7 @@ class ScreenLayout extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        topBarText,
+                        widget.topBarText,
                         style: Theme.of(context).textTheme.bodyMediumPrimary,
                       ),
                       if (authProvider.currentUser?.role ==
@@ -162,24 +190,53 @@ class ScreenLayout extends StatelessWidget {
                             ],
                           ),
                         ),
+                      if (authProvider.currentUser?.role ==
+                          UserRoleEnum.user.roleName)
+                        Container(
+                          margin: const EdgeInsets.only(left: 10),
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 10),
+                              Text(
+                                '$instituteName\'s institute',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMediumTitleBrown
+                                    .copyWith(
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        ),
                     ],
                   ),
                 ),
-                if (icon != null)
+                if (widget.icon != null)
                   Positioned(
-                    top: 0,
+                    top: 15,
                     bottom: 0,
-                    right: 60,
-                    child: InkWell(
-                      onTap: onIconTap,
-                      child: icon!,
+                    left: 20,
+                    child: Column(
+                      children: [
+                        InkWell(
+                          onTap: widget.onIconTap,
+                          child: widget.icon!,
+                        ),
+                        Text(
+                          "Cart",
+                          style: Theme.of(context)
+                              .textTheme
+                              .displaySmallPrimarySemiBold,
+                        )
+                      ],
                     ),
                   ),
               ],
             ),
           ),
           // Main content area
-          Expanded(child: child),
+          Expanded(child: widget.child),
           // Bottom container
           // if (showBottomBar)
           //   Visibility(

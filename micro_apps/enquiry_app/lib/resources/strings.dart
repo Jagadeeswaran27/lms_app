@@ -144,4 +144,5 @@ class Strings {
   static const String anErrorOccurredPleaseTryAgainLater =
       'An error occurred. Please try again later';
   static const String submit = 'Submit';
+  static const String reOpen = 'Re Open';
 }

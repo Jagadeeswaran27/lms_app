@@ -4,30 +4,30 @@ import 'package:registration_app/themes/colors.dart';
 import 'package:registration_app/themes/fonts.dart';
 
 class FormInput extends StatelessWidget {
-  const FormInput({
-    super.key,
-    required this.text,
-    this.obscureText = false,
-    this.readOnly,
-    this.keyboardType,
-    this.onSaved,
-    this.borderColor,
-    this.validator,
-    this.controller,
-    this.onChanged,
-    this.onTap,
-    this.prefixIcon,
-    this.suffixIcon,
-    this.initialValue,
-    this.hintTextStyle,
-    this.hintText,
-    this.enabled,
-    this.fillColor,
-    this.borderWidth,
-    this.hasShadow = false,
-    this.hasOfferTag = false, // Property to control offer tag
-    this.offer = '10',
-  });
+  const FormInput(
+      {super.key,
+      required this.text,
+      this.obscureText = false,
+      this.readOnly,
+      this.keyboardType,
+      this.onSaved,
+      this.borderColor,
+      this.validator,
+      this.controller,
+      this.onChanged,
+      this.onTap,
+      this.prefixIcon,
+      this.suffixIcon,
+      this.initialValue,
+      this.hintTextStyle,
+      this.hintText,
+      this.enabled,
+      this.fillColor,
+      this.borderWidth,
+      this.hasShadow = false,
+      this.hasOfferTag = false, // Property to control offer tag
+      this.offer = '10',
+      this.autofillHints});
 
   final String text;
   final bool? obscureText;
@@ -50,6 +50,7 @@ class FormInput extends StatelessWidget {
   final bool hasShadow;
   final bool hasOfferTag; // Property to control offer tag
   final String offer;
+  final Iterable<String>? autofillHints;
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +70,7 @@ class FormInput extends StatelessWidget {
             )
           : null,
       child: TextFormField(
+        autofillHints: autofillHints,
         keyboardType: keyboardType,
         initialValue: initialValue,
         obscureText: obscureText ?? false,

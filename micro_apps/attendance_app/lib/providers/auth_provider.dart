@@ -107,6 +107,20 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  Future<String> getInstituteName(String accessCode) async {
+    try {
+      final instituteRef =
+          FirebaseFirestore.instance.collection('institutes').doc(accessCode);
+
+      final docSnapshot = await instituteRef.get();
+
+      final data = docSnapshot.data();
+      return data!['instituteName'];
+    } catch (e) {
+      return "";
+    }
+  }
+
   Future<AuthModel> signIn(String email, String password) async {
     try {
       final userCredential =

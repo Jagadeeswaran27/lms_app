@@ -1,6 +1,5 @@
 import 'package:enquiry_app/core/services/enquiry/admin_enquiry_service.dart';
 import 'package:enquiry_app/core/services/enquiry/admin_messages_service.dart';
-import 'package:enquiry_app/utils/error/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:enquiry_app/models/enquiry/enquiry_model.dart';
 import 'package:enquiry_app/models/enquiry/message_model.dart';
@@ -26,25 +25,6 @@ class _ReceptionEnquiryDetailContainerState
   bool _isLoading = false;
   List<MessageModel> messages = [];
   final AdminEnquiryService enquiryService = AdminEnquiryService();
-
-  void onResolveEnquiry() async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    setState(() {
-      _isLoading = true;
-    });
-    final status = await enquiryService.resolveEnquiry(
-        widget.enquiry.enquiryId, authProvider.currentUser!.institute[0]);
-    setState(() {
-      _isLoading = false;
-    });
-
-    if (status) {
-      showSnackbar(context, 'Enquiry resolved successfully');
-      Navigator.of(context).pop();
-    } else {
-      showSnackbar(context, 'Failed to resolve enquiry');
-    }
-  }
 
   Future<void> fetchMessages() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -102,7 +82,6 @@ class _ReceptionEnquiryDetailContainerState
             child: ReceptionEnquiryDetailWidget(
               enquiry: widget.enquiry,
               isLoading: _isLoading,
-              onResolveEnquiry: onResolveEnquiry,
               messages: messages,
               onSendMessage: sendMessage,
             ),
