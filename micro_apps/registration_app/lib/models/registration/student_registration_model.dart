@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class StudentRegistrationModel {
   final String courseName;
   final String courseId;
@@ -12,6 +14,7 @@ class StudentRegistrationModel {
   final String email;
   final String userName;
   final String mobileNumber;
+  final Timestamp? registrationTime;
 
   StudentRegistrationModel({
     required this.courseName,
@@ -27,6 +30,7 @@ class StudentRegistrationModel {
     required this.email,
     required this.userName,
     required this.mobileNumber,
+    this.registrationTime,
   });
 
   factory StudentRegistrationModel.fromJson(Map<String, dynamic> json) {
@@ -44,6 +48,9 @@ class StudentRegistrationModel {
       email: json['email'] as String,
       userName: json['userName'] as String,
       mobileNumber: json['mobileNumber'] as String,
+      registrationTime: json['registrationTime'] != null
+          ? (json['registrationTime'] as Timestamp)
+          : null,
     );
   }
 
@@ -62,6 +69,7 @@ class StudentRegistrationModel {
       'email': email,
       'userName': userName,
       'mobileNumber': mobileNumber,
+      'registrationTime': registrationTime,
     };
   }
 

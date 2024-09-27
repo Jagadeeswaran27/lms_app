@@ -30,8 +30,12 @@ class _MyCoursesContainerState extends State<MyCoursesContainer> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     String userId = authProvider.currentUser!.uid;
     String instituteId = authProvider.selectedinstituteCode;
-    List<CourseModel> fetchedCourses =
-        await attendanceService.getCourses(userId, instituteId);
+    String roleType = authProvider.currentUser!.roleType;
+    List<CourseModel> fetchedCourses = await attendanceService.getCourses(
+      userId,
+      instituteId,
+      roleType,
+    );
     setState(() {
       isLoading = false;
       myCourses = fetchedCourses;

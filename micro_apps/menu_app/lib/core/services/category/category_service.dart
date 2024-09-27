@@ -22,7 +22,11 @@ class CategoryService {
 
   /// Add a category and return the updated list of categories
   Future<List<CategoryModel>> addCategory(
-      String categoryName, String categoryTitle, File icon) async {
+    String categoryName,
+    String categoryTitle,
+    File icon,
+    String accessId,
+  ) async {
     try {
       // Upload icon to Firebase Storage and get the download URL
       final String iconUrl = await _storageService.uploadFile(
@@ -40,15 +44,20 @@ class CategoryService {
 
       // Add category to Firestore with categoryName as the document ID
       await _firestore
+          .collection('institutes')
+          .doc(accessId)
           .collection('categories')
-          .doc(categoryName)
+          .doc()
           .set(category.toJson());
 
       log.i('Category $categoryName added successfully.');
 
       // Fetch the updated list of categories from Firestore
-      final QuerySnapshot snapshot =
-          await _firestore.collection('categories').get();
+      final QuerySnapshot snapshot = await _firestore
+          .collection('institutes')
+          .doc(accessId)
+          .collection('categories')
+          .get();
       final List<CategoryModel> categories = snapshot.docs
           .map((doc) =>
               CategoryModel.fromJson(doc.data() as Map<String, dynamic>))
@@ -61,17 +70,21 @@ class CategoryService {
     }
   }
 
-  Future<List<CategoryModel>> getCategories() async {
+  Future<List<CategoryModel>> getCategories(String accessId) async {
     try {
       // Fetch all documents from the 'categories' collection
-      final QuerySnapshot snapshot =
-          await _firestore.collection('categories').get();
+      final QuerySnapshot snapshot = await _firestore
+          .collection('institutes')
+          .doc(accessId)
+          .collection('categories')
+          .get();
 
       // Convert the documents to a list of CategoryModel instances
       final List<CategoryModel> categories = snapshot.docs
           .map((doc) =>
               CategoryModel.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
+      print(categories);
 
       log.i('Fetched ${categories.length} categories.');
       return categories;

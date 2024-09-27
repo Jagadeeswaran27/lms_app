@@ -30,11 +30,13 @@ class _ItemCategoryContainerState extends State<ItemCategoryContainer> {
   }
 
   void fetchCategories() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     try {
       setState(() {
         isLoading = true;
       });
-      categories = await categoryService.getCategories();
+      categories = await categoryService
+          .getCategories(authProvider.currentUser!.institute[0]);
       setState(() {
         isLoading = false;
       });
@@ -68,11 +70,17 @@ class _ItemCategoryContainerState extends State<ItemCategoryContainer> {
     String categoryTitle,
     File icon,
   ) async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     setState(() {
       isLoading = true;
     });
     final List<CategoryModel> updatedCategories =
-        await categoryService.addCategory(categoryName, categoryTitle, icon);
+        await categoryService.addCategory(
+      categoryName,
+      categoryTitle,
+      icon,
+      authProvider.currentUser!.institute[0],
+    );
     if (updatedCategories.isNotEmpty) {
       setState(() {
         categories = updatedCategories;

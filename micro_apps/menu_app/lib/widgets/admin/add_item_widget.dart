@@ -129,7 +129,8 @@ class AddItemWidgetState extends State<AddItemWidget> {
         'batchDay': widget.subCategory == 'courses' ? _selectedDays : null,
         'batchTime': widget.subCategory == 'courses' ? _batchTime : null,
         'amount': _amountDetails,
-        'totalHours': int.parse(_totalHours),
+        'totalHours':
+            _totalHours.trim().isNotEmpty ? int.parse(_totalHours) : null,
         'customDays': _selectedDays.contains('Custom') ? _customDays : null,
         'customTime': _batchTime.contains('Custom') ? _customTime : null,
       };

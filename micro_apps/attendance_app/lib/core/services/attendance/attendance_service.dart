@@ -20,7 +20,10 @@ class AttendanceService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<List<CourseModel>> getCourses(
-      String userId, String instituteId) async {
+    String userId,
+    String instituteId,
+    String roleType,
+  ) async {
     try {
       // Fetch the user document
       DocumentSnapshot userSnapshot =
@@ -47,28 +50,61 @@ class AttendanceService {
               Map<String, dynamic> courseData;
 
               // Fetch the number of registrations
-              QuerySnapshot registrationSnapshot = await _firestore
+              QuerySnapshot studentsRegistrationSnapshot = await _firestore
                   .collection('institutes')
                   .doc(instituteId)
                   .collection('students-registrations')
                   .where('courseId', isEqualTo: courseId)
-                  .where('status', isEqualTo: "Approved")
                   .get();
 
-              if (registrationSnapshot.size > 0) {
+              QuerySnapshot teachersRegistrationSnapshot = await _firestore
+                  .collection('institutes')
+                  .doc(instituteId)
+                  .collection('teachers-registrations')
+                  .where('courseId', isEqualTo: courseId)
+                  .get();
+
+              bool hasApproval = false;
+
+              // Check approval status based on role type
+              if (roleType == "Student") {
+                hasApproval = studentsRegistrationSnapshot.docs.any((doc) {
+                  return doc['registeredBy'] == userId &&
+                      doc['status'] == "Approved";
+                });
+              } else if (roleType == "Teacher") {
+                hasApproval = teachersRegistrationSnapshot.docs.any((doc) {
+                  return doc['registeredBy'] == userId &&
+                      doc['status'] == "Approved";
+                });
+              }
+
+              if (hasApproval) {
                 courseData = courseSnapshot.data() as Map<String, dynamic>;
-                int noOfRegistrations = registrationSnapshot.size;
+                int noOfRegistrations = studentsRegistrationSnapshot.size;
+                int noOfTeachersRegistrations =
+                    teachersRegistrationSnapshot.size;
 
                 // Extract user names from the registrations
                 List<Map<String, String>> userNames =
-                    registrationSnapshot.docs.map((registrationDoc) {
+                    studentsRegistrationSnapshot.docs.map((registrationDoc) {
                   String studentId = registrationDoc['registeredBy'] as String;
                   String studentName = registrationDoc['userName'] as String;
                   return {studentId: studentName};
                 }).toList();
 
+                List<Map<String, String>> teacherNames =
+                    teachersRegistrationSnapshot.docs.map((registrationDoc) {
+                  String teacherId = registrationDoc['registeredBy'] as String;
+                  String teacherName = registrationDoc['userName'] as String;
+                  return {teacherId: teacherName};
+                }).toList();
+
                 courseData['noOfRegistrations'] = noOfRegistrations;
+                courseData['noOfTeachersRegistrations'] =
+                    noOfTeachersRegistrations;
                 courseData['students'] = userNames;
+                courseData['teachers'] = teacherNames;
 
                 // Convert to CourseModel and add to list
                 courses.add(CourseModel.fromJson(courseData));
@@ -91,6 +127,7 @@ class AttendanceService {
 
   Future<bool> markAttendance(
     Map<String, bool> attendanceStatus,
+    Map<String, bool> teachersAttendanceStatus,
     String courseId,
     String date,
   ) async {
@@ -111,6 +148,28 @@ class AttendanceService {
         DocumentReference attendanceDocRef = firestore
             .collection('lms-users')
             .doc(studentId)
+            .collection('courses')
+            .doc(courseId)
+            .collection('attendance')
+            .doc(date);
+
+        // Add or update the document with the attendance data
+        await attendanceDocRef.set(attendanceData);
+      }
+      for (var entry in teachersAttendanceStatus.entries) {
+        String teacherId = entry.key;
+        bool status = entry.value;
+
+        // Create an instance of AttendanceModel
+        AttendanceModel attendanceModel = AttendanceModel(status: status);
+
+        // Convert the model to a map
+        Map<String, dynamic> attendanceData = attendanceModel.toJson();
+
+        // Define the path to the document
+        DocumentReference attendanceDocRef = firestore
+            .collection('lms-users')
+            .doc(teacherId)
             .collection('courses')
             .doc(courseId)
             .collection('attendance')
@@ -160,6 +219,49 @@ class AttendanceService {
         } else {
           // If no attendance record exists for this date, assume false (absent)
           attendanceMap[studentId] = false;
+        }
+      }
+
+      return attendanceMap;
+    } catch (e) {
+      print(e);
+      return {};
+    }
+  }
+
+  Future<Map<String, bool>> getTeachersAttendance(
+    String courseId,
+    String date,
+    Map<String, bool> attendanceStatus,
+  ) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    try {
+      // Create a map to hold student IDs and their attendance status
+      Map<String, bool> attendanceMap = {};
+
+      // Iterate through the student IDs in attendanceStatus map
+      for (var teacherId in attendanceStatus.keys) {
+        // Fetch the attendance document for the given courseId and date
+        DocumentSnapshot attendanceDoc = await firestore
+            .collection('lms-users')
+            .doc(teacherId)
+            .collection('courses')
+            .doc(courseId)
+            .collection('attendance')
+            .doc(date)
+            .get();
+
+        if (attendanceDoc.exists) {
+          // Convert the document data to AttendanceModel
+          AttendanceModel attendanceModel = AttendanceModel.fromJson(
+            attendanceDoc.data() as Map<String, dynamic>,
+          );
+
+          // Add to the map
+          attendanceMap[teacherId] = attendanceModel.status;
+        } else {
+          // If no attendance record exists for this date, assume false (absent)
+          attendanceMap[teacherId] = false;
         }
       }
 

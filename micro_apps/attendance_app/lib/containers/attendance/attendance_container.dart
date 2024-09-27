@@ -20,6 +20,7 @@ class AttendanceContainer extends StatefulWidget {
 class _ItemDetailContainerState extends State<AttendanceContainer> {
   AttendanceService attendanceService = AttendanceService();
   Map<String, bool> studentsAttendanceStatus = {};
+  Map<String, bool> teachersAttendanceStatus = {};
   bool isLoading = false;
   String _date = DateFormat('ddMMyyyy').format(DateTime.now());
   String _displayFormatDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
@@ -38,15 +39,24 @@ class _ItemDetailContainerState extends State<AttendanceContainer> {
     Map<String, bool> attendanceStatus = {
       for (var student in widget.course.students!) student.keys.first: false,
     };
+    Map<String, bool> teachersAttendanceStatus = {
+      for (var teacher in widget.course.teachers!) teacher.keys.first: false,
+    };
     studentsAttendanceStatus = await attendanceService.getAttendance(
       widget.course.courseId,
       date,
       attendanceStatus,
     );
+    teachersAttendanceStatus = await attendanceService.getTeachersAttendance(
+      widget.course.courseId,
+      date,
+      teachersAttendanceStatus,
+    );
     setState(() {
       _date = date;
       isLoading = false;
       _displayFormatDate = displayFormatDate;
+      this.teachersAttendanceStatus = teachersAttendanceStatus;
     });
   }
 
@@ -57,6 +67,7 @@ class _ItemDetailContainerState extends State<AttendanceContainer> {
             child: CircularProgressIndicator(),
           )
         : AttendanceWidget(
+            teachersAttendanceStatus: teachersAttendanceStatus,
             displayFormatDate: _displayFormatDate,
             course: widget.course,
             studentsAttendanceStatus: studentsAttendanceStatus,

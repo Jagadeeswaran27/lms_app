@@ -34,7 +34,7 @@ class CourseDetailWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CourseDetailCard(course: course),
+            CourseDetailCard(subCategory: subCategory, course: course),
             const SizedBox(height: 20),
             Text(
               Strings.aboutDescription,

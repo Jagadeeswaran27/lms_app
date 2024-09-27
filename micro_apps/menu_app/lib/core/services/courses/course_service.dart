@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:menu_app/core/services/firebase/firebase_storage_service.dart';
 import 'package:menu_app/models/courses/course_model.dart';
+import 'package:menu_app/models/courses/item_model.dart';
 import 'package:menu_app/utils/logger/logger.dart';
 
 class CourseService {
@@ -79,10 +80,40 @@ class CourseService {
       WriteBatch batch = _firestore.batch();
 
       for (String itemTitle in itemTitles) {
+        print('...................................');
+        print(itemTitle);
         List batchDays = formData['batchDay'] ?? [];
         List batchTimes = formData['batchTime'] ?? [];
         int index = itemTitles.indexOf(itemTitle);
 
+//Todo:If no batch days and batch times then different logic
+        if (subCategory != 'courses') {
+          final itemId = _firestore
+              .collection('institutes')
+              .doc(accessCode)
+              .collection(subCategory)
+              .doc()
+              .id;
+
+          ItemModel newItem = ItemModel(
+            courseId: itemId,
+            courseTitle: itemTitle,
+            imageUrl: imageUrls[index],
+            shortDescription: formData['shortDescription'],
+            aboutDescription: formData['aboutDescription'],
+            amount: double.parse(formData['amount']),
+          );
+
+          await _firestore
+              .collection('institutes')
+              .doc(accessCode)
+              .collection(subCategory)
+              .doc(itemId)
+              .set(
+                newItem.toJson(),
+              );
+          lastAddedItemId = itemId;
+        }
         for (String day in batchDays) {
           for (String time in batchTimes) {
             final itemId = _firestore
@@ -91,7 +122,6 @@ class CourseService {
                 .collection(subCategory)
                 .doc()
                 .id;
-
             CourseModel newCourse = CourseModel(
               courseId: itemId,
               courseTitle: itemTitle,

@@ -11,10 +11,12 @@ class AttendanceChangesWidget extends StatefulWidget {
     super.key,
     required this.attendances,
     required this.onUpdateAttendance,
+    required this.isLoading,
   });
 
   final List<DisplayAttendanceModel> attendances;
   final void Function(List<DisplayAttendanceModel>) onUpdateAttendance;
+  final bool isLoading;
 
   @override
   State<AttendanceChangesWidget> createState() =>
@@ -127,6 +129,7 @@ class _AttendanceChangesWidgetState extends State<AttendanceChangesWidget> {
               width: screenSize.width * 0.5,
               height: 50,
               child: IconTextButton(
+                isLoading: widget.isLoading,
                 iconHorizontalPadding: 5,
                 radius: 20,
                 text: "Submit",

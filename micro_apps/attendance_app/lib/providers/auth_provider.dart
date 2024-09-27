@@ -61,6 +61,7 @@ class AuthProvider with ChangeNotifier {
           institute: loggedUser.institute,
           profileUrl: user.photoURL,
           state: loggedUser.state,
+          roleType: loggedUser.roleType,
           city: loggedUser.city,
           address: loggedUser.address,
         );
@@ -141,6 +142,7 @@ class AuthProvider with ChangeNotifier {
           institute: loggedUser.institute,
           state: loggedUser.state,
           city: loggedUser.city,
+          roleType: loggedUser.roleType,
           profileUrl: userCredential.user!.photoURL,
         );
         if (loggedUser.uid != '') {
@@ -203,6 +205,7 @@ class AuthProvider with ChangeNotifier {
           address: loggedUser.address,
           institute: loggedUser.institute,
           state: loggedUser.state,
+          roleType: loggedUser.roleType,
           city: loggedUser.city,
           profileUrl: url,
         );
@@ -243,6 +246,7 @@ class AuthProvider with ChangeNotifier {
           address: currentUser!.address,
           state: currentUser!.state,
           city: currentUser!.city,
+          roleType: currentUser!.roleType,
           institute: [instituteCode, ...currentUser!.institute],
           profileUrl: user!.photoURL,
         );
@@ -285,6 +289,7 @@ class AuthProvider with ChangeNotifier {
           institute: loggedUser.institute,
           state: loggedUser.state,
           city: loggedUser.city,
+          roleType: loggedUser.roleType,
           profileUrl: user.photoURL,
         );
         _user = user;

@@ -5,10 +5,16 @@ import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
 
 class CourseCard extends StatelessWidget {
-  const CourseCard({super.key, required this.onPressed, required this.course});
+  const CourseCard({
+    super.key,
+    required this.onPressed,
+    required this.course,
+    required this.subCategory,
+  });
 
   final Function() onPressed;
   final CourseModel course;
+  final String subCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -73,41 +79,65 @@ class CourseCard extends StatelessWidget {
                             .copyWith(fontSize: 18),
                       ),
                       const SizedBox(height: 8.0),
-                      Wrap(
-                        children: [
-                          Text(
-                            "Day : ",
-                            style: Theme.of(context)
-                                .textTheme
-                                .displayMediumPrimary,
-                          ),
-                          Text(
-                            dayString,
-                            style: Theme.of(context)
-                                .textTheme
-                                .displaySmall!
-                                .copyWith(fontSize: 12),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10.0),
-                      Row(
-                        children: [
-                          Text(
-                            "Time : ",
-                            style: Theme.of(context)
-                                .textTheme
-                                .displayMediumPrimary,
-                          ),
-                          Text(
-                            timeString,
-                            style: Theme.of(context)
-                                .textTheme
-                                .displaySmall!
-                                .copyWith(fontSize: 12),
-                          ),
-                        ],
-                      ),
+                      if (subCategory == 'courses')
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                Wrap(
+                                  children: [
+                                    Text(
+                                      "Day : ",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .displayMediumPrimary,
+                                    ),
+                                    Text(
+                                      dayString,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .displaySmall!
+                                          .copyWith(fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10.0),
+                            Row(
+                              children: [
+                                Text(
+                                  "Time : ",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displayMediumPrimary,
+                                ),
+                                Text(
+                                  timeString,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displaySmall!
+                                      .copyWith(fontSize: 12),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      if (subCategory != 'courses')
+                        Column(
+                          children: [
+                            Wrap(
+                              children: [
+                                Text(
+                                  course.shortDescription,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displayMediumPrimary,
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
                       const SizedBox(height: 10.0),
                       Text(
                         'Rs.${course.amount.toString()}',
