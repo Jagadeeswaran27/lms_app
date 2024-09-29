@@ -12,6 +12,7 @@ class UserModel {
   final List<String> registeredCourses;
   final String roleType;
   final bool? isFaceRecognized;
+  final bool? isSomeone;
 
   UserModel(
       {required this.uid,
@@ -20,6 +21,7 @@ class UserModel {
       required this.role,
       required this.phone,
       required this.institute,
+      this.isSomeone,
       this.profileUrl,
       this.address,
       this.state,
@@ -43,6 +45,7 @@ class UserModel {
       registeredCourses: List<String>.from(data['registeredCourses'] ?? []),
       roleType: data['roleType'] ?? '',
       isFaceRecognized: data['isFaceRecognized'] ?? false,
+      isSomeone: data['isSomeone'] ?? false,
     );
   }
 
@@ -61,6 +64,7 @@ class UserModel {
       registeredCourses: [],
       roleType: '',
       isFaceRecognized: false,
+      isSomeone: false,
     );
   }
 

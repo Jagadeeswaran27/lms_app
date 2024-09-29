@@ -25,9 +25,15 @@ class _StudentEnrollmentContainerState
     extends State<StudentEnrollmentContainer> {
   void checkFaceRecognition() {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    if (!authProvider.currentUser!.isFaceRecognized!) {
+    if (!authProvider.currentUser!.isFaceRecognized! &&
+        !authProvider.currentUser!.isSomeone!) {
       Navigator.of(context)
           .pushNamed(StudentRoutes.faceRecognition, arguments: null);
+    } else {
+      Navigator.of(context).pushNamedAndRemoveUntil(
+        StudentRoutes.itemList,
+        (Route<dynamic> route) => false,
+      );
     }
   }
 

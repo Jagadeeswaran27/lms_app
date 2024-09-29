@@ -13,12 +13,12 @@ class KidEnrollmentWidget extends StatelessWidget {
     super.key,
     required this.registrationIds,
     required this.courses,
-    required this.onProceedToPayment,
+    required this.logout,
   });
 
   final List<String> registrationIds;
   final List<CourseModel> courses;
-  final void Function() onProceedToPayment;
+  final void Function()? logout;
 
   @override
   Widget build(BuildContext context) {
@@ -71,30 +71,26 @@ class KidEnrollmentWidget extends StatelessWidget {
             child: ListView(
               shrinkWrap: true,
               children: [
-                ...courses
-                    .map((course) => CartCard(
-                          imageUrl: course.imageUrl,
-                          title: course.courseTitle,
-                          amount: course.amount.toString(),
-                          description: course.aboutDescription,
-                          discount: 10,
-                        ))
-                    .toList(),
+                ...courses.map(
+                  (course) => CartCard(
+                    imageUrl: course.imageUrl,
+                    title: course.courseTitle,
+                    amount: course.amount.toString(),
+                    description: course.aboutDescription,
+                    discount: 10,
+                  ),
+                ),
                 const SizedBox(height: 20),
-                // Row(
-                //   children: [
-                //     Text(
-                //       "Total Amount : ",
-                //       style: Theme.of(context)
-                //           .textTheme
-                //           .bodyMediumTitleBrownSemiBold,
-                //     ),
-                //     Text(
-                //       "Rs 30000",
-                //       style: Theme.of(context).textTheme.bodyMediumPrimary,
-                //     ),
-                //   ],
-                // ),
+                Wrap(
+                  children: [
+                    Text(
+                      Strings.anEmailVerificationLinkSent,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMediumTitleBrownSemiBold,
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 20),
                 Align(
                   alignment: Alignment.center,
@@ -104,8 +100,8 @@ class KidEnrollmentWidget extends StatelessWidget {
                     child: IconTextButton(
                       iconHorizontalPadding: 7,
                       radius: 20,
-                      text: Strings.proceedToPayment,
-                      onPressed: onProceedToPayment,
+                      text: Strings.logout,
+                      onPressed: logout,
                       color: ThemeColors.primary,
                       buttonTextStyle: Theme.of(context).textTheme.bodyMedium,
                       svgIcon: icons.Icons.cartIconSvg,

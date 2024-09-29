@@ -1,11 +1,10 @@
-import 'package:location_app/utils/error/show_snackbar.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+
+import 'package:location_app/screens/common/settings_screen.dart';
+import 'package:location_app/utils/error/show_snackbar.dart';
 import 'package:location_app/constants/enums/user_role_enum.dart';
 import 'package:location_app/providers/auth_provider.dart';
-import 'package:location_app/resources/strings.dart';
-import 'package:location_app/screens/auth/welcome_screen.dart';
-
 import 'package:location_app/themes/colors.dart';
 import 'package:location_app/themes/fonts.dart';
 import 'package:location_app/widgets/common/svg_lodder.dart';
@@ -49,21 +48,6 @@ class _ScreenLayoutState extends State<ScreenLayout> {
   void initState() {
     super.initState();
     handleGetInstitute();
-  }
-
-  void logout(BuildContext context) async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final response = await authProvider.signOut();
-    if (response) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (context) => const WelcomeScreen(),
-        ),
-        (Route<dynamic> route) => false,
-      );
-    } else {
-      showSnackbar(context, Strings.errorLoggingOut);
-    }
   }
 
   void onCopy(BuildContext context) async {
@@ -135,11 +119,17 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                     bottom: 0,
                     child: IconButton(
                       icon: Icon(
-                        Icons.logout_outlined,
+                        Icons.menu,
                         color: ThemeColors.primary,
-                        size: 20,
+                        size: 30,
                       ),
-                      onPressed: () => logout(context),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) => const SettingsScreen(),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 Align(

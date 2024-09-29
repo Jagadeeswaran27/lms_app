@@ -1,11 +1,10 @@
-import 'package:attendance_app/screens/common/welcome_screen.dart';
-import 'package:attendance_app/utils/error/show_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:attendance_app/screens/common/settings_screen.dart';
+import 'package:attendance_app/utils/error/show_snackbar.dart';
 import 'package:attendance_app/constants/enums/user_role_enum.dart';
 import 'package:attendance_app/providers/auth_provider.dart';
-import 'package:attendance_app/resources/strings.dart';
-
 import 'package:attendance_app/themes/colors.dart';
 import 'package:attendance_app/themes/fonts.dart';
 import 'package:attendance_app/widgets/common/svg_lodder.dart';
@@ -51,21 +50,6 @@ class _ScreenLayoutState extends State<AttendanceLayout> {
   void initState() {
     super.initState();
     handleGetInstitute();
-  }
-
-  void logout(BuildContext context) async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    final response = await authProvider.signOut();
-    if (response) {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (context) => const WelcomeScreen(),
-        ),
-        (Route<dynamic> route) => false,
-      );
-    } else {
-      showSnackbar(context, Strings.errorLoggingOut);
-    }
   }
 
   void onCopy(BuildContext context) async {
@@ -137,11 +121,17 @@ class _ScreenLayoutState extends State<AttendanceLayout> {
                     bottom: 0,
                     child: IconButton(
                       icon: Icon(
-                        Icons.logout_outlined,
+                        Icons.menu,
                         color: ThemeColors.primary,
-                        size: 20,
+                        size: 30,
                       ),
-                      onPressed: () => logout(context),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) => const SettingsScreen(),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 Align(
@@ -190,7 +180,8 @@ class _ScreenLayoutState extends State<AttendanceLayout> {
                         ),
                       if (authProvider.currentUser?.role ==
                               UserRoleEnum.user.roleName &&
-                          widget.showInstituteName)
+                          widget.showInstituteName &&
+                          instituteName.trim().isNotEmpty)
                         Container(
                           margin: const EdgeInsets.only(left: 10),
                           child: Column(

@@ -94,6 +94,13 @@ class FormInput extends StatelessWidget {
               width: borderWidth ?? 1,
             ),
           ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(50.0),
+            borderSide: BorderSide(
+              color: borderColor ?? ThemeColors.primary,
+              width: borderWidth ?? 2,
+            ),
+          ),
           prefixIcon: prefixIcon,
           suffixIcon: Padding(
             padding: const EdgeInsets.only(right: 8.0),

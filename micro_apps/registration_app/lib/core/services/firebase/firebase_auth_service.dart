@@ -256,14 +256,23 @@ class FirebaseAuthService {
   }
 
   Future<String> createLMSUser(
-      String uid, String name, String email, String role, String phone) async {
+    String uid,
+    String name,
+    String email,
+    String role,
+    String phone,
+    String roleType,
+  ) async {
     try {
+      final bool isSomeone = roleType == 'Student';
       await _firestore.collection('lms-users').doc(uid).set({
         'uid': uid,
         'name': name,
         'email': email,
         'role': role,
         'phone': phone,
+        'roleType': roleType,
+        'isSomeone': isSomeone,
       });
       return uid;
     } catch (e) {

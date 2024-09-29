@@ -4,6 +4,7 @@ import 'package:registration_app/constants/enums/user_role_enum.dart';
 import 'package:registration_app/providers/auth_provider.dart';
 import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/screens/auth/welcome_screen.dart';
+import 'package:registration_app/screens/common/settings_screen.dart';
 
 import 'package:registration_app/themes/colors.dart';
 import 'package:registration_app/themes/fonts.dart';
@@ -25,6 +26,7 @@ class ScreenLayout extends StatefulWidget {
     this.showAccessCode,
     this.onBack,
     this.showLogout = true,
+    this.showInstituteName = true,
   });
 
   final Widget child;
@@ -37,6 +39,7 @@ class ScreenLayout extends StatefulWidget {
   final bool? showAccessCode;
   final void Function()? onBack;
   final bool showLogout;
+  final bool showInstituteName;
 
   @override
   State<ScreenLayout> createState() => _ScreenLayoutState();
@@ -49,6 +52,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
   void initState() {
     super.initState();
     handleGetInstitute();
+    print(widget.showInstituteName);
   }
 
   void logout(BuildContext context) async {
@@ -103,7 +107,9 @@ class _ScreenLayoutState extends State<ScreenLayout> {
             height:
                 authProvider.currentUser!.role == UserRoleEnum.admin.roleName
                     ? null
-                    : 150,
+                    : !widget.showInstituteName
+                        ? 110
+                        : 150,
             padding: EdgeInsets.only(top: topInset, bottom: 20),
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -139,11 +145,17 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                     bottom: 0,
                     child: IconButton(
                       icon: Icon(
-                        Icons.logout_outlined,
+                        Icons.menu,
                         color: ThemeColors.primary,
-                        size: 20,
+                        size: 30,
                       ),
-                      onPressed: () => logout(context),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (ctx) => const SettingsScreen(),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 Align(
@@ -191,7 +203,8 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                           ),
                         ),
                       if (authProvider.currentUser?.role ==
-                          UserRoleEnum.user.roleName)
+                              UserRoleEnum.user.roleName &&
+                          widget.showInstituteName)
                         Container(
                           margin: const EdgeInsets.only(left: 10),
                           child: Column(

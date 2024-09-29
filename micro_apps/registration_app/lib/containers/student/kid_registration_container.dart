@@ -1,6 +1,7 @@
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:registration_app/core/services/firebase/firebase_auth_service.dart';
 import 'package:registration_app/core/services/registration/registration_service.dart';
 import 'package:registration_app/models/registration/course_model.dart';
 import 'package:registration_app/providers/auth_provider.dart';
@@ -35,6 +36,20 @@ class _KidRegistrationContainerState extends State<KidRegistrationContainer> {
   bool _isLoading = false;
   String uid = '';
 
+  // Future<void> sendKidEmailVerification(String email) async {
+  //   final HttpsCallable callable =
+  //       FirebaseFunctions.instance.httpsCallable('sendKidEmailVerification');
+  //   try {
+  //     final result = await callable.call(<String, dynamic>{
+  //       'email': email,
+  //     });
+
+  //     print('Email verification link sent: ${result.data}');
+  //   } catch (e) {
+  //     print('Error sending email verification: $e');
+  //   }
+  // }
+
   void registerKid(
     String userName,
     String userEmail,
@@ -50,6 +65,13 @@ class _KidRegistrationContainerState extends State<KidRegistrationContainer> {
     final isEmailAlreadyRegistered =
         await authProvider.isEmailAlreadyRegistered(userEmail);
     try {
+      if (isEmailAlreadyRegistered) {
+        showSnackbar(context, "Account already registered");
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
       if (!isEmailAlreadyRegistered) {
         final HttpsCallable callable =
             FirebaseFunctions.instance.httpsCallable('createUser');
@@ -59,14 +81,26 @@ class _KidRegistrationContainerState extends State<KidRegistrationContainer> {
         });
         uid = result.data['uid'];
         await authProvider.createLMSUser(
-            uid, userName, userEmail, 'student', phone);
+          uid,
+          userName,
+          userEmail,
+          'User',
+          phone,
+          'Student',
+        );
+        final userCredential =
+            await FirebaseAuthService().signInWithEmailAndPassword(
+          userEmail,
+          userPassword,
+        );
+        await userCredential.user!.sendEmailVerification();
       }
 
       final registrationIds = await registrationService.registerKid(
         courses: widget.courses,
         selectedBatchDay: widget.batchDay,
         selectedBatchTime: widget.batchTime,
-        registeredBy: userEmail,
+        registeredBy: uid,
         userName: userName,
         mobileNumber: phone,
         registeredFor: 'Kid',
@@ -89,11 +123,9 @@ class _KidRegistrationContainerState extends State<KidRegistrationContainer> {
         showSnackbar(context, 'Error registering courses for kid');
       }
     } catch (err) {
-      print('Error type: ${err.runtimeType}');
       print('Error details: $err');
       if (err is FirebaseFunctionsException) {
         print('Firebase Functions Error: ${err.code} - ${err.message}');
-        print('Error details: ${err.details}');
       }
       showSnackbar(
           context, 'Error registering courses for kid: ${err.toString()}');
@@ -107,8 +139,6 @@ class _KidRegistrationContainerState extends State<KidRegistrationContainer> {
   @override
   Widget build(BuildContext context) {
     return KidRegistrationWidget(
-      email: widget.email,
-      userName: widget.userName,
       mobileNumber: widget.mobileNumber,
       isLoading: _isLoading,
       registerKid: registerKid,

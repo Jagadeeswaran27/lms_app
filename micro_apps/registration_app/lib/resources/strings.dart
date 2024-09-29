@@ -10,6 +10,8 @@ class Strings {
   static const String homeText = 'Your Comfort,\nAt Your Home';
   static const signIn = "Sign In";
   static const String register = 'Register';
+  static const String anEmailVerificationLinkSent =
+      "An email verification link sent to registered email. Please verify and login from registered email to purchase more courses.";
   static const String enterSignInDetails =
       'Enter your user name and password to login!';
   static const String enterYourEmailOrPhoneNo = 'Enter your email / Phone no';
@@ -48,6 +50,7 @@ class Strings {
   static const String invalidMobileNumber = 'Invalid mobile number';
   static const String pleaseSelectRole = 'Please select a role';
   static const String errorLoggingOut = 'Error logging out';
+  static const String logout = 'Logout';
 
   //app related
   static const String attendance = 'Attendance';
@@ -142,4 +145,7 @@ class Strings {
   static const String anErrorOccurredPleaseTryAgainLater =
       'An error occurred. Please try again later';
   static const String submit = 'Submit';
+  static const String settings = 'Settings';
+  static const String instituteName = 'Institute Name : ';
+  static const String userNameSettings = 'User Name : ';
 }

@@ -9,31 +9,29 @@ import 'package:registration_app/providers/auth_provider.dart';
 import 'package:registration_app/routes/student_routes.dart';
 import 'package:registration_app/widgets/student/face_recognition_screen_widget.dart';
 
-class FaceRecignitionScreenContainer extends StatefulWidget {
-  const FaceRecignitionScreenContainer({
+class SomeoneFaceRecognitionContainer extends StatefulWidget {
+  const SomeoneFaceRecognitionContainer({
     super.key,
-    required this.kidUid,
   });
-  final String? kidUid;
   @override
-  State<FaceRecignitionScreenContainer> createState() =>
+  State<SomeoneFaceRecognitionContainer> createState() =>
       _FaceRecignitionScreenContainerState();
 }
 
 class _FaceRecignitionScreenContainerState
-    extends State<FaceRecignitionScreenContainer> {
+    extends State<SomeoneFaceRecognitionContainer> {
   bool _isLoading = false;
   FaceRecognitionFirebaseService faceRecignitionFirebaseService =
       FaceRecognitionFirebaseService();
 
   Future<void> onSaveFaceRecognition(List<File?> images) async {
-    // setState(() {
-    //   _isLoading = true;
-    // });
+    setState(() {
+      _isLoading = true;
+    });
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final bool response = await saveFaceRecognition(
       images,
-      widget.kidUid ?? authProvider.currentUser!.uid,
+      authProvider.currentUser!.uid,
     );
     if (response) {
       await faceRecignitionFirebaseService
@@ -43,7 +41,7 @@ class _FaceRecignitionScreenContainerState
       _isLoading = false;
     });
     Navigator.of(context).pushNamedAndRemoveUntil(
-      StudentRoutes.itemList,
+      StudentRoutes.accessCode,
       (Route<dynamic> route) => false,
     );
   }

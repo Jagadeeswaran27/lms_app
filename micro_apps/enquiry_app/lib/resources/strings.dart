@@ -145,4 +145,8 @@ class Strings {
       'An error occurred. Please try again later';
   static const String submit = 'Submit';
   static const String reOpen = 'Re Open';
+  static const String settings = 'Settings';
+  static const String instituteName = 'Institute Name : ';
+  static const String userNameSettings = 'User Name : ';
+  static const String logout = 'Logout';
 }

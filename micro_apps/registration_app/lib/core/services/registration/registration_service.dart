@@ -147,6 +147,8 @@ class RegistrationService {
       // Create a list to store registration IDs
       List<String> registrationIds = [];
 
+      print(registeredBy);
+
       // Loop through each course in the courses list
       for (CourseModel course in courses) {
         // Generate a unique registration ID for each course
@@ -181,6 +183,11 @@ class RegistrationService {
             .collection('students-registrations')
             .doc(courseRegistrationId)
             .set(registration.toJson());
+
+        // Add the course ID to the user's registered courses in Firestore
+        await _firestore.collection('lms-users').doc(registeredBy).update({
+          'registeredCourses': FieldValue.arrayUnion([course.courseId])
+        });
 
         // Add the registration ID to the list
         registrationIds.add(courseRegistrationId);

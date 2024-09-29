@@ -27,10 +27,10 @@ class _StudentRegisterContainerState extends State<StudentRegisterContainer> {
     final registrationService = RegistrationService();
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final courseIds = authProvider.cart.map((e) => e.courseId).toList();
-    setState(() {
-      isLoading = true;
-    });
     if (selectedOption == 'Self') {
+      setState(() {
+        isLoading = true;
+      });
       final response = await registrationService.registerStudent(
         courses: authProvider.cart,
         registeredBy: authProvider.currentUser!.uid,
@@ -57,7 +57,7 @@ class _StudentRegisterContainerState extends State<StudentRegisterContainer> {
       setState(() {
         isLoading = false;
       });
-    } else if (selectedOption == 'For kid') {
+    } else if (selectedOption == 'For Someone else') {
       Navigator.of(context)
           .pushNamed(StudentRoutes.kidRegistration, arguments: {
         'courses': authProvider.cart,

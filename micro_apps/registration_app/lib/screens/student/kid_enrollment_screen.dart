@@ -19,7 +19,6 @@ class KidEnrollmentScreen extends StatelessWidget {
     return ScreenLayout(
       topBarText: Strings.enrollmentInitiated,
       onBack: () {
-        print(".......");
         Navigator.of(context).pushNamed(StudentRoutes.itemList);
       },
       child: KidEnrollmentContainer(
