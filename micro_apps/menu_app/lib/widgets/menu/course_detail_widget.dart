@@ -67,22 +67,7 @@ class CourseDetailWidget extends StatelessWidget {
             if (subCategory == 'courses')
               Column(
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        Strings.batchOffered,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMediumPrimary
-                            .copyWith(fontSize: 20),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  BatchCard(role: role, course: course),
-                  const SizedBox(height: 20),
-                  if (course.customDays != null &&
-                      course.customDays!.isNotEmpty)
+                  if (course.batchDay.isNotEmpty)
                     Column(
                       children: [
                         Row(
@@ -102,26 +87,25 @@ class CourseDetailWidget extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 10),
-                              ...course.customDays!.map(
-                                (day) => Container(
-                                  margin: const EdgeInsets.only(bottom: 7),
-                                  child: Text(
-                                    day,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .copyWith(fontSize: 16),
+                              ...course.batchDay.split('+').map(
+                                    (day) => Container(
+                                      margin: const EdgeInsets.only(bottom: 7),
+                                      child: Text(
+                                        day,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(fontSize: 16),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
                             ],
                           ),
                         ),
                         const SizedBox(height: 20),
                       ],
                     ),
-                  if (course.customTime != null &&
-                      course.customTime!.isNotEmpty)
+                  if (course.batchTime != null && course.batchTime!.isNotEmpty)
                     Column(
                       children: [
                         Row(
@@ -134,7 +118,7 @@ class CourseDetailWidget extends StatelessWidget {
                                   .copyWith(fontSize: 20),
                             ),
                             Text(
-                              course.customTime!,
+                              course.batchTime!,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall!

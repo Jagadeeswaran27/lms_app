@@ -103,7 +103,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
             height:
                 authProvider.currentUser!.role == UserRoleEnum.admin.roleName
                     ? null
-                    : 140,
+                    : 150,
             padding: EdgeInsets.only(top: topInset, bottom: 20),
             decoration: const BoxDecoration(
               color: Colors.white,

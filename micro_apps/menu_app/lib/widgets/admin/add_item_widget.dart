@@ -44,8 +44,6 @@ class AddItemWidgetState extends State<AddItemWidget> {
   List<String> _batchTime = [];
   String _amountDetails = '';
   String _totalHours = '';
-  List<String> _customDays = [];
-  String _customTime = '';
 
   void _handleBatchOfferedDaysChange(List<String> days) {
     setState(() {
@@ -66,14 +64,6 @@ class AddItemWidgetState extends State<AddItemWidget> {
       _image = files;
       _isUploadValid = !files.contains(null);
     });
-  }
-
-  void saveCustomDays(List<String> customDays) {
-    _customDays = customDays;
-  }
-
-  void saveCustomTime(String time) {
-    _customTime = time;
   }
 
   void resetForm() {
@@ -97,6 +87,10 @@ class AddItemWidgetState extends State<AddItemWidget> {
   }
 
   void _onAddItem() {
+    if (_selectedDays.isEmpty || _batchTime.isEmpty) {
+      showSnackbar(context, "Select Time and Days");
+      return;
+    }
     bool isFormValid = _formKey.currentState!.validate();
     if (_image.isEmpty || _image.contains(null)) {
       setState(() {
@@ -131,8 +125,6 @@ class AddItemWidgetState extends State<AddItemWidget> {
         'amount': _amountDetails,
         'totalHours':
             _totalHours.trim().isNotEmpty ? int.parse(_totalHours) : null,
-        'customDays': _selectedDays.contains('Custom') ? _customDays : null,
-        'customTime': _batchTime.contains('Custom') ? _customTime : null,
       };
 
       widget.addItem({...formData}, _image.whereType<File>().toList());
@@ -171,7 +163,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
     final Size screenSize = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: SizedBox(
-        width: screenSize.width * 0.9,
+        width: screenSize.width * 0.95,
         child: Form(
           key: _formKey,
           child: Column(
@@ -264,8 +256,6 @@ class AddItemWidgetState extends State<AddItemWidget> {
                             selectedTime: _batchTime,
                             onSelectedDaysChanged:
                                 _handleBatchOfferedDaysChange,
-                            onSaveCustomDays: saveCustomDays,
-                            onSaveCustomTime: saveCustomTime,
                             onSelectedTimeChanged:
                                 _handleBatchOfferedTimeChange,
                           ),

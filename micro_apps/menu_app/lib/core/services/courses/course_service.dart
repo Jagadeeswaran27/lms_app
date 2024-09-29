@@ -132,8 +132,6 @@ class CourseService {
               batchTime: time,
               totalHours: formData['totalHours'],
               amount: double.parse(formData['amount']),
-              customDays: day == 'Custom' ? formData['customDays'] : null,
-              customTime: time == 'Custom' ? formData['customTime'] : null,
             );
 
             // Add the write operation to the batch

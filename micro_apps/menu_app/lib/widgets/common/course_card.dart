@@ -18,11 +18,6 @@ class CourseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String dayString = (course.customDays!.isNotEmpty)
-        ? course.customDays!.join(',')
-        : course.batchDay;
-    final String timeString =
-        course.customTime!.isNotEmpty ? course.customTime! : course.batchTime!;
     return InkWell(
       onTap: onPressed,
       child: Container(
@@ -84,22 +79,22 @@ class CourseCard extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                Wrap(
-                                  children: [
-                                    Text(
-                                      "Day : ",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .displayMediumPrimary,
-                                    ),
-                                    Text(
-                                      dayString,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .displaySmall!
-                                          .copyWith(fontSize: 12),
-                                    ),
-                                  ],
+                                Text(
+                                  "Day : ",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .displayMediumPrimary,
+                                ),
+                                SizedBox(
+                                  width: 110,
+                                  child: Text(
+                                    overflow: TextOverflow.ellipsis,
+                                    course.batchDay,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .displaySmall!
+                                        .copyWith(fontSize: 12),
+                                  ),
                                 ),
                               ],
                             ),
@@ -113,7 +108,7 @@ class CourseCard extends StatelessWidget {
                                       .displayMediumPrimary,
                                 ),
                                 Text(
-                                  timeString,
+                                  course.batchTime!,
                                   style: Theme.of(context)
                                       .textTheme
                                       .displaySmall!

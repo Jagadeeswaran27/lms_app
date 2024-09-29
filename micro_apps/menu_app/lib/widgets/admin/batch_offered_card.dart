@@ -3,22 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
-import 'package:menu_app/utils/show_snackbar.dart';
 
 class BatchOfferedCard extends StatefulWidget {
   final List<String> selectedDays;
   final List<String> selectedTime;
   final ValueChanged<List<String>> onSelectedDaysChanged;
   final ValueChanged<List<String>> onSelectedTimeChanged;
-  final void Function(List<String>) onSaveCustomDays;
-  final void Function(String) onSaveCustomTime;
 
   const BatchOfferedCard({
     super.key,
     required this.selectedDays,
     required this.selectedTime,
-    required this.onSaveCustomTime,
-    required this.onSaveCustomDays,
     required this.onSelectedDaysChanged,
     required this.onSelectedTimeChanged,
   });
@@ -37,21 +32,33 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
     'Saturday',
     'Sunday'
   ];
+  final List<String> _customTimes = [
+    'Early Morning',
+    'Late Morning',
+    'Early Afternoon',
+    'Late Afternoon',
+    'Early Evening',
+    'Late Evening',
+    'Night'
+  ];
 
   List<String> customDays = [];
+  List<String> customTimes = [];
   String? customTime;
-  String? customDaysErr;
 
+  String customDaysErr = '';
   void _showCustomDayPickerDialog(BuildContext context) {
+    String localCustomDaysErr = '';
+
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Select Days'),
-          content: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return SingleChildScrollView(
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setDialogState) {
+            return AlertDialog(
+              title: const Text('Select Days'),
+              content: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -60,62 +67,151 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
                         title: Text(day),
                         value: customDays.contains(day),
                         onChanged: (bool? isChecked) {
-                          setState(() {
+                          setDialogState(() {
                             if (isChecked == true) {
                               customDays.add(day);
                             } else {
                               customDays.remove(day);
                             }
+                            localCustomDaysErr = '';
                           });
                         },
                       );
                     }),
+                    if (localCustomDaysErr.isNotEmpty)
+                      Text(
+                        localCustomDaysErr,
+                        style: Theme.of(context).textTheme.bodyMediumTitleBrown,
+                      )
                   ],
                 ),
-              );
-            },
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  widget.selectedDays.remove("Custom");
-                });
-                Navigator.pop(context);
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                if (customDays.isEmpty) {
-                  showSnackbar(context, "At least select one day");
-                  return;
-                }
-                widget.onSaveCustomDays(customDays);
-                Navigator.pop(context);
-              },
-              child: const Text('OK'),
-            ),
-          ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      widget.selectedDays.remove("Custom");
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (customDays.isEmpty) {
+                      setDialogState(() {
+                        localCustomDaysErr = 'Please select at least one day.';
+                      });
+                      return;
+                    }
+
+                    final sortedSelectedDays = List<String>.from(customDays)
+                      ..sort();
+                    final combinedDays = sortedSelectedDays.join("+");
+
+                    bool isCombinationExists =
+                        widget.selectedDays.any((existingCombination) {
+                      final existingDays = existingCombination.split("+")
+                        ..sort();
+                      return existingDays.join("+") == combinedDays;
+                    });
+
+                    if (!isCombinationExists) {
+                      setState(() {
+                        widget.selectedDays.add(combinedDays);
+                        customDays.clear();
+                        Navigator.pop(context);
+                      });
+                    } else {
+                      setDialogState(() {
+                        localCustomDaysErr = 'Already added';
+                      });
+                    }
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
         );
       },
     );
   }
 
-  Future<void> _showCustomTimePicker() async {
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
+  void _showCustomTimePickerDialog(BuildContext context) {
+    String localCustomTimeErr = '';
 
-    if (pickedTime != null) {
-      customTime = pickedTime.format(context);
-      widget.onSaveCustomTime(customTime!);
-    } else {
-      setState(() {
-        widget.selectedTime.remove("Custom");
-      });
-    }
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setDialogState) {
+            return AlertDialog(
+              title: const Text('Select Times'),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ..._customTimes.map((time) {
+                      return CheckboxListTile(
+                        title: Text(
+                          time,
+                          style:
+                              Theme.of(context).textTheme.bodyMediumTitleBrown,
+                        ),
+                        value: customTimes.contains(time),
+                        onChanged: (bool? isChecked) {
+                          setDialogState(() {
+                            if (isChecked == true) {
+                              customTimes.add(time);
+                            } else {
+                              customTimes.remove(time);
+                            }
+                            localCustomTimeErr = '';
+                          });
+                        },
+                      );
+                    }),
+                    if (localCustomTimeErr.isNotEmpty)
+                      Text(
+                        localCustomTimeErr,
+                        style: Theme.of(context).textTheme.bodyMediumTitleBrown,
+                      )
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      widget.selectedTime.remove("Custom");
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (customTimes.isEmpty) {
+                      setDialogState(() {
+                        localCustomTimeErr = 'At least select one';
+                      });
+                      return;
+                    }
+                    setState(() {
+                      widget.selectedTime.addAll(customTimes);
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   void _handleDayChange(String day, bool isSelected) {
@@ -184,16 +280,27 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
                   _handleDayChange('Weekday', newValue!);
                 },
               ),
-              const SizedBox(width: 20),
+              ...widget.selectedDays.map((customDay) {
+                if (customDay == 'Weekend' || customDay == 'Weekday') {
+                  return const SizedBox();
+                }
+                return Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  child: _CustomCheckbox(
+                    text: customDay,
+                    value: widget.selectedDays.contains(customDay),
+                    onChanged: (bool? newValue) {
+                      _handleDayChange(customDay, newValue!);
+                    },
+                  ),
+                );
+              }),
               _CustomCheckbox(
+                isAdd: true,
                 text: 'Custom',
                 value: widget.selectedDays.contains('Custom'),
-                onChanged: (bool? newValue) {
-                  _handleDayChange('Custom', newValue!);
-                  if (newValue) {
-                    _showCustomDayPickerDialog(context);
-                  }
-                },
+                onChanged: (bool? newValue) {},
+                onTap: () => _showCustomDayPickerDialog(context),
               ),
             ],
           ),
@@ -206,6 +313,7 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
           Wrap(
             runSpacing: 20,
             children: [
+              //should automatically added here
               _CustomCheckbox(
                 text: 'Morning',
                 value: widget.selectedTime.contains('Morning'),
@@ -213,7 +321,7 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
                   _handleTimeChange('Morning', newValue!);
                 },
               ),
-              const SizedBox(width: 20),
+              const SizedBox(width: 10),
               _CustomCheckbox(
                 text: 'Evening',
                 value: widget.selectedTime.contains('Evening'),
@@ -221,16 +329,25 @@ class BatchOfferedCardState extends State<BatchOfferedCard> {
                   _handleTimeChange('Evening', newValue!);
                 },
               ),
-              const SizedBox(width: 20),
+
+              ...customTimes.map((customTime) {
+                return Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  child: _CustomCheckbox(
+                    text: customTime,
+                    value: widget.selectedTime.contains(customTime),
+                    onChanged: (bool? newValue) {
+                      _handleTimeChange(customTime, newValue!);
+                    },
+                  ),
+                );
+              }),
               _CustomCheckbox(
+                isAdd: true,
                 text: 'Custom',
                 value: widget.selectedTime.contains('Custom'),
-                onChanged: (bool? newValue) {
-                  _handleTimeChange('Custom', newValue!);
-                  if (newValue) {
-                    _showCustomTimePicker();
-                  }
-                },
+                onChanged: (bool? newValue) {},
+                onTap: () => _showCustomTimePickerDialog(context),
               ),
             ],
           ),
@@ -244,17 +361,23 @@ class _CustomCheckbox extends StatelessWidget {
   final String text;
   final bool value;
   final ValueChanged<bool?> onChanged;
+  final bool isAdd;
+  final void Function()? onTap;
 
   const _CustomCheckbox({
     required this.text,
     required this.value,
     required this.onChanged,
+    this.isAdd = false,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    final bool isLong = text.split('+').length > 2;
     return Container(
-      width: 135,
+      width: isLong ? null : 140,
+      height: 47,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
         color: ThemeColors.white,
@@ -267,19 +390,42 @@ class _CustomCheckbox extends StatelessWidget {
           ),
         ],
       ),
-      padding: const EdgeInsets.only(left: 10),
+      padding: const EdgeInsets.only(left: 12),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment:
+            isAdd ? MainAxisAlignment.spaceEvenly : MainAxisAlignment.center,
         children: [
-          Text(
-            text,
-            style: Theme.of(context).textTheme.titleSmall,
+          Expanded(
+            child: Text(
+              maxLines: 2,
+              text,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall!
+                  .copyWith(fontSize: 10),
+            ),
           ),
-          Checkbox(
-            value: value,
-            onChanged: onChanged,
-            activeColor: ThemeColors.titleBrown,
-          ),
+          if (!isAdd)
+            Transform.scale(
+              scale: 1,
+              child: Checkbox(
+                value: value,
+                onChanged: onChanged,
+                activeColor: ThemeColors.titleBrown,
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+            ),
+          if (isAdd)
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: InkWell(
+                onTap: onTap,
+                child: Icon(
+                  Icons.add,
+                  color: ThemeColors.titleBrown,
+                ),
+              ),
+            )
         ],
       ),
     );

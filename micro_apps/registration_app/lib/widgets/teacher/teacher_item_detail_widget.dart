@@ -80,49 +80,45 @@ class _TeacherItemDetailWidgetState extends State<TeacherItemDetailWidget> {
               ],
             ),
             const SizedBox(height: 20),
-            BatchCard(course: widget.course),
-            const SizedBox(height: 20),
-            if (widget.course.customDays != null &&
-                widget.course.customDays!.isNotEmpty)
-              Column(
-                children: [
-                  Row(
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      "Days",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMediumPrimary
+                          .copyWith(fontSize: 20),
+                    ),
+                  ],
+                ),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Days",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMediumPrimary
-                            .copyWith(fontSize: 20),
-                      ),
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 10),
-                        ...widget.course.customDays!.map(
-                          (day) => Container(
-                            margin: const EdgeInsets.only(bottom: 7),
-                            child: Text(
-                              day,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall!
-                                  .copyWith(fontSize: 16),
+                      const SizedBox(height: 10),
+                      ...widget.course.batchDay.split('+').map(
+                            (day) => Container(
+                              margin: const EdgeInsets.only(bottom: 7),
+                              child: Text(
+                                day,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(fontSize: 16),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
+                    ],
                   ),
-                  const SizedBox(height: 20),
-                ],
-              ),
-            if (widget.course.customTime != null &&
-                widget.course.customTime!.isNotEmpty)
+                ),
+                const SizedBox(height: 20),
+              ],
+            ),
+            if (widget.course.batchTime != null &&
+                widget.course.batchTime!.isNotEmpty)
               Column(
                 children: [
                   Row(
@@ -135,7 +131,7 @@ class _TeacherItemDetailWidgetState extends State<TeacherItemDetailWidget> {
                             .copyWith(fontSize: 20),
                       ),
                       Text(
-                        widget.course.customTime!,
+                        widget.course.batchTime!,
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall!
