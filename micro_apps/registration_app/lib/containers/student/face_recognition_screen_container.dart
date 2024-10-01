@@ -27,9 +27,9 @@ class _FaceRecignitionScreenContainerState
       FaceRecognitionFirebaseService();
 
   Future<void> onSaveFaceRecognition(List<File?> images) async {
-    // setState(() {
-    //   _isLoading = true;
-    // });
+    setState(() {
+      _isLoading = true;
+    });
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final bool response = await saveFaceRecognition(
       images,

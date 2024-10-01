@@ -182,7 +182,10 @@ class RegistrationService {
             .doc(instituteId)
             .collection('students-registrations')
             .doc(courseRegistrationId)
-            .set(registration.toJson());
+            .set({
+          ...registration.toJson(),
+          'registrationTime': FieldValue.serverTimestamp(),
+        });
 
         // Add the course ID to the user's registered courses in Firestore
         await _firestore.collection('lms-users').doc(registeredBy).update({

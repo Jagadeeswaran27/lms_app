@@ -31,7 +31,7 @@ class CategoryService {
       // Upload icon to Firebase Storage and get the download URL
       final String iconUrl = await _storageService.uploadFile(
         icon,
-        'categories/$categoryName/icon',
+        'categories/$accessId/$categoryName/icon',
         icon.path.split('/').last,
       );
 

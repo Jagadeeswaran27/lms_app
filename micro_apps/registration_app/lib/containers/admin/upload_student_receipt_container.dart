@@ -49,13 +49,13 @@ class _UploadStudentReceiptContainerState
           context,
           Strings.acknowledgment,
           () {
-            // Navigator.of(context).pushNamedAndRemoveUntil(
-            //   AdminRoutes.studentList,
-            //   (Route<dynamic> route) => false,
-            // );
-            Navigator.of(context).pushReplacementNamed(
+            Navigator.of(context).pushNamedAndRemoveUntil(
               AdminRoutes.studentList,
+              ModalRoute.withName(AdminRoutes.registrationList),
             );
+            // Navigator.of(context).pushReplacementNamed(
+            //   AdminRoutes.studentList,
+            // );
           },
           [registrationId],
         );
