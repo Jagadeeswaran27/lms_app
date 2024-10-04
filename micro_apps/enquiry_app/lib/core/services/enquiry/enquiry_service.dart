@@ -56,6 +56,7 @@ class EnquiryService {
         type: type,
         userId: userId,
         fileUrl: imageUrl,
+        isReOpen: false,
       );
 
       await _firestore

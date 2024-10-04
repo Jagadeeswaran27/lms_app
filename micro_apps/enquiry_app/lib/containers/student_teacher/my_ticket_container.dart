@@ -49,7 +49,9 @@ class _MyTicketContainerState extends State<MyTicketContainer> {
       _isLoading = true;
     });
     final status = await enquiryService.reOpenEnquiry(
-        widget.enquiry.enquiryId, authProvider.selectedinstituteCode);
+      widget.enquiry.enquiryId,
+      authProvider.selectedinstituteCode,
+    );
     setState(() {
       _isLoading = false;
     });

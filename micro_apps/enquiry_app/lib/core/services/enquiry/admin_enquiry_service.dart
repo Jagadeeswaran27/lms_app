@@ -91,7 +91,10 @@ class AdminEnquiryService {
           .doc(accessId)
           .collection('enquiries')
           .doc(enquiryId)
-          .update({'status': 'created'});
+          .update({
+        'status': 'created',
+        'isReOpen': true,
+      });
 
       log.i('Enquiry $enquiryId resolved successfully');
       return true;

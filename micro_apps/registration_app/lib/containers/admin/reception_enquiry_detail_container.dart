@@ -4,6 +4,7 @@ import 'package:registration_app/core/services/enquiry/messages_service.dart';
 import 'package:registration_app/models/enquiry/enquiry_model.dart';
 import 'package:registration_app/models/enquiry/message_model.dart';
 import 'package:registration_app/providers/auth_provider.dart';
+import 'package:registration_app/utils/show_snackbar.dart';
 import 'package:registration_app/widgets/admin/reception_enquiry_detail_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -68,6 +69,27 @@ class _ReceptionEnquiryDetailContainerState
     }
   }
 
+  void onResolveEnquiry() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    setState(() {
+      _isLoading = true;
+    });
+    final status = await enquiryService.resolveEnquiry(
+      widget.enquiry.enquiryId,
+      authProvider.currentUser!.institute[0],
+    );
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (status) {
+      showSnackbar(context, 'Enquiry resolved successfully');
+      Navigator.of(context).pop();
+    } else {
+      showSnackbar(context, 'Failed to resolve enquiry');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -76,7 +98,6 @@ class _ReceptionEnquiryDetailContainerState
 
   @override
   Widget build(BuildContext context) {
-    print(messages.length);
     return !_isLoading
         ? RefreshIndicator(
             onRefresh: fetchMessages,
@@ -85,6 +106,7 @@ class _ReceptionEnquiryDetailContainerState
               isLoading: _isLoading,
               messages: messages,
               onSendMessage: sendMessage,
+              onResolveEnquiry: onResolveEnquiry,
             ),
           )
         : const Center(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:menu_app/models/enquiry/enquiry_model.dart';
 import 'package:menu_app/models/enquiry/message_model.dart';
 import 'package:menu_app/resources/strings.dart';
+import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
 import 'package:menu_app/widgets/admin/messages.dart';
 import 'package:menu_app/widgets/common/choose_file_button.dart';
@@ -10,6 +11,7 @@ import 'package:menu_app/widgets/common/enquiry_reception_title_card.dart';
 import 'package:menu_app/widgets/common/form_input.dart';
 import 'package:menu_app/widgets/common/full_screen_image_viewer.dart';
 import 'package:menu_app/resources/icons.dart' as icons;
+import 'package:menu_app/widgets/common/icon_text_button.dart';
 import 'package:menu_app/widgets/common/svg_lodder.dart';
 
 class ReceptionEnquiryDetailWidget extends StatefulWidget {
@@ -19,10 +21,12 @@ class ReceptionEnquiryDetailWidget extends StatefulWidget {
     required this.onSendMessage,
     required this.messages,
     required this.isLoading,
+    required this.onResolveEnquiry,
   });
 
   final EnquiryModel enquiry;
   final Future<bool> Function(String) onSendMessage;
+  final void Function() onResolveEnquiry;
   final List<MessageModel> messages;
   final bool isLoading;
 
@@ -176,6 +180,21 @@ class _ReceptionEnquiryDetailWidgetState
                   if (widget.messages.isNotEmpty)
                     Messages(
                       messages: widget.messages,
+                    ),
+                  if (!widget.enquiry.isReOpen &&
+                      widget.enquiry.status == 'created')
+                    SizedBox(
+                      height: 50,
+                      width: screenSize.width * 0.7,
+                      child: IconTextButton(
+                        text: Strings.resolve,
+                        onPressed: widget.onResolveEnquiry,
+                        color: ThemeColors.primary,
+                        iconHorizontalPadding: 5,
+                        svgIcon: icons.Icons.resolve,
+                        iconColor: ThemeColors.white,
+                        isLoading: widget.isLoading,
+                      ),
                     ),
                 ],
               ),

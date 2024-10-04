@@ -1,6 +1,5 @@
 import 'package:enquiry_app/models/enquiry/enquiry_model.dart';
 import 'package:enquiry_app/resources/strings.dart';
-import 'package:enquiry_app/routes/admin_routes.dart';
 import 'package:enquiry_app/routes/student_teacher_routes.dart';
 import 'package:enquiry_app/themes/colors.dart';
 import 'package:enquiry_app/widgets/common/ticket_card.dart';

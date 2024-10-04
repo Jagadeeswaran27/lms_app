@@ -181,7 +181,8 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                     ],
                   ),
                   const SizedBox(height: 30),
-                  if (widget.enquiry.status != "resolved")
+                  if (widget.enquiry.isReOpen &&
+                      widget.enquiry.status != "resolved")
                     SizedBox(
                       height: 50,
                       width: screenSize.width * 0.7,

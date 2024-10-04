@@ -1,4 +1,6 @@
+import 'package:enquiry_app/themes/colors.dart';
 import 'package:enquiry_app/widgets/admin/admin_messages.dart';
+import 'package:enquiry_app/widgets/common/icon_text_button.dart';
 import 'package:enquiry_app/widgets/common/svg_lodder.dart';
 import 'package:enquiry_app/widgets/student_teacher/choose_file_button.dart';
 import 'package:enquiry_app/widgets/student_teacher/enquiry_reception_title_card.dart';
@@ -19,10 +21,12 @@ class ReceptionEnquiryDetailWidget extends StatefulWidget {
     required this.onSendMessage,
     required this.messages,
     required this.isLoading,
+    required this.onResolveEnquiry,
   });
 
   final EnquiryModel enquiry;
   final Future<bool> Function(String) onSendMessage;
+  final void Function() onResolveEnquiry;
   final List<MessageModel> messages;
   final bool isLoading;
 
@@ -176,6 +180,21 @@ class _ReceptionEnquiryDetailWidgetState
                   if (widget.messages.isNotEmpty)
                     AdminMessages(
                       messages: widget.messages,
+                    ),
+                  if (!widget.enquiry.isReOpen &&
+                      widget.enquiry.status == 'created')
+                    SizedBox(
+                      height: 50,
+                      width: screenSize.width * 0.7,
+                      child: IconTextButton(
+                        text: Strings.resolve,
+                        onPressed: widget.onResolveEnquiry,
+                        color: ThemeColors.primary,
+                        iconHorizontalPadding: 5,
+                        svgIcon: icons.Icons.resolve,
+                        iconColor: ThemeColors.white,
+                        isLoading: widget.isLoading,
+                      ),
                     ),
                 ],
               ),
