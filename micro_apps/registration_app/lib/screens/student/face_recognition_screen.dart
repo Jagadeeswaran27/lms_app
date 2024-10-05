@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:registration_app/containers/auth/face_recognition_screen_container.dart';
+import 'package:registration_app/containers/student/face_recognition_screen_container.dart';
 import 'package:registration_app/widgets/common/screen_layout.dart';
 
 class FaceRecognitionScreen extends StatelessWidget {
@@ -7,9 +7,12 @@ class FaceRecognitionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ScreenLayout(
+    final String? uid = ModalRoute.of(context)!.settings.arguments as String?;
+    return ScreenLayout(
       topBarText: "Face Recognition",
-      child: FaceRecignitionScreenContainer(),
+      child: FaceRecignitionScreenContainer(
+        kidUid: uid,
+      ),
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:attendance_app/core/services/admin/items_service.dart';
 import 'package:attendance_app/models/courses/course_model.dart';
 import 'package:attendance_app/providers/auth_provider.dart';
-import 'package:attendance_app/themes/fonts.dart';
 import 'package:attendance_app/widgets/admin/item_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,14 +40,6 @@ class ItemListContainerState extends State<ItemListContainer> {
 
   @override
   Widget build(BuildContext context) {
-    if (myCourses.isEmpty) {
-      return Center(
-        child: Text(
-          "Add Some Courses",
-          style: Theme.of(context).textTheme.bodyMediumPrimary,
-        ),
-      );
-    }
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(),

@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:location_app/providers/auth_provider.dart';
 
 import 'package:location_app/resources/images.dart';
+import 'package:location_app/resources/strings.dart';
+import 'package:location_app/screens/auth/welcome_screen.dart';
 import 'package:location_app/themes/colors.dart';
 import 'package:location_app/themes/fonts.dart';
+import 'package:location_app/utils/error/show_snackbar.dart';
 import 'package:location_app/widgets/common/custom_elevated_button.dart';
 import 'package:location_app/widgets/common/form_input.dart';
+import 'package:provider/provider.dart';
 
 class AccessCodeWidget extends StatefulWidget {
   final bool isLoading;
+  final String? existingAccessCode;
   final Function(String accessCode) onInstituteSelection;
+
   const AccessCodeWidget({
     super.key,
     required this.onInstituteSelection,
     required this.isLoading,
+    this.existingAccessCode,
   });
 
   @override
@@ -21,11 +29,41 @@ class AccessCodeWidget extends StatefulWidget {
 
 class _AccessCodeWidgetState extends State<AccessCodeWidget> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _accessCodeController = TextEditingController();
   String _instituteCode = '';
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.existingAccessCode != null) {
+      _accessCodeController.text = widget.existingAccessCode!;
+    }
+  }
 
   void onSubmit() {
     _formKey.currentState?.save();
     widget.onInstituteSelection(_instituteCode);
+  }
+
+  @override
+  void dispose() {
+    _accessCodeController.dispose();
+    super.dispose();
+  }
+
+  void logout(BuildContext context) async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final response = await authProvider.signOut();
+    if (response) {
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const WelcomeScreen(),
+        ),
+        (Route<dynamic> route) => false,
+      );
+    } else {
+      showSnackbar(context, Strings.errorLoggingOut);
+    }
   }
 
   @override
@@ -89,9 +127,18 @@ class _AccessCodeWidgetState extends State<AccessCodeWidget> {
                       const SizedBox(height: 20.0),
                       SizedBox(
                         width: screenSize.width * 0.8,
-                        child: FormInput(
-                          text: "Enter Access Code",
-                          onSaved: (value) => {_instituteCode = value!},
+                        child: Focus(
+                          onFocusChange: (hasFocus) {
+                            if (hasFocus && widget.existingAccessCode != null) {
+                              _accessCodeController.text =
+                                  widget.existingAccessCode!;
+                            }
+                          },
+                          child: FormInput(
+                            text: "Enter Access Code",
+                            controller: _accessCodeController,
+                            onSaved: (value) => {_instituteCode = value!},
+                          ),
                         ),
                       ),
                       const SizedBox(height: 20.0),
@@ -104,6 +151,35 @@ class _AccessCodeWidgetState extends State<AccessCodeWidget> {
                         ),
                       ),
                       const SizedBox(height: 20.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          InkWell(
+                            onTap: () => logout(context),
+                            child: SizedBox(
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Logout",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmallTitleBrown
+                                        .copyWith(
+                                            decoration:
+                                                TextDecoration.underline),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  const Icon(
+                                    Icons.logout_outlined,
+                                    size: 14,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                        ],
+                      )
                     ],
                   ),
                 ),

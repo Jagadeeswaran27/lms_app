@@ -11,7 +11,9 @@ class CourseModel {
   final double amount;
   final int totalHours;
   final int? noOfRegistrations;
+  final int? noOfTeachersRegistrations;
   final List<Map<String, String>>? students;
+  final List<Map<String, String>>? teachers;
 
   CourseModel({
     required this.courseId,
@@ -25,6 +27,8 @@ class CourseModel {
     required this.totalHours,
     this.noOfRegistrations,
     this.students,
+    this.noOfTeachersRegistrations,
+    this.teachers,
   });
 
   factory CourseModel.fromJson(Map<String, dynamic> json) {
@@ -38,7 +42,9 @@ class CourseModel {
       batchTime: json['batchTime'],
       amount: json['amount'].toDouble(),
       noOfRegistrations: json['noOfRegistrations'] ?? 0,
+      noOfTeachersRegistrations: json['noOfTeachersRegistrations'] ?? 0,
       students: json['students'] ?? [],
+      teachers: json['teachers'] ?? [],
       totalHours: json['totalHours'] ?? 0,
     );
   }
@@ -54,7 +60,9 @@ class CourseModel {
       'batchTime': batchTime,
       'amount': amount,
       'noOfRegistrations': noOfRegistrations,
+      'noOfTeachersRegistrations': noOfTeachersRegistrations,
       'students': students,
+      'teachers': teachers,
       'totalHours': totalHours,
     };
   }

@@ -87,6 +87,10 @@ class AddItemWidgetState extends State<AddItemWidget> {
   }
 
   void _onAddItem() {
+    if (_selectedDays.isEmpty || _batchTime.isEmpty) {
+      showSnackbar(context, "Select Time and Days");
+      return;
+    }
     bool isFormValid = _formKey.currentState!.validate();
     if (_image.isEmpty || _image.contains(null)) {
       setState(() {
@@ -119,8 +123,10 @@ class AddItemWidgetState extends State<AddItemWidget> {
         'batchDay': widget.subCategory == 'courses' ? _selectedDays : null,
         'batchTime': widget.subCategory == 'courses' ? _batchTime : null,
         'amount': _amountDetails,
-        'totalHours': int.parse(_totalHours),
+        'totalHours':
+            _totalHours.trim().isNotEmpty ? int.parse(_totalHours) : null,
       };
+
       widget.addItem({...formData}, _image.whereType<File>().toList());
       resetForm();
     }
@@ -157,7 +163,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
     final Size screenSize = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: SizedBox(
-        width: screenSize.width * 0.9,
+        width: screenSize.width * 0.95,
         child: Form(
           key: _formKey,
           child: Column(

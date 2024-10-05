@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:registration_app/screens/auth/face_recognition_screen.dart';
 import 'package:registration_app/screens/auth/init_screen.dart';
 import 'package:registration_app/screens/auth/options_screen.dart';
 import 'package:registration_app/screens/auth/role_type_selection_screen.dart';
@@ -13,7 +12,6 @@ class Routes {
   static const String optionsScreen = '/options';
   static const String welcomeScreen = '/welcome';
   static const String roleTypeSelectionScreen = '/role-type-selection';
-  static const String faceRecognition = '/face-recognition';
 
   static Map<String, WidgetBuilder> get buildRoutes {
     return {
@@ -21,7 +19,6 @@ class Routes {
       welcomeScreen: (ctx) => const WelcomeScreen(),
       optionsScreen: (ctx) => const OptionsScreen(),
       roleTypeSelectionScreen: (ctx) => const RoleTypeSelectionScreen(),
-      faceRecognition: (ctx) => const FaceRecognitionScreen(),
     };
   }
 

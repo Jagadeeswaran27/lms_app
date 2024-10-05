@@ -53,7 +53,6 @@ class FirebaseAuthService {
     }
   }
 
-  // Sign up with email and password
   Future<UserCredential> signUpWithEmailAndPassword(
     String userName,
     String email,
@@ -65,7 +64,10 @@ class FirebaseAuthService {
     try {
       UserCredential userCredential = await _firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
+
       final bool isAdmin = role == UserRoleEnum.admin.roleName ? true : false;
+
+      // Create user document in 'lms-users' collection
       await _firestore
           .collection('lms-users')
           .doc(userCredential.user!.uid)
@@ -77,14 +79,48 @@ class FirebaseAuthService {
         'phone': phone,
         'institute': isAdmin ? [accessCodeId] : [],
       });
-      if (role == UserRoleEnum.admin.roleName) {
+
+      // If the role is admin, create institute document and add default categories
+      if (isAdmin) {
         await _firestore.collection('institutes').doc(accessCodeId).set({
           'uid': accessCodeId,
           'email': email,
           'instituteId': accessCodeId,
           'instituteName': userName,
         });
+
+        // Add default categories under 'institutes > accessCodeId > categories'
+        CollectionReference categoriesRef = _firestore
+            .collection('institutes')
+            .doc(accessCodeId)
+            .collection('categories');
+
+        List<Map<String, String>> defaultCategories = [
+          {
+            'categoryName': 'courses',
+            'categoryTitle': 'course',
+            'iconUrl':
+                'https://firebasestorage.googleapis.com/v0/b/ultrasonic-clinic.appspot.com/o/categories%2Fcourses%2Ficon%2F1000009075.png?alt=media&token=fd2ed7d2-3164-4249-ae1f-45b87e97dd10',
+          },
+          {
+            'categoryName': 'food',
+            'categoryTitle': 'food',
+            'iconUrl':
+                'https://firebasestorage.googleapis.com/v0/b/ultrasonic-clinic.appspot.com/o/categories%2Ffood%2Ficon%2F1000009074.png?alt=media&token=d1cdaa6d-bf55-4471-8234-713570e632a4',
+          },
+          {
+            'categoryName': 'tailor',
+            'categoryTitle': 'tailor',
+            'iconUrl':
+                'https://firebasestorage.googleapis.com/v0/b/ultrasonic-clinic.appspot.com/o/categories%2Ftailor%2Ficon%2F1000009076.png?alt=media&token=91806f40-bcd7-4596-b378-5bbcbdd422f1',
+          }
+        ];
+
+        for (var category in defaultCategories) {
+          await categoriesRef.add(category);
+        }
       }
+
       return userCredential;
     } on FirebaseAuthException {
       log.e('Error signing up: ');

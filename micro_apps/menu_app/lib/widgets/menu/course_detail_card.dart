@@ -6,8 +6,13 @@ import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
 
 class CourseDetailCard extends StatelessWidget {
-  const CourseDetailCard({super.key, required this.course});
+  const CourseDetailCard({
+    super.key,
+    required this.course,
+    required this.subCategory,
+  });
 
+  final String subCategory;
   final CourseModel course;
 
   @override
@@ -59,7 +64,9 @@ class CourseDetailCard extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            Strings.courseCode,
+                            subCategory == 'courses'
+                                ? Strings.courseCode
+                                : 'Item Code : ',
                             style: Theme.of(context)
                                 .textTheme
                                 .displayMediumTitleBrownSemiBold,
@@ -79,22 +86,23 @@ class CourseDetailCard extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 5),
-                      Row(
-                        children: [
-                          Text(
-                            Strings.duration,
-                            style: Theme.of(context)
-                                .textTheme
-                                .displayMediumTitleBrownSemiBold,
-                          ),
-                          Text(
-                            '${course.totalHours} Hours',
-                            style: Theme.of(context)
-                                .textTheme
-                                .displayMediumPrimarySemiBold,
-                          ),
-                        ],
-                      ),
+                      if (subCategory == 'courses')
+                        Row(
+                          children: [
+                            Text(
+                              Strings.duration,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displayMediumTitleBrownSemiBold,
+                            ),
+                            Text(
+                              '${course.totalHours} Hours',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displayMediumPrimarySemiBold,
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                 ],

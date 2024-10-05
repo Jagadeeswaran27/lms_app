@@ -8,6 +8,7 @@ class RoleTypeSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const ScreenLayout(
+      showInstituteName: false,
       topBarText: 'Select Role Type',
       showBackButton: false,
       child: RoleTypeSelectionContainer(),

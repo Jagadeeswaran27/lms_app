@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
 import 'package:registration_app/constants/enums/button_size.dart';
 import 'package:registration_app/resources/regex.dart';
 import 'package:registration_app/resources/strings.dart';
@@ -11,15 +12,11 @@ import 'package:registration_app/themes/fonts.dart';
 class KidRegistrationWidget extends StatefulWidget {
   const KidRegistrationWidget({
     super.key,
-    required this.email,
-    required this.userName,
     required this.mobileNumber,
     required this.isLoading,
     required this.registerKid,
   });
 
-  final String email;
-  final String userName;
   final String mobileNumber;
   final bool isLoading;
   final Function(String, String, String, String) registerKid;
@@ -44,8 +41,6 @@ class _KidRegistrationWidgetState extends State<KidRegistrationWidget> {
   @override
   void initState() {
     super.initState();
-    _userName = widget.userName;
-    _userEmail = widget.email;
     _phone = widget.mobileNumber;
   }
 
@@ -91,7 +86,7 @@ class _KidRegistrationWidgetState extends State<KidRegistrationWidget> {
         child: Column(
           children: [
             FormInput(
-              text: 'Kid Name',
+              text: 'Name',
               keyboardType: TextInputType.name,
               validator: (value) {
                 if (value == null || value.isEmpty) {

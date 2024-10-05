@@ -28,25 +28,6 @@ class _ReceptionEnquiryDetailContainerState
   List<MessageModel> messages = [];
   final EnquiryService enquiryService = EnquiryService();
 
-  void onResolveEnquiry() async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    setState(() {
-      _isLoading = true;
-    });
-    final status = await enquiryService.resolveEnquiry(
-        widget.enquiry.enquiryId, authProvider.currentUser!.institute[0]);
-    setState(() {
-      _isLoading = false;
-    });
-
-    if (status) {
-      showSnackbar(context, 'Enquiry resolved successfully');
-      Navigator.of(context).pop();
-    } else {
-      showSnackbar(context, 'Failed to resolve enquiry');
-    }
-  }
-
   Future<void> fetchMessages() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     try {
@@ -93,6 +74,27 @@ class _ReceptionEnquiryDetailContainerState
   void initState() {
     super.initState();
     fetchMessages();
+  }
+
+  void onResolveEnquiry() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    setState(() {
+      _isLoading = true;
+    });
+    final status = await enquiryService.resolveEnquiry(
+      widget.enquiry.enquiryId,
+      authProvider.currentUser!.institute[0],
+    );
+    setState(() {
+      _isLoading = false;
+    });
+
+    if (status) {
+      showSnackbar(context, 'Enquiry resolved successfully');
+      Navigator.of(context).pop();
+    } else {
+      showSnackbar(context, 'Failed to resolve enquiry');
+    }
   }
 
   @override

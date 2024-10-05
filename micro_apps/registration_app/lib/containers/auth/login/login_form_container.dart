@@ -7,7 +7,6 @@ import 'package:registration_app/models/auth/auth_model.dart';
 import 'package:registration_app/providers/auth_provider.dart';
 import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/screens/admin/admin_app.dart';
-import 'package:registration_app/screens/auth/face_recognition_screen.dart';
 import 'package:registration_app/screens/auth/role_type_selection_screen.dart';
 import 'package:registration_app/screens/student/student_app.dart';
 import 'package:registration_app/screens/teacher/teacher_app.dart';
@@ -24,6 +23,8 @@ class LoginFormContainer extends StatefulWidget {
 
 class _LoginFormContainerState extends State<LoginFormContainer> {
   bool _isLoading = false;
+  bool _isprefLoading = false;
+  String? existingPassword;
 
   Future<void> onSignIn(
       String userEmail, String userPassword, bool isGoogle) async {
@@ -58,6 +59,10 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
       final loggedInStatuses = await SharedPreferencesUtils().getMapPrefs(
         constants.loggedInStatusFlag,
       );
+      await SharedPreferencesUtils()
+          .addMapPrefs(passwordConstants.passwordFlag, {
+        "password": userPassword,
+      });
       if (loggedInStatuses.value == null ||
           loggedInStatuses.value[user.userId] == null ||
           loggedInStatuses.value[user.userId] == false) {
@@ -89,14 +94,6 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
             );
             return;
           }
-          if (authProvider.currentUser!.isFaceRecognized! == false) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (ctx) => const FaceRecognitionScreen(),
-              ),
-            );
-            return;
-          }
 
           if (authProvider.currentUser!.roleType ==
               UserRoleTypeEnum.student.roleName) {
@@ -120,11 +117,37 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
     }
   }
 
+  void checkExistingPassword() async {
+    setState(() {
+      _isprefLoading = true;
+    });
+    final passwordStatus = await SharedPreferencesUtils().getMapPrefs(
+      passwordConstants.passwordFlag,
+    );
+    setState(() {
+      existingPassword = passwordStatus.value != null
+          ? passwordStatus.value['password']
+          : null;
+      _isprefLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkExistingPassword();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return LoginFormWidget(
-      isLoading: _isLoading,
-      onSignIn: onSignIn,
-    );
+    return _isprefLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : LoginFormWidget(
+            isLoading: _isLoading,
+            onSignIn: onSignIn,
+            existingPassword: existingPassword,
+          );
   }
 }

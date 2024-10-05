@@ -48,8 +48,21 @@ class AuthProvider with ChangeNotifier {
   }
 
   void updateRegisteredCourses(String courseId) {
-    _currentUser!.registeredCourses.add(courseId);
     notifyListeners();
+  }
+
+  Future<String> getInstituteName(String accessCode) async {
+    try {
+      final instituteRef =
+          FirebaseFirestore.instance.collection('institutes').doc(accessCode);
+
+      final docSnapshot = await instituteRef.get();
+
+      final data = docSnapshot.data();
+      return data!['instituteName'];
+    } catch (e) {
+      return "";
+    }
   }
 
   void updateRegisteredCoursesList(List<String> courseIds) {
@@ -68,6 +81,7 @@ class AuthProvider with ChangeNotifier {
         registeredCourses: [..._currentUser!.registeredCourses, ...courseIds],
         roleType: _currentUser!.roleType,
         isFaceRecognized: _currentUser!.isFaceRecognized ?? false,
+        isSomeone: _currentUser!.isSomeone,
       );
     }
     notifyListeners();
@@ -88,6 +102,7 @@ class AuthProvider with ChangeNotifier {
       registeredCourses: _currentUser!.registeredCourses,
       roleType: roleType,
       isFaceRecognized: _currentUser!.isFaceRecognized ?? false,
+      isSomeone: _currentUser!.isSomeone,
     );
     notifyListeners();
   }
@@ -129,6 +144,7 @@ class AuthProvider with ChangeNotifier {
           registeredCourses: loggedUser.registeredCourses,
           roleType: loggedUser.roleType,
           isFaceRecognized: loggedUser.isFaceRecognized ?? false,
+          isSomeone: loggedUser.isSomeone ?? false,
         );
       }
       _loggedInStatus = loggedInStatus;
@@ -197,6 +213,7 @@ class AuthProvider with ChangeNotifier {
           registeredCourses: loggedUser.registeredCourses,
           roleType: loggedUser.roleType,
           isFaceRecognized: loggedUser.isFaceRecognized ?? false,
+          isSomeone: loggedUser.isSomeone ?? false,
         );
         if (loggedUser.uid != '') {
           return AuthModel.success(
@@ -263,6 +280,7 @@ class AuthProvider with ChangeNotifier {
           registeredCourses: loggedUser.registeredCourses,
           roleType: loggedUser.roleType,
           isFaceRecognized: loggedUser.isFaceRecognized ?? false,
+          isSomeone: loggedUser.isSomeone ?? false,
         );
 
         notifyListeners();
@@ -307,6 +325,7 @@ class AuthProvider with ChangeNotifier {
           registeredCourses: loggedUser.registeredCourses,
           roleType: loggedUser.roleType,
           isFaceRecognized: loggedUser.isFaceRecognized ?? false,
+          isSomeone: loggedUser.isSomeone ?? false,
         );
         _user = user;
         _loggedInStatus = true;
@@ -421,6 +440,7 @@ class AuthProvider with ChangeNotifier {
           profileUrl: user!.photoURL,
           roleType: currentUser!.roleType,
           isFaceRecognized: currentUser!.isFaceRecognized ?? false,
+          isSomeone: currentUser!.isSomeone ?? false,
         );
         notifyListeners();
         return true;
@@ -454,9 +474,16 @@ class AuthProvider with ChangeNotifier {
     String email,
     String role,
     String phone,
+    String roleType,
   ) async {
-    return await FirebaseAuthService()
-        .createLMSUser(uid, name, email, role, phone);
+    return await FirebaseAuthService().createLMSUser(
+      uid,
+      name,
+      email,
+      role,
+      phone,
+      roleType,
+    );
   }
 
   Future<bool> updateUserRoleType(String roleType, String uid) async {

@@ -17,8 +17,10 @@ class CourseDashboardWidget extends StatefulWidget {
 }
 
 class _CourseDashboardWidgetState extends State<CourseDashboardWidget> {
-  bool _isAscending = true;
-  List<Map<String, dynamic>>? _studentsData; // Cache for students data
+  bool _isAscendingStudents = true;
+  bool _isAscendingTeachers = true;
+  List<Map<String, dynamic>>? _studentsData;
+  List<Map<String, dynamic>>? _teachersData;
   bool _isLoading = true;
 
   Future<void> fetchStudentsData() async {
@@ -28,8 +30,8 @@ class _CourseDashboardWidgetState extends State<CourseDashboardWidget> {
         final studentName = await getStudentName(studentId);
         final attendedHours = await getAttendedHours(studentId);
         return {
-          'studentId': studentId,
-          'studentName': studentName,
+          'id': studentId,
+          'name': studentName,
           'attendedHours': attendedHours,
         };
       }).toList(),
@@ -41,34 +43,57 @@ class _CourseDashboardWidgetState extends State<CourseDashboardWidget> {
     });
   }
 
+  Future<void> fetchTeachersData() async {
+    List<Map<String, dynamic>> teachersData = await Future.wait(
+      widget.course.teachers!.map((teacher) async {
+        final teacherId = teacher.keys.first;
+        final teacherName = await getStudentName(teacherId);
+        final attendedHours = await getAttendedHours(teacherId);
+        return {
+          'id': teacherId,
+          'name': teacherName,
+          'attendedHours': attendedHours,
+        };
+      }).toList(),
+    );
+
+    setState(() {
+      _teachersData = teachersData;
+      _isLoading = false;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     fetchStudentsData();
+    fetchTeachersData();
   }
 
-  Future<int> getAttendedHours(String studentId) async {
+  Future<int> getAttendedHours(String id) async {
     AttendanceService attendanceService = AttendanceService();
-    return await attendanceService.attendedHours(
-        studentId, widget.course.courseId);
+    return await attendanceService.attendedHours(id, widget.course.courseId);
   }
 
-  Future<String> getStudentName(String studentId) async {
+  Future<String> getStudentName(String id) async {
     AttendanceService attendanceService = AttendanceService();
-    return await attendanceService.getStudentName(studentId);
+    return await attendanceService.getStudentName(id);
   }
 
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
 
+    // Show loading indicator when data is being fetched
     if (_isLoading) {
       return const Center(
         child: CircularProgressIndicator(),
       );
     }
 
-    if (_studentsData == null || _studentsData!.isEmpty) {
+    // Check if both _studentsData and _teachersData are null or empty
+    if ((_studentsData == null || _studentsData!.isEmpty) &&
+        (_teachersData == null || _teachersData!.isEmpty)) {
       return Center(
         child: Text(
           "No Data Found",
@@ -77,53 +102,72 @@ class _CourseDashboardWidgetState extends State<CourseDashboardWidget> {
       );
     }
 
-    return Container(
-      width: screenSize.width * 0.9,
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        children: [
-          const SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+    return RefreshIndicator(
+      onRefresh: () async {
+        setState(() {
+          _isLoading = true;
+        });
+
+        await Future.wait([fetchStudentsData(), fetchTeachersData()]);
+
+        setState(() {
+          _isLoading = false;
+        });
+      },
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Container(
+          width: screenSize.width * 0.9,
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          child: Column(
             children: [
-              Text(
-                "Sort By",
-                style: Theme.of(context).textTheme.bodyMediumTitleBrown,
-              ),
-              const SizedBox(width: 15),
-              DropdownButton<String>(
-                value: _isAscending ? "Ascending" : "Descending",
-                icon: const Icon(
-                  Icons.arrow_drop_down,
+              const SizedBox(height: 10),
+              // Students section
+              if (_studentsData != null && _studentsData!.isNotEmpty) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Students",
+                      style: Theme.of(context).textTheme.bodyMediumTitleBrown,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "Sort By",
+                          style:
+                              Theme.of(context).textTheme.bodyMediumTitleBrown,
+                        ),
+                        const SizedBox(width: 15),
+                        DropdownButton<String>(
+                          value:
+                              _isAscendingStudents ? "Ascending" : "Descending",
+                          icon: const Icon(Icons.arrow_drop_down),
+                          padding: const EdgeInsets.all(0),
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayMediumTitleBrownSemiBold,
+                          items: const [
+                            DropdownMenuItem(
+                              value: "Ascending",
+                              child: Text('Ascending'),
+                            ),
+                            DropdownMenuItem(
+                              value: "Descending",
+                              child: Text('Descending'),
+                            ),
+                          ],
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _isAscendingStudents = (newValue == "Ascending");
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                padding: const EdgeInsets.all(0),
-                style:
-                    Theme.of(context).textTheme.displayMediumTitleBrownSemiBold,
-                items: const [
-                  DropdownMenuItem(
-                    value: "Ascending",
-                    child: Text(
-                      'Ascending',
-                    ),
-                  ),
-                  DropdownMenuItem(
-                    value: "Descending",
-                    child: Text(
-                      'Descending',
-                    ),
-                  ),
-                ],
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _isAscending = (newValue == "Ascending");
-                  });
-                },
-              ),
-            ],
-          ),
-          _isLoading
-              ? const CircularProgressIndicator()
-              : ListView.builder(
+                ListView.builder(
                   padding: const EdgeInsets.all(0),
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -133,7 +177,7 @@ class _CourseDashboardWidgetState extends State<CourseDashboardWidget> {
                         List.from(_studentsData!);
 
                     sortedStudentsData.sort((a, b) {
-                      return _isAscending
+                      return _isAscendingStudents
                           ? a['attendedHours'].compareTo(b['attendedHours'])
                           : b['attendedHours'].compareTo(a['attendedHours']);
                     });
@@ -142,12 +186,88 @@ class _CourseDashboardWidgetState extends State<CourseDashboardWidget> {
                     return DashboardCardWidget(
                       course: widget.course,
                       attendedHours: studentData['attendedHours'],
-                      name: studentData['studentName'],
-                      studentId: studentData['studentId'],
+                      name: studentData['name'],
+                      studentId: studentData['id'],
                     );
                   },
                 ),
-        ],
+              ],
+
+              const SizedBox(height: 20),
+
+              // Teachers section
+              if (_teachersData != null && _teachersData!.isNotEmpty) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Teachers",
+                      style: Theme.of(context).textTheme.bodyMediumTitleBrown,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "Sort By",
+                          style:
+                              Theme.of(context).textTheme.bodyMediumTitleBrown,
+                        ),
+                        const SizedBox(width: 15),
+                        DropdownButton<String>(
+                          value:
+                              _isAscendingTeachers ? "Ascending" : "Descending",
+                          icon: const Icon(Icons.arrow_drop_down),
+                          padding: const EdgeInsets.all(0),
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayMediumTitleBrownSemiBold,
+                          items: const [
+                            DropdownMenuItem(
+                              value: "Ascending",
+                              child: Text('Ascending'),
+                            ),
+                            DropdownMenuItem(
+                              value: "Descending",
+                              child: Text('Descending'),
+                            ),
+                          ],
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _isAscendingTeachers = (newValue == "Ascending");
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                ListView.builder(
+                  padding: const EdgeInsets.all(0),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: _teachersData!.length,
+                  itemBuilder: (ctx, index) {
+                    List<Map<String, dynamic>> sortedTeachersData =
+                        List.from(_teachersData!);
+
+                    sortedTeachersData.sort((a, b) {
+                      return _isAscendingTeachers
+                          ? a['attendedHours'].compareTo(b['attendedHours'])
+                          : b['attendedHours'].compareTo(a['attendedHours']);
+                    });
+
+                    final teacherData = sortedTeachersData[index];
+                    return DashboardCardWidget(
+                      course: widget.course,
+                      attendedHours: teacherData['attendedHours'],
+                      name: teacherData['name'],
+                      studentId: teacherData['id'],
+                    );
+                  },
+                ),
+              ],
+            ],
+          ),
+        ),
       ),
     );
   }

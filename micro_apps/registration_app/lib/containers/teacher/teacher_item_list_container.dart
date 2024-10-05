@@ -21,8 +21,12 @@ class _TeacherItemListContainerState extends State<TeacherItemListContainer> {
 
   void fetchItems() {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    _courseService.getCourses(authProvider.selectedinstituteCode).listen(
-        (courses) {
+    _courseService
+        .getCourses(
+      authProvider.selectedinstituteCode,
+      authProvider.currentUser!.uid,
+    )
+        .listen((courses) {
       setState(() {
         _isLoading = false;
         this.courses = courses;

@@ -6,6 +6,7 @@ void showSnackbar(BuildContext context, String message) {
       content: Center(
         child: Text(message),
       ),
+      duration: const Duration(milliseconds: 1500),
     ),
   );
 }

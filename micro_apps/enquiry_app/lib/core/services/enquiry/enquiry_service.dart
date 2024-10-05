@@ -56,6 +56,7 @@ class EnquiryService {
         type: type,
         userId: userId,
         fileUrl: imageUrl,
+        isReOpen: false,
       );
 
       await _firestore
@@ -75,28 +76,59 @@ class EnquiryService {
     }
   }
 
-  Future<List<EnquiryModel>> getMyEnquiries(
+  Stream<List<EnquiryModel>> getMyEnquiries(
     String userId,
     String instituteId,
-  ) async {
+  ) async* {
     try {
       // Query Firestore for enquiries with the matching userId
-      QuerySnapshot querySnapshot = await _firestore
+      Stream<QuerySnapshot> enquiriesStream = _firestore
           .collection('institutes')
           .doc(instituteId)
           .collection('enquiries')
           .where('userId', isEqualTo: userId)
-          .get();
+          .where("status", isEqualTo: "created")
+          .snapshots();
 
-      // Convert each document to EnquiryModel and return as a list
-      List<EnquiryModel> enquiries = querySnapshot.docs.map((doc) {
-        return EnquiryModel.fromJson(doc.data() as Map<String, dynamic>);
-      }).toList();
+      // Yield enquiries as they come in
+      await for (QuerySnapshot querySnapshot in enquiriesStream) {
+        List<EnquiryModel> enquiries = querySnapshot.docs.map((doc) {
+          return EnquiryModel.fromJson(doc.data() as Map<String, dynamic>);
+        }).toList();
 
-      return enquiries;
+        yield enquiries;
+      }
     } catch (e) {
       log.e('Error fetching user enquiries: $e');
-      return [];
+      yield [];
+    }
+  }
+
+  Stream<List<EnquiryModel>> getMyResolvedEnquiries(
+    String userId,
+    String instituteId,
+  ) async* {
+    try {
+      // Query Firestore for enquiries with the matching userId
+      Stream<QuerySnapshot> enquiriesStream = await _firestore
+          .collection('institutes')
+          .doc(instituteId)
+          .collection('enquiries')
+          .where('userId', isEqualTo: userId)
+          .where("status", isEqualTo: "resolved")
+          .snapshots();
+
+      // Convert each document to EnquiryModel and return as a list
+      await for (QuerySnapshot querySnapshot in enquiriesStream) {
+        List<EnquiryModel> enquiries = querySnapshot.docs.map((doc) {
+          return EnquiryModel.fromJson(doc.data() as Map<String, dynamic>);
+        }).toList();
+
+        yield enquiries;
+      }
+    } catch (e) {
+      log.e('Error fetching user enquiries: $e');
+      yield [];
     }
   }
 }

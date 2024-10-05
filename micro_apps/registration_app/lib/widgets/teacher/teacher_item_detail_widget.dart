@@ -80,26 +80,68 @@ class _TeacherItemDetailWidgetState extends State<TeacherItemDetailWidget> {
               ],
             ),
             const SizedBox(height: 20),
-            BatchCard(course: widget.course),
-            const SizedBox(height: 20),
-            Row(
+            Column(
               children: [
-                Text(
-                  Strings.amountDetails,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMediumPrimary
-                      .copyWith(fontSize: 20),
+                Row(
+                  children: [
+                    Text(
+                      "Days",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMediumPrimary
+                          .copyWith(fontSize: 20),
+                    ),
+                  ],
                 ),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 10),
+                      ...widget.course.batchDay.split('+').map(
+                            (day) => Container(
+                              margin: const EdgeInsets.only(bottom: 7),
+                              child: Text(
+                                day,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(fontSize: 16),
+                              ),
+                            ),
+                          ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
               ],
             ),
-            const SizedBox(height: 20),
-            Text(
-              widget.course.amount.toString(),
-              maxLines: 2,
-              style:
-                  Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 16),
-            ),
+            if (widget.course.batchTime != null &&
+                widget.course.batchTime!.isNotEmpty)
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Timing : ",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMediumPrimary
+                            .copyWith(fontSize: 20),
+                      ),
+                      Text(
+                        widget.course.batchTime!,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(fontSize: 16),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

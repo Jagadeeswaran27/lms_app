@@ -42,6 +42,9 @@ class _AttendanceChangesContainerState
 
   void onUpdateAttendance(
       List<DisplayAttendanceModel> updatedAttendances) async {
+    setState(() {
+      _isLoading = true;
+    });
     final int response = await attendanceService.updateStudentAttendance(
       widget.studentId,
       widget.courseId,
@@ -58,6 +61,7 @@ class _AttendanceChangesContainerState
             child: CircularProgressIndicator(),
           )
         : AttendanceChangesWidget(
+            isLoading: _isLoading,
             attendances: attendances,
             onUpdateAttendance: onUpdateAttendance,
           );

@@ -47,7 +47,10 @@ class RegistrationService {
           .doc(instituteId)
           .collection('teachers-registrations')
           .doc(registrationId)
-          .set(registration.toJson());
+          .set({
+        ...registration.toJson(),
+        'registrationTime': FieldValue.serverTimestamp(),
+      });
 
       // Update the user's registered courses in Firestore
       await _firestore.collection('lms-users').doc(registeredBy).update({
@@ -107,7 +110,10 @@ class RegistrationService {
             .doc(instituteId)
             .collection('students-registrations')
             .doc(courseRegistrationId)
-            .set(registration.toJson());
+            .set({
+          ...registration.toJson(),
+          'registrationTime': FieldValue.serverTimestamp(),
+        });
 
         // Add the course ID to the user's registered courses in Firestore
         await _firestore.collection('lms-users').doc(registeredBy).update({
@@ -140,6 +146,8 @@ class RegistrationService {
     try {
       // Create a list to store registration IDs
       List<String> registrationIds = [];
+
+      print(registeredBy);
 
       // Loop through each course in the courses list
       for (CourseModel course in courses) {
@@ -174,7 +182,15 @@ class RegistrationService {
             .doc(instituteId)
             .collection('students-registrations')
             .doc(courseRegistrationId)
-            .set(registration.toJson());
+            .set({
+          ...registration.toJson(),
+          'registrationTime': FieldValue.serverTimestamp(),
+        });
+
+        // Add the course ID to the user's registered courses in Firestore
+        await _firestore.collection('lms-users').doc(registeredBy).update({
+          'registeredCourses': FieldValue.arrayUnion([course.courseId])
+        });
 
         // Add the registration ID to the list
         registrationIds.add(courseRegistrationId);

@@ -47,38 +47,97 @@ class StudentItemDetailWidget extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return SingleChildScrollView(
-      child: Container(
-        width: screenWidth * 0.9,
-        margin: const EdgeInsets.only(top: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Container(
+      width: screenWidth * 0.9,
+      margin: const EdgeInsets.only(top: 20),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        ItemDetailCard(course: course),
+        const SizedBox(height: 20),
+        Text(
+          Strings.aboutDescription,
+          style: Theme.of(context)
+              .textTheme
+              .bodyMediumPrimary
+              .copyWith(fontSize: 20),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          course.aboutDescription,
+          style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 16),
+        ),
+        const SizedBox(height: 20),
+        Text(
+          Strings.batchOffered,
+          style: Theme.of(context)
+              .textTheme
+              .bodyMediumPrimary
+              .copyWith(fontSize: 20),
+        ),
+        const SizedBox(height: 20),
+        Column(
           children: [
-            ItemDetailCard(course: course),
-            const SizedBox(height: 20),
-            Text(
-              Strings.aboutDescription,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMediumPrimary
-                  .copyWith(fontSize: 20),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              course.aboutDescription,
-              style:
-                  Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 16),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              Strings.batchOffered,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMediumPrimary
-                  .copyWith(fontSize: 20),
-            ),
-            const SizedBox(height: 20),
-            BatchCard(course: course),
-            const SizedBox(height: 20),
+            if (course.batchDay.isNotEmpty)
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Days",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMediumPrimary
+                            .copyWith(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
+                        ...course.batchDay.split('+').map(
+                              (day) => Container(
+                                margin: const EdgeInsets.only(bottom: 7),
+                                child: Text(
+                                  day,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(fontSize: 16),
+                                ),
+                              ),
+                            ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            if (course.batchTime != null && course.batchTime!.isNotEmpty)
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Timing : ",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMediumPrimary
+                            .copyWith(fontSize: 20),
+                      ),
+                      Text(
+                        course.batchTime!,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(fontSize: 16),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
             Row(
               children: [
                 Text(
@@ -120,7 +179,7 @@ class StudentItemDetailWidget extends StatelessWidget {
             const SizedBox(height: 20),
           ],
         ),
-      ),
-    );
+      ]),
+    ));
   }
 }
