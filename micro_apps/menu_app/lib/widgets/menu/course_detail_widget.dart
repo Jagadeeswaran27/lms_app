@@ -34,7 +34,7 @@ class CourseDetailWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CourseDetailCard(course: course),
+            CourseDetailCard(subCategory: subCategory, course: course),
             const SizedBox(height: 20),
             Text(
               Strings.aboutDescription,
@@ -67,20 +67,68 @@ class CourseDetailWidget extends StatelessWidget {
             if (subCategory == 'courses')
               Column(
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        Strings.batchOffered,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMediumPrimary
-                            .copyWith(fontSize: 20),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  BatchCard(role: role, course: course),
-                  const SizedBox(height: 20),
+                  if (course.batchDay.isNotEmpty)
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              "Days",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMediumPrimary
+                                  .copyWith(fontSize: 20),
+                            ),
+                          ],
+                        ),
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 10),
+                              ...course.batchDay.split('+').map(
+                                    (day) => Container(
+                                      margin: const EdgeInsets.only(bottom: 7),
+                                      child: Text(
+                                        day,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(fontSize: 16),
+                                      ),
+                                    ),
+                                  ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  if (course.batchTime != null && course.batchTime!.isNotEmpty)
+                    Column(
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              "Timing : ",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMediumPrimary
+                                  .copyWith(fontSize: 20),
+                            ),
+                            Text(
+                              course.batchTime!,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(fontSize: 16),
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    )
                 ],
               ),
             Row(

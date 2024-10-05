@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import 'package:registration_app/models/registration/student_registration_model.dart';
 import 'package:registration_app/routes/admin_routes.dart';
 import 'package:registration_app/themes/colors.dart';
@@ -37,6 +38,15 @@ class StudentListWidget extends StatelessWidget {
       );
     }
 
+    // Date formatting utility
+    String formatDate(Timestamp? timestamp) {
+      if (timestamp == null) {
+        return 'N/A';
+      }
+      DateTime dateTime = timestamp.toDate();
+      return DateFormat('MMM d, h:mm a').format(dateTime);
+    }
+
     return Container(
       width: screenSize.width * 0.9,
       margin: const EdgeInsets.only(top: 15),
@@ -44,6 +54,7 @@ class StudentListWidget extends StatelessWidget {
         padding: const EdgeInsets.all(0),
         children: registrationList
             .map((student) => ActionCard(
+                  registeredTime: formatDate(student.registrationTime),
                   imageUrl: student.imageUrl,
                   name: student.userName,
                   courseName: student.courseName,

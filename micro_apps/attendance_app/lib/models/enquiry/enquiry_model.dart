@@ -8,6 +8,7 @@ class EnquiryModel {
   final String type;
   final String status;
   final String? fileUrl;
+  final bool isReOpen;
 
   EnquiryModel({
     required this.enquiryId,
@@ -18,6 +19,7 @@ class EnquiryModel {
     required this.priority,
     required this.type,
     required this.status,
+    required this.isReOpen,
     this.fileUrl,
   });
 
@@ -33,6 +35,7 @@ class EnquiryModel {
       'type': type,
       'status': status,
       'fileUrl': fileUrl,
+      'isReOpen': isReOpen,
     };
   }
 
@@ -48,6 +51,7 @@ class EnquiryModel {
       type: json['type'] as String,
       status: json['status'] as String,
       fileUrl: json['fileUrl'] as String?,
+      isReOpen: json['isReOpen'] != null ? json['isReOpen'] as bool : false,
     );
   }
 }

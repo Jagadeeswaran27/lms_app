@@ -58,6 +58,14 @@ class _InitScreenState extends State<InitScreen> {
               );
               return;
             }
+            // if (authProvider.currentUser!.isFaceRecognized! == false) {
+            //   Navigator.of(context).pushReplacement(
+            //     MaterialPageRoute(
+            //       builder: (ctx) => const FaceRecognitionScreen(),
+            //     ),
+            //   );
+            //   return;
+            // }
             if (authProvider.currentUser!.roleType ==
                 UserRoleTypeEnum.student.roleName) {
               Navigator.of(context).pushReplacement(

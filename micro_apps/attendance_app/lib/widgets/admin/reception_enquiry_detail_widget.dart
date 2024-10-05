@@ -1,18 +1,17 @@
+import 'package:attendance_app/themes/colors.dart';
+import 'package:attendance_app/widgets/common/icon_text_button.dart';
 import 'package:attendance_app/widgets/common/svg_lodder.dart';
 import 'package:flutter/material.dart';
 
 import 'package:attendance_app/models/enquiry/enquiry_model.dart';
 import 'package:attendance_app/models/enquiry/message_model.dart';
 import 'package:attendance_app/resources/strings.dart';
-import 'package:attendance_app/themes/colors.dart';
 import 'package:attendance_app/themes/fonts.dart';
 import 'package:attendance_app/widgets/admin/messages.dart';
 import 'package:attendance_app/widgets/common/choose_file_button.dart';
 import 'package:attendance_app/widgets/common/enquiry_reception_title_card.dart';
 import 'package:attendance_app/widgets/common/form_input.dart';
 import 'package:attendance_app/widgets/common/full_screen_image_viewer.dart';
-import 'package:attendance_app/widgets/common/icon_text_button.dart';
-import 'package:attendance_app/widgets/common/status_progress_indicator.dart';
 import 'package:attendance_app/resources/icons.dart' as icons;
 
 class ReceptionEnquiryDetailWidget extends StatefulWidget {
@@ -27,9 +26,9 @@ class ReceptionEnquiryDetailWidget extends StatefulWidget {
 
   final EnquiryModel enquiry;
   final Future<bool> Function(String) onSendMessage;
+  final void Function() onResolveEnquiry;
   final List<MessageModel> messages;
   final bool isLoading;
-  final void Function() onResolveEnquiry;
 
   @override
   State<ReceptionEnquiryDetailWidget> createState() =>
@@ -71,8 +70,6 @@ class _ReceptionEnquiryDetailWidgetState
 
   @override
   Widget build(BuildContext context) {
-    final isAcknowledged = widget.enquiry.status == 'acknowledged';
-    final isResolved = widget.enquiry.status == 'resolved';
     final Size screenSize = MediaQuery.of(context).size;
 
     return Column(
@@ -135,13 +132,16 @@ class _ReceptionEnquiryDetailWidgetState
                     ],
                   ),
                   const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Text(
-                        widget.enquiry.description,
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    ],
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Wrap(
+                      children: [
+                        Text(
+                          widget.enquiry.description,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 30),
                   Row(
@@ -176,81 +176,25 @@ class _ReceptionEnquiryDetailWidgetState
                       )
                     ],
                   ),
-                  const SizedBox(height: 30),
-                  SizedBox(
-                    height: 50,
-                    width: screenSize.width * 0.7,
-                    child: IconTextButton(
-                      text: Strings.resolve,
-                      onPressed: widget.onResolveEnquiry,
-                      color: ThemeColors.primary,
-                      iconHorizontalPadding: 5,
-                      svgIcon: icons.Icons.resolve,
-                      iconColor: ThemeColors.white,
-                      isLoading: widget.isLoading,
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  Row(
-                    children: [
-                      Text(
-                        Strings.status,
-                        style: Theme.of(context).textTheme.bodyMediumTitleBrown,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Column(
-                        children: [
-                          SizedBox(
-                            width: 200,
-                            child: FormInput(
-                              text: "",
-                              hintText: isAcknowledged || isResolved
-                                  ? Strings.acknowledged
-                                  : Strings.toAcknowledge,
-                              readOnly: true,
-                              fillColor: isAcknowledged || isResolved
-                                  ? ThemeColors.primary
-                                  : null,
-                              hintTextStyle: isAcknowledged || isResolved
-                                  ? Theme.of(context).textTheme.bodyMedium
-                                  : null,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          SizedBox(
-                            width: 200,
-                            child: FormInput(
-                              text: "",
-                              hintText: isResolved
-                                  ? Strings.resolved
-                                  : Strings.toResolve,
-                              readOnly: true,
-                              fillColor:
-                                  isResolved ? ThemeColors.primary : null,
-                              hintTextStyle: isResolved
-                                  ? Theme.of(context).textTheme.bodyMedium
-                                  : null,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 10),
-                      StatusProgressIndicator(
-                        isAcknowledged:
-                            isAcknowledged || isResolved ? true : false,
-                        isResolved: isResolved ? true : false,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 30),
                   if (widget.messages.isNotEmpty)
                     Messages(
                       messages: widget.messages,
+                    ),
+                  const SizedBox(height: 20),
+                  if (!widget.enquiry.isReOpen &&
+                      widget.enquiry.status == 'created')
+                    SizedBox(
+                      height: 50,
+                      width: screenSize.width * 0.7,
+                      child: IconTextButton(
+                        text: Strings.resolve,
+                        onPressed: widget.onResolveEnquiry,
+                        color: ThemeColors.primary,
+                        iconHorizontalPadding: 5,
+                        svgIcon: icons.Icons.resolve,
+                        iconColor: ThemeColors.white,
+                        isLoading: widget.isLoading,
+                      ),
                     ),
                 ],
               ),

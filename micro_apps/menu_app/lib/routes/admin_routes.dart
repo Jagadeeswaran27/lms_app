@@ -5,6 +5,7 @@ import 'package:menu_app/screens/admin/item_category_screen.dart';
 import 'package:menu_app/screens/admin/item_list_screen.dart';
 import 'package:menu_app/screens/admin/reception_enquiry_detail_screen.dart';
 import 'package:menu_app/screens/admin/reception_enquiry_screen.dart';
+import 'package:menu_app/screens/admin/resolved_enquiry_screen.dart';
 import 'package:menu_app/screens/common/course_detail_screen.dart';
 
 class AdminRoutes {
@@ -16,6 +17,7 @@ class AdminRoutes {
   static const String receptionEnquiry = '/reception-enquiry';
   static const String receptionEnquiryDetail = '/reception-enquiry-detail';
   static const String courseDetail = '/course-detail';
+  static const String resolvedEnquiry = '/resolved-enquiry';
 
   static Map<String, WidgetBuilder> get buildAdminRoutes {
     return {
@@ -25,6 +27,7 @@ class AdminRoutes {
       receptionEnquiryDetail: (context) => const ReceptionEnquiryDetailScreen(),
       courseDetail: (context) => const CourseDetailScreen(),
       itemCategory: (context) => const ItemCategoryScreen(),
+      resolvedEnquiry: (context) => const ResolvedEnquiryScreen(),
     };
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:registration_app/models/registration/course_model.dart';
 
+import 'package:registration_app/models/registration/course_model.dart';
 import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/themes/colors.dart';
 import 'package:registration_app/themes/fonts.dart';
@@ -13,10 +13,12 @@ class StudentEnrollmentWidget extends StatelessWidget {
     super.key,
     required this.registrationIds,
     required this.courses,
+    required this.onProceedToPayment,
   });
 
   final List<String> registrationIds;
   final List<CourseModel> courses;
+  final void Function() onProceedToPayment;
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +105,7 @@ class StudentEnrollmentWidget extends StatelessWidget {
                       iconHorizontalPadding: 7,
                       radius: 20,
                       text: Strings.proceedToPayment,
-                      onPressed: () {},
+                      onPressed: onProceedToPayment,
                       color: ThemeColors.primary,
                       buttonTextStyle: Theme.of(context).textTheme.bodyMedium,
                       svgIcon: icons.Icons.cartIconSvg,

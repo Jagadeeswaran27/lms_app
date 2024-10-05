@@ -1,26 +1,27 @@
+import 'package:attendance_app/screens/auth/forgot_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
 import 'package:attendance_app/constants/enums/button_size.dart';
-import 'package:attendance_app/resources/images.dart';
 import 'package:attendance_app/resources/strings.dart';
 import 'package:attendance_app/screens/auth/signup_screen.dart';
 import 'package:attendance_app/themes/colors.dart';
 import 'package:attendance_app/themes/fonts.dart';
 import 'package:attendance_app/widgets/common/custom_elevated_button.dart';
 import 'package:attendance_app/widgets/common/form_input.dart';
-import 'package:attendance_app/widgets/common/svg_lodder.dart';
 
 class LoginFormWidget extends StatefulWidget {
   const LoginFormWidget({
     super.key,
     required this.isLoading,
     required this.onSignIn,
+    this.existingPassword,
   });
 
   final Future<void> Function(String email, String password, bool isGoogle)
       onSignIn;
   final bool isLoading;
+  final String? existingPassword;
 
   @override
   State<LoginFormWidget> createState() => _LoginFormWidgetState();
@@ -28,9 +29,18 @@ class LoginFormWidget extends StatefulWidget {
 
 class _LoginFormWidgetState extends State<LoginFormWidget> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _passwordController = TextEditingController();
   String _userEmail = '';
   String _userPassword = '';
   bool isPasswordVisible = true;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.existingPassword != null) {
+      _passwordController.text = widget.existingPassword!;
+    }
+  }
 
   void _handleSignIn() {
     if (_formKey.currentState!.validate()) {
@@ -46,6 +56,12 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
   }
 
   @override
+  void dispose() {
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -57,6 +73,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
         child: Column(
           children: [
             FormInput(
+              autoFillHints: const [AutofillHints.email],
               text: Strings.enterYourEmailOrPhoneNo,
               onSaved: (value) => {_userEmail = value!},
               validator: (value) {
@@ -68,7 +85,9 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
             ),
             const SizedBox(height: 20),
             FormInput(
+              autoFillHints: const [AutofillHints.password],
               text: Strings.enterYourPassword,
+              controller: _passwordController,
               onSaved: (value) => {_userPassword = value!},
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -84,30 +103,36 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
               ),
               obscureText: isPasswordVisible,
             ),
-            // const SizedBox(height: 20),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.end,
-            //   children: [
-            //     GestureDetector(
-            //       onTap: () {},
-            //       child: Text(
-            //         Strings.forgetYourPassword,
-            //         style: Theme.of(context)
-            //             .textTheme
-            //             .displayMediumPrimary
-            //             .copyWith(fontSize: 14.0),
-            //       ),
-            //     )
-            //   ],
-            // ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (ctx) => const ForgotPasswordScreen(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    Strings.forgetYourPassword,
+                    style: Theme.of(context)
+                        .textTheme
+                        .displayMediumPrimary
+                        .copyWith(fontSize: 14.0),
+                  ),
+                )
+              ],
+            ),
             const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: CustomElevatedButton(
                 text: Strings.login,
                 buttonSize: ButtonSize.large,
-                onPressed: _handleSignIn,
                 isLoading: widget.isLoading,
+                onPressed: _handleSignIn,
               ),
             ),
             const SizedBox(height: 20),
@@ -132,7 +157,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> {
                         .copyWith(fontSize: 15),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        Navigator.of(context).pushReplacement(
+                        Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (ctx) => const SignupScreen(),
                           ),

@@ -15,6 +15,7 @@ class ActionCard extends StatelessWidget {
     required this.paymentDone,
     required this.onAccept,
     required this.onReject,
+    required this.registeredTime,
   });
 
   final String imageUrl;
@@ -23,6 +24,7 @@ class ActionCard extends StatelessWidget {
   final bool paymentDone;
   final void Function() onAccept;
   final void Function() onReject;
+  final String registeredTime;
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +59,8 @@ class ActionCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(50.0),
             child: Image.network(
               imageUrl,
-              width: 80,
-              height: 80,
+              width: 60,
+              height: 60,
               fit: BoxFit.cover,
             ),
           ),
@@ -92,6 +94,22 @@ class ActionCard extends StatelessWidget {
                   ),
                   Text(
                     courseName,
+                    style: Theme.of(context)
+                        .textTheme
+                        .displayMediumPrimarySemiBold,
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    'At : ',
+                    style: Theme.of(context)
+                        .textTheme
+                        .displayMediumTitleBrownSemiBold,
+                  ),
+                  Text(
+                    registeredTime,
                     style: Theme.of(context)
                         .textTheme
                         .displayMediumPrimarySemiBold,

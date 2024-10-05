@@ -28,7 +28,7 @@ class ItemCard extends StatelessWidget {
           ],
         ),
         child: SizedBox(
-          height: 120.0,
+          height: 150.0,
           child: Row(
             children: [
               Expanded(
@@ -67,12 +67,52 @@ class ItemCard extends StatelessWidget {
                             .copyWith(fontSize: 20),
                       ),
                       const SizedBox(height: 8.0),
+                      Wrap(
+                        children: [
+                          Text(
+                            "Day : ",
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayMediumPrimary,
+                          ),
+                          SizedBox(
+                            width: 110,
+                            child: Text(
+                              overflow: TextOverflow.ellipsis,
+                              course.batchDay,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displaySmall!
+                                  .copyWith(fontSize: 12),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10.0),
+                      Row(
+                        children: [
+                          Text(
+                            "Time : ",
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayMediumPrimary,
+                          ),
+                          Text(
+                            course.batchTime!,
+                            style: Theme.of(context)
+                                .textTheme
+                                .displaySmall!
+                                .copyWith(fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10.0),
                       Text(
-                        course.aboutDescription,
+                        'Rs.${course.amount.toString()}',
                         style: Theme.of(context)
                             .textTheme
                             .displaySmall!
-                            .copyWith(fontSize: 14),
+                            .copyWith(fontSize: 16),
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,

@@ -11,6 +11,8 @@ class AdminCourseModel {
   final double amount;
   final int noOfRegistrations;
   final int totalHours;
+  final List<String>? customDays;
+  final String? customTime;
 
   AdminCourseModel({
     required this.courseId,
@@ -23,6 +25,8 @@ class AdminCourseModel {
     required this.amount,
     required this.noOfRegistrations,
     required this.totalHours,
+    this.customDays,
+    this.customTime,
   });
 
   factory AdminCourseModel.fromJson(Map<String, dynamic> json) {
@@ -37,6 +41,10 @@ class AdminCourseModel {
       amount: json['amount'].toDouble(),
       noOfRegistrations: json['noOfRegistrations'],
       totalHours: json['totalHours'] ?? 0,
+      customDays: json['customDays'] != null
+          ? List<String>.from(json['customDays'] as List<dynamic>)
+          : [],
+      customTime: json['customTime'] ?? '',
     );
   }
 
@@ -52,6 +60,8 @@ class AdminCourseModel {
       'amount': amount,
       'noOfRegistrations': noOfRegistrations,
       'totalHours': totalHours,
+      'customDays': customDays,
+      'customTime': customTime,
     };
   }
 

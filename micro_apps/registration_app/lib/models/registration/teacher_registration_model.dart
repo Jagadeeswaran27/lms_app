@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class TeacherRegistrationModel {
   final String courseName;
   final String courseId;
@@ -8,6 +10,7 @@ class TeacherRegistrationModel {
   final String imageUrl;
   final String registeredFor;
   final String userName;
+  final Timestamp? registrationTime;
 
   TeacherRegistrationModel({
     required this.courseName,
@@ -19,6 +22,7 @@ class TeacherRegistrationModel {
     required this.imageUrl,
     required this.registeredFor,
     required this.userName,
+    this.registrationTime,
   });
 
   factory TeacherRegistrationModel.fromJson(Map<String, dynamic> json) {
@@ -32,6 +36,9 @@ class TeacherRegistrationModel {
       imageUrl: json['imageUrl'] as String,
       registeredFor: json['registeredFor'] as String,
       userName: json['userName'] as String,
+      registrationTime: json['registrationTime'] != null
+          ? (json['registrationTime'] as Timestamp)
+          : null,
     );
   }
 
@@ -46,6 +53,7 @@ class TeacherRegistrationModel {
       'imageUrl': imageUrl,
       'registeredFor': registeredFor,
       'userName': userName,
+      'registrationTime': registrationTime,
     };
   }
 

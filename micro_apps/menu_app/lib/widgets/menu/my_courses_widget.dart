@@ -51,6 +51,7 @@ class MyCoursesWidget extends StatelessWidget {
         itemCount: courses.length,
         itemBuilder: (context, index) {
           return CourseCard(
+            subCategory: subCategory,
             course: courses[index],
             onPressed: () => navigateToCourseDetail(context, courses[index]),
           );

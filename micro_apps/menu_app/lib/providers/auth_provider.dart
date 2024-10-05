@@ -192,6 +192,20 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  Future<String> getInstituteName(String accessCode) async {
+    try {
+      final instituteRef =
+          FirebaseFirestore.instance.collection('institutes').doc(accessCode);
+
+      final docSnapshot = await instituteRef.get();
+
+      final data = docSnapshot.data();
+      return data!['instituteName'];
+    } catch (e) {
+      return "";
+    }
+  }
+
   Future<bool> saveUser(Map<String, String> data, File? profile) async {
     User? user = FirebaseAuth.instance.currentUser;
     String? url = user?.photoURL;

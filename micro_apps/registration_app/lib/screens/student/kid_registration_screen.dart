@@ -33,16 +33,22 @@ class KidRegistrationScreen extends StatelessWidget {
                 children: [
                   Column(
                     children: [
-                      Text(
-                        'Register your kid',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium!
-                            .copyWith(fontSize: 32.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Register Someone you know!',
+                            maxLines: 2,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium!
+                                .copyWith(fontSize: 20.0),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        'Enter your kid details',
+                        'Enter details',
                         style: Theme.of(context)
                             .textTheme
                             .displayMediumSemiBold

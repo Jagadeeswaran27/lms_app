@@ -15,7 +15,7 @@ description: "A new Flutter module project."
 # This version is used _only_ for the Runner app, which is used if you just do
 # a `flutter run` or a `flutter make-host-app-editable`. It has no impact
 # on any other native host app that you embed your Flutter project into.
-version: 1.0.0+1
+version: 1.0.2
 
 environment:
   sdk: ">=3.4.3 <4.0.0"
@@ -37,6 +37,8 @@ dependencies:
   image_picker: ^1.1.2
   dotted_border: ^2.1.0
   cloud_functions: ^5.1.0
+  http: ^1.2.2
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

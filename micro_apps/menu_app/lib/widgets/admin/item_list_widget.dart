@@ -83,6 +83,7 @@ class ItemListWidget extends StatelessWidget {
                   children: [
                     ...courses.map(
                       (course) => CourseCard(
+                        subCategory: subCategory,
                         onPressed: () =>
                             navigateToCourseDetail(context, course),
                         course: course,

@@ -20,6 +20,7 @@ class ItemDetailContainer extends StatefulWidget {
 class _ItemDetailContainerState extends State<ItemDetailContainer> {
   AttendanceService attendanceService = AttendanceService();
   Map<String, bool> studentsAttendanceStatus = {};
+  Map<String, bool> teachersAttendanceStatus = {};
   bool isLoading = false;
   String _date = DateFormat('ddMMyyyy').format(DateTime.now());
   String _displayFormatDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
@@ -38,25 +39,43 @@ class _ItemDetailContainerState extends State<ItemDetailContainer> {
     Map<String, bool> attendanceStatus = {
       for (var student in widget.course.students!) student.keys.first: false,
     };
+    Map<String, bool> teachersAttendanceStatus = {
+      for (var teacher in widget.course.teachers!) teacher.keys.first: false,
+    };
     studentsAttendanceStatus = await attendanceService.getAttendance(
       widget.course.courseId,
       date,
       attendanceStatus,
     );
+    teachersAttendanceStatus = await attendanceService.getTeachersAttendance(
+      widget.course.courseId,
+      date,
+      teachersAttendanceStatus,
+    );
     setState(() {
       _date = date;
       isLoading = false;
       _displayFormatDate = displayFormatDate;
+      this.teachersAttendanceStatus = teachersAttendanceStatus;
     });
   }
 
-  Future<bool> onMarkAttendance(Map<String, bool> attendanceStatus) async {
+  Future<bool> onMarkAttendance(
+    Map<String, bool> studentsAttendanceStatus,
+    Map<String, bool> teachersAttendanceStatus,
+  ) async {
+    print(teachersAttendanceStatus);
     try {
       final bool response = await attendanceService.markAttendance(
-          attendanceStatus, widget.course.courseId, _date);
+        studentsAttendanceStatus,
+        teachersAttendanceStatus,
+        widget.course.courseId,
+        _date,
+      );
       if (response) {
         setState(() {
-          studentsAttendanceStatus = attendanceStatus;
+          studentsAttendanceStatus = studentsAttendanceStatus;
+          teachersAttendanceStatus = teachersAttendanceStatus;
         });
         return true;
       }
@@ -77,6 +96,7 @@ class _ItemDetailContainerState extends State<ItemDetailContainer> {
             displayFormatDate: _displayFormatDate,
             course: widget.course,
             onMarkAttendance: onMarkAttendance,
+            teachersAttendanceStatus: teachersAttendanceStatus,
             studentsAttendanceStatus: studentsAttendanceStatus,
             fetchAttendance: fetchAttendance,
           );

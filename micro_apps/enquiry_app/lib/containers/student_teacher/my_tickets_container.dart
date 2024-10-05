@@ -1,4 +1,3 @@
-import 'package:enquiry_app/themes/fonts.dart';
 import 'package:flutter/material.dart';
 
 import 'package:enquiry_app/core/services/enquiry/enquiry_service.dart';
@@ -26,12 +25,22 @@ class _MyTicketsContainerState extends State<MyTicketsContainer> {
     fetchMyEnquiries();
   }
 
-  Future<void> fetchMyEnquiries() async {
+  void fetchMyEnquiries() {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     String userId = authProvider.currentUser!.uid;
     String instituteId = authProvider.selectedinstituteCode;
     try {
-      _myEnquiries = await enquiryService.getMyEnquiries(userId, instituteId);
+      enquiryService.getMyEnquiries(userId, instituteId).listen((enquiries) {
+        setState(
+          () {
+            _myEnquiries = enquiries;
+          },
+        );
+      }, onError: (error) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
     } catch (e) {
       showSnackbar(context, "Error fetching tickets");
     } finally {
@@ -46,15 +55,6 @@ class _MyTicketsContainerState extends State<MyTicketsContainer> {
     if (_isLoading) {
       return const Center(
         child: CircularProgressIndicator(),
-      );
-    }
-
-    if (_myEnquiries.isEmpty) {
-      return Center(
-        child: Text(
-          "No tickets",
-          style: Theme.of(context).textTheme.bodyMediumPrimary,
-        ),
       );
     }
 

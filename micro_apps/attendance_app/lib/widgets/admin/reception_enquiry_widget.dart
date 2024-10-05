@@ -1,3 +1,4 @@
+import 'package:attendance_app/widgets/common/icon_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance_app/models/enquiry/enquiry_model.dart';
 import 'package:attendance_app/resources/strings.dart';
@@ -31,11 +32,36 @@ class ReceptionEnquiryWidget extends StatelessWidget {
 
     if (enquiries.isEmpty) {
       return Center(
-        child: Text(
-          Strings.noEnquiriesFound,
-          style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                color: ThemeColors.primary,
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                width: 200,
+                height: 40,
+                margin: const EdgeInsets.only(top: 10, right: 10),
+                child: IconTextButton(
+                  text: Strings.resolvedHistory,
+                  onPressed: () {
+                    Navigator.of(context)
+                        .pushNamed(AdminRoutes.resolvedEnquiryScreen);
+                  },
+                  color: ThemeColors.primary,
+                  iconHorizontalPadding: 5,
+                ),
               ),
+            ),
+            Expanded(
+              child: Center(
+                child: Text(
+                  Strings.noEnquiriesFound,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: ThemeColors.primary,
+                      ),
+                ),
+              ),
+            ),
+          ],
         ),
       );
     }
@@ -43,16 +69,39 @@ class ReceptionEnquiryWidget extends StatelessWidget {
     return Container(
       width: screenSize.width * 0.90,
       margin: const EdgeInsets.only(top: 3),
-      child: ListView.builder(
-        padding: const EdgeInsets.all(0),
-        itemCount: enquiries.length,
-        itemBuilder: (context, index) {
-          final enquiry = enquiries[index];
-          return EnquiryCard(
-            enquiry: enquiry,
-            onTap: () => navigateToEnquiryDetailScreen(context, enquiry),
-          );
-        },
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              width: 200,
+              height: 40,
+              margin: const EdgeInsets.only(top: 10),
+              child: IconTextButton(
+                text: Strings.resolvedHistory,
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushNamed(AdminRoutes.resolvedEnquiryScreen);
+                },
+                color: ThemeColors.primary,
+                iconHorizontalPadding: 5,
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              padding: const EdgeInsets.all(0),
+              itemCount: enquiries.length,
+              itemBuilder: (context, index) {
+                final enquiry = enquiries[index];
+                return EnquiryCard(
+                  enquiry: enquiry,
+                  onTap: () => navigateToEnquiryDetailScreen(context, enquiry),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

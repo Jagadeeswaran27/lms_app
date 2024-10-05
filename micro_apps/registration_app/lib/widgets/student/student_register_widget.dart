@@ -108,7 +108,7 @@ class _StudentRegisterWidgetState extends State<StudentRegisterWidget> {
                         selectedOption = value;
                       });
                     },
-                    value: "For kid",
+                    value: "For Someone else",
                   )
                 ],
               ),

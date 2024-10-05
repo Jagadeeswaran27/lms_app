@@ -2,6 +2,7 @@ import 'package:attendance_app/models/courses/course_model.dart';
 import 'package:attendance_app/resources/strings.dart';
 import 'package:attendance_app/routes/admin_routes.dart';
 import 'package:attendance_app/themes/colors.dart';
+import 'package:attendance_app/themes/fonts.dart';
 import 'package:attendance_app/widgets/common/icon_text_button.dart';
 import 'package:attendance_app/resources/icons.dart' as icons;
 import 'package:flutter/material.dart';
@@ -25,6 +26,14 @@ class ItemListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (myCourses.isEmpty) {
+      return Center(
+        child: Text(
+          "Add Some Courses",
+          style: Theme.of(context).textTheme.bodyMediumPrimary,
+        ),
+      );
+    }
     final Size screenSize = MediaQuery.of(context).size;
     return Column(
       children: [

@@ -1,3 +1,4 @@
+import 'package:attendance_app/themes/fonts.dart';
 import 'package:flutter/material.dart';
 
 import 'package:attendance_app/routes/attendance_app_routes.dart';
@@ -21,6 +22,14 @@ class MyCoursesWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (myCourses.isEmpty) {
+      return Center(
+        child: Text(
+          "Buy Some Courses",
+          style: Theme.of(context).textTheme.bodyMediumPrimary,
+        ),
+      );
+    }
     final Size screenSize = MediaQuery.of(context).size;
     return Container(
       width: screenSize.width * 0.9,
