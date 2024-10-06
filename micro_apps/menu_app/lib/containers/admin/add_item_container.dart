@@ -51,12 +51,17 @@ class _AddItemContainerState extends State<AddItemContainer> {
     }
   }
 
+  void onAddSuggestion() {
+    print('I am on add suggestion');
+  }
+
   @override
   Widget build(BuildContext context) {
     return AddItemWidget(
       isLoading: _isLoading,
       addItem: addItem,
       subCategory: widget.subCategory,
+      onAddSuggestion: onAddSuggestion,
     );
   }
 }

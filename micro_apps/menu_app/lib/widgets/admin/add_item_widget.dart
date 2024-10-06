@@ -12,6 +12,7 @@ import 'package:menu_app/widgets/common/form_input.dart';
 import 'package:menu_app/widgets/common/icon_text_button.dart';
 import 'package:menu_app/resources/icons.dart' as icons;
 import 'package:menu_app/widgets/common/registration_media_dialog.dart';
+import 'package:menu_app/widgets/common/svg_lodder.dart';
 
 class AddItemWidget extends StatefulWidget {
   const AddItemWidget({
@@ -19,12 +20,13 @@ class AddItemWidget extends StatefulWidget {
     required this.isLoading,
     required this.addItem,
     required this.subCategory,
+    required this.onAddSuggestion,
   });
 
   final bool isLoading;
   final Function(Map<String, dynamic>, List<File> images) addItem;
   final String subCategory;
-
+  final Function() onAddSuggestion;
   @override
   AddItemWidgetState createState() => AddItemWidgetState();
 }
@@ -158,6 +160,58 @@ class AddItemWidgetState extends State<AddItemWidget> {
     });
   }
 
+  void closeModal(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
+  void onAddSuggestion() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.8,
+              maxWidth: MediaQuery.of(context).size.width * 0.9,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: InkWell(
+                      child: const SVGLoader(
+                        image: icons.Icons.closeRed,
+                        width: 16,
+                        height: 16,
+                      ),
+                      onTap: () => closeModal(context),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Add Suggestion',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headlineSmall!
+                        .copyWith(fontSize: 18),
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
@@ -174,6 +228,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
                 titleError: _titleError,
                 onTitleChange: _handleTitleChange,
                 onTap: _onProfileUpload,
+                onAddSuggestion: onAddSuggestion,
               ),
               const SizedBox(height: 20),
               Row(

@@ -9,6 +9,7 @@ class FormInput extends StatelessWidget {
     required this.text,
     this.obscureText = false,
     this.readOnly,
+    this.focusNode,
     this.keyboardType,
     this.onSaved,
     this.borderColor,
@@ -37,6 +38,7 @@ class FormInput extends StatelessWidget {
   final TextEditingController? controller;
   final void Function(String)? onChanged;
   final bool? readOnly;
+  final FocusNode? focusNode;
   final TextStyle? hintTextStyle;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
@@ -69,6 +71,7 @@ class FormInput extends StatelessWidget {
             )
           : null, // No shadow if hasShadow is false
       child: TextFormField(
+        focusNode: focusNode,
         autofillHints: autofillHints,
         expands: isDescription ? true : false,
         minLines: isDescription ? null : 1,

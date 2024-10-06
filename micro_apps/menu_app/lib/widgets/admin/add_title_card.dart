@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:menu_app/resources/strings.dart';
@@ -8,13 +9,15 @@ import 'package:menu_app/themes/fonts.dart';
 import 'package:menu_app/widgets/common/form_input.dart';
 import 'package:menu_app/resources/icons.dart' as icons;
 import 'package:menu_app/widgets/common/svg_lodder.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
-class AddTitleCard extends StatelessWidget {
+class AddTitleCard extends StatefulWidget {
   final Function() onTap;
   final String text;
   final File? image;
   final String? titleError;
   final Function(String) onTitleChange;
+  final Function() onAddSuggestion;
 
   const AddTitleCard({
     super.key,
@@ -23,7 +26,22 @@ class AddTitleCard extends StatelessWidget {
     required this.text,
     required this.onTitleChange,
     required this.titleError,
+    required this.onAddSuggestion,
   });
+
+  @override
+  State<AddTitleCard> createState() => _AddTitleCardState();
+}
+
+class _AddTitleCardState extends State<AddTitleCard> {
+  int _selectedFieldType = 0;
+  final TextEditingController _typeAheadController = TextEditingController();
+
+  void _handleAutoChange(int value) {
+    setState(() {
+      _selectedFieldType = value;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,19 +68,20 @@ class AddTitleCard extends StatelessWidget {
       margin: const EdgeInsets.only(top: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            onTap: onTap,
+            onTap: widget.onTap,
             child: SizedBox(
               width: 100,
               height: 100,
               child: CircleAvatar(
                 backgroundColor: Colors.transparent,
-                child: image == null
+                child: widget.image == null
                     ? const SVGLoader(image: icons.Icons.profileBackup)
                     : ClipOval(
                         child: Image.file(
-                          image!,
+                          widget.image!,
                           width: 100,
                           height: 100,
                           fit: BoxFit.cover,
@@ -82,32 +101,173 @@ class AddTitleCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 8.0),
                 SizedBox(
-                  width: screenSize.width * 0.45,
+                  width: screenSize.width * 0.60,
                   child: FormInput(
                     text: '',
-                    hintText: text,
+                    hintText: widget.text,
                     // initialValue: text,
-                    onChanged: onTitleChange,
+                    onChanged: widget.onTitleChange,
                     fillColor: ThemeColors.white,
                     borderColor: ThemeColors.cardBorderColor,
                     borderWidth: 0.4,
                     hasShadow: true,
+                    readOnly: true,
                   ),
                 ),
-                if (titleError != null)
+                if (widget.titleError != null)
                   Padding(
                     padding: const EdgeInsets.only(
                       left: 10,
                       top: 5,
                     ),
                     child: Text(
-                      titleError!,
+                      widget.titleError!,
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall!
                           .copyWith(color: ThemeColors.primary),
                     ),
                   ),
+                const SizedBox(height: 18.0),
+                Text(
+                  Strings.inputType,
+                  style: Theme.of(context).textTheme.bodyMediumTitleBrown,
+                ),
+                Transform.translate(
+                  offset: const Offset(-10, 0),
+                  child: Column(
+                    children: [
+                      RadioListTile(
+                        contentPadding: EdgeInsets.zero,
+                        value: _selectedFieldType == 0,
+                        groupValue: true,
+                        onChanged: (value) => _handleAutoChange(0),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        title: Text(
+                          Strings.manual,
+                          style:
+                              Theme.of(context).textTheme.bodyMediumTitleBrown,
+                        ),
+                      ),
+                      Transform.translate(
+                        offset: const Offset(0, -20),
+                        child: RadioListTile(
+                          contentPadding: EdgeInsets.zero,
+                          value: _selectedFieldType == 1,
+                          groupValue: true,
+                          onChanged: (value) => _handleAutoChange(1),
+                          title: Text(
+                            Strings.auto,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMediumTitleBrown,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Transform.translate(
+                  offset: const Offset(0, -10),
+                  child: Text(
+                    '${_selectedFieldType == 0 ? Strings.manual : Strings.auto} Field',
+                    style: Theme.of(context).textTheme.bodyMediumTitleBrown,
+                  ),
+                ),
+                _selectedFieldType == 0
+                    ? SizedBox(
+                        width: screenSize.width * 0.60,
+                        child: FormInput(
+                          text: '',
+                          hintText: widget.text,
+                          // initialValue: text,
+                          onChanged: widget.onTitleChange,
+                          fillColor: ThemeColors.white,
+                          borderColor: ThemeColors.cardBorderColor,
+                          borderWidth: 0.4,
+                          hasShadow: true,
+                        ),
+                      )
+                    : TypeAheadField<QueryDocumentSnapshot>(
+                        controller: _typeAheadController,
+                        builder: (context, controller, focusNode) {
+                          return FormInput(
+                            text: '',
+                            focusNode: focusNode,
+                            controller: controller,
+                            hintText: '',
+                            borderColor: ThemeColors.cardBorderColor,
+                            fillColor: ThemeColors.white,
+                            borderWidth: 0.4,
+                            hasShadow: true,
+                          );
+                        },
+                        loadingBuilder: (context) =>
+                            const CircularProgressIndicator(),
+                        suggestionsCallback: (search) async {
+                          if (search.isEmpty) {
+                            return null;
+                          }
+
+                          try {
+                            String capitalizedSearchTerm =
+                                search[0].toUpperCase() +
+                                    search.substring(1).toLowerCase();
+                            final QuerySnapshot querySnapshot =
+                                await FirebaseFirestore.instance
+                                    .collection('suggestions')
+                                    .where('name',
+                                        isGreaterThanOrEqualTo:
+                                            capitalizedSearchTerm)
+                                    .where('name',
+                                        isLessThan: '${capitalizedSearchTerm}z')
+                                    .where('isApproved', isEqualTo: true)
+                                    .get();
+                            final listValues =
+                                querySnapshot.docs.map((ele) => ele).toList();
+                            return Future.value(listValues);
+                          } catch (e) {
+                            print('Error fetching suggestions: $e');
+                            return [];
+                          }
+                        },
+                        debounceDuration: const Duration(milliseconds: 500),
+                        itemBuilder: (context, suggestion) {
+                          return ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: Colors.white,
+                              backgroundImage: suggestion['image'] != null
+                                  ? NetworkImage(suggestion['image'])
+                                      as ImageProvider
+                                  : null,
+                            ),
+                            title: Text(
+                              suggestion['name'] as String,
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          );
+                        },
+                        emptyBuilder: (context) => InkWell(
+                          onTap: () {
+                            _typeAheadController.clear();
+                            widget.onAddSuggestion();
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
+                            child: Text(
+                              'Add Suggestion',
+                              style: TextStyle(
+                                  fontSize: 14, color: ThemeColors.primary),
+                            ),
+                          ),
+                        ),
+                        onSelected: (suggestion) {
+                          widget.onTitleChange(
+                              '${widget.text.isNotEmpty ? '${widget.text},' : ''}${suggestion['name']}');
+                          _typeAheadController.clear();
+                        },
+                      ),
               ],
             ),
           )

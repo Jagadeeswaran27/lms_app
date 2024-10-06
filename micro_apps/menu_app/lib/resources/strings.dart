@@ -68,6 +68,9 @@ class Strings {
   static const String receptionEnquiry = 'Reception Enquiry';
   static const String item = 'Item';
   static const String addTitle = 'Add Title(s)';
+  static const String inputType = 'Input Type';
+  static const String manual = 'Manual';
+  static const String auto = 'Auto';
   static const String amountDetails = 'Amount Details';
   static const String shortDescription = 'Short Description';
   static const String addBatchOffered = 'Add Batch Offered';
