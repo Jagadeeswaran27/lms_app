@@ -116,4 +116,7 @@ class Strings {
   static const String contactInfo = 'Contact Info : ';
   static const String userName = 'User Name : ';
   static const String logout = 'Logout';
+  static const String suggestionAddedSuccessfully =
+      'Suggestion Added Successfully';
+  static const String suggestionAddingFailed = 'Suggestion Adding Failed';
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:menu_app/core/services/courses/course_service.dart';
 import 'package:menu_app/providers/auth_provider.dart';
+import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/routes/admin_routes.dart';
 import 'package:menu_app/utils/show_snackbar.dart';
 
@@ -51,8 +52,13 @@ class _AddItemContainerState extends State<AddItemContainer> {
     }
   }
 
-  void onAddSuggestion() {
-    print('I am on add suggestion');
+  Future<bool> onAddSuggestion(String name, File image) async {
+    final response = await _courseService.addSuggestion(name, image);
+    if (response) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override

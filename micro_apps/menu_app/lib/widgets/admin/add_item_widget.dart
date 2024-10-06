@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/themes/colors.dart';
@@ -8,6 +9,8 @@ import 'package:menu_app/themes/fonts.dart';
 import 'package:menu_app/utils/show_snackbar.dart';
 import 'package:menu_app/widgets/admin/add_title_card.dart';
 import 'package:menu_app/widgets/admin/batch_offered_card.dart';
+import 'package:menu_app/widgets/common/custom_dashed_input.dart';
+import 'package:menu_app/widgets/common/custom_elevated_button.dart';
 import 'package:menu_app/widgets/common/form_input.dart';
 import 'package:menu_app/widgets/common/icon_text_button.dart';
 import 'package:menu_app/resources/icons.dart' as icons;
@@ -26,7 +29,7 @@ class AddItemWidget extends StatefulWidget {
   final bool isLoading;
   final Function(Map<String, dynamic>, List<File> images) addItem;
   final String subCategory;
-  final Function() onAddSuggestion;
+  final Future<bool> Function(String name, File) onAddSuggestion;
   @override
   AddItemWidgetState createState() => AddItemWidgetState();
 }
@@ -46,6 +49,8 @@ class AddItemWidgetState extends State<AddItemWidget> {
   List<String> _batchTime = [];
   String _amountDetails = '';
   String _totalHours = '';
+
+  final _picker = ImagePicker();
 
   void _handleBatchOfferedDaysChange(List<String> days) {
     setState(() {
@@ -165,6 +170,14 @@ class AddItemWidgetState extends State<AddItemWidget> {
   }
 
   void onAddSuggestion() {
+    final TextEditingController suggestionNameController =
+        TextEditingController();
+    File? selectedImage;
+    String? nameError;
+    String? imageError;
+    bool isLoading = false;
+    String? message;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -172,40 +185,151 @@ class AddItemWidgetState extends State<AddItemWidget> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.8,
-              maxWidth: MediaQuery.of(context).size.width * 0.9,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: InkWell(
-                      child: const SVGLoader(
-                        image: icons.Icons.closeRed,
-                        width: 16,
-                        height: 16,
+          child: StatefulBuilder(
+            builder: (context, setModalState) {
+              return ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.8,
+                  maxWidth: MediaQuery.of(context).size.width * 0.9,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(30.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Align(
+                        alignment: Alignment.topRight,
+                        child: InkWell(
+                          child: const SVGLoader(
+                            image: icons.Icons.closeRed,
+                            width: 16,
+                            height: 16,
+                          ),
+                          onTap: () => closeModal(context),
+                        ),
                       ),
-                      onTap: () => closeModal(context),
-                    ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Add Suggestion',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall!
+                            .copyWith(fontSize: 18),
+                      ),
+                      const SizedBox(height: 20),
+                      FormInput(
+                        controller: suggestionNameController,
+                        text: 'Name',
+                      ),
+                      // Display error text for the name if it's empty
+                      if (nameError != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Text(
+                            nameError!,
+                            style: const TextStyle(
+                                color: Colors.red, fontSize: 12),
+                          ),
+                        ),
+                      const SizedBox(height: 20),
+                      selectedImage == null
+                          ? CustomDashedInput(
+                              text: "Image",
+                              onTap: () async {
+                                final pickedFile = await _picker.pickImage(
+                                    source: ImageSource.gallery);
+                                if (pickedFile != null) {
+                                  setModalState(() {
+                                    selectedImage = File(pickedFile.path);
+                                    imageError = null; // Reset image error
+                                  });
+                                }
+                              },
+                            )
+                          : Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: 20,
+                                  backgroundImage:
+                                      FileImage(File(selectedImage!.path)),
+                                ),
+                                const SizedBox(width: 10),
+                                Text(
+                                  'Image uploaded',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMediumTitleBrown,
+                                ),
+                              ],
+                            ),
+                      if (imageError != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Text(
+                            imageError!,
+                            style: const TextStyle(
+                                color: Colors.red, fontSize: 12),
+                          ),
+                        ),
+                      const SizedBox(height: 20),
+                      if (message != null)
+                        Text(
+                          message!,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMediumTitleBrownSemiBold,
+                        ),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        width: double.infinity,
+                        child: CustomElevatedButton(
+                          isLoading: isLoading,
+                          text: Strings.save,
+                          onPressed: () async {
+                            setModalState(() {
+                              nameError = suggestionNameController.text.isEmpty
+                                  ? 'Please enter a name'
+                                  : null;
+                              imageError = selectedImage == null
+                                  ? 'Please select an image'
+                                  : null;
+                            });
+
+                            if (nameError == null && imageError == null) {
+                              setModalState(() {
+                                isLoading = true;
+                              });
+                              final response = await widget.onAddSuggestion(
+                                suggestionNameController.text,
+                                selectedImage!,
+                              );
+                              if (response) {
+                                setModalState(() {
+                                  isLoading = false;
+                                  message = Strings.suggestionAddedSuccessfully;
+                                });
+
+                                Future.delayed(
+                                    const Duration(
+                                      milliseconds: 600,
+                                    ), () {
+                                  closeModal(context);
+                                });
+                              } else {
+                                setModalState(() {
+                                  message = Strings.suggestionAddingFailed;
+                                });
+                              }
+                            }
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Add Suggestion',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall!
-                        .copyWith(fontSize: 18),
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           ),
         );
       },

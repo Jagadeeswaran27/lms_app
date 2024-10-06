@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:menu_app/core/services/firebase/firebase_storage_service.dart';
 import 'package:menu_app/models/courses/course_model.dart';
 import 'package:menu_app/models/courses/item_model.dart';
+import 'package:menu_app/models/courses/suggestion_model.dart';
 import 'package:menu_app/utils/logger/logger.dart';
 
 class CourseService {
@@ -30,6 +31,29 @@ class CourseService {
       print(e);
       log.e('Error checking selectedCategory: $e');
       throw Exception('Failed to check selectedCategory');
+    }
+  }
+
+  Future<bool> addSuggestion(String name, File image) async {
+    try {
+      String url = await _storageService.uploadFile(
+        image,
+        'suggestions/',
+        image.path.split('/').last,
+      );
+      SuggestionModel newSuggestion = SuggestionModel(
+        name: name,
+        image: url,
+        isApproved: false,
+        isRejected: false,
+      );
+      await _firestore.collection('suggestions').add(newSuggestion.toJson());
+
+      return true;
+    } catch (e) {
+      print(e);
+      log.e('Error adding category: $e');
+      return false;
     }
   }
 
