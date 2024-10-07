@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:menu_app/constants/enums/user_role_enum.dart';
 import 'package:menu_app/models/courses/course_model.dart';
 import 'package:menu_app/providers/auth_provider.dart';
-import 'package:menu_app/utils/show_snackbar.dart';
+import 'package:menu_app/widgets/common/custom_elevated_button.dart';
+import 'package:menu_app/widgets/common/svg_lodder.dart';
 
 import 'package:provider/provider.dart';
 
@@ -22,6 +23,7 @@ class CourseDetailWidget extends StatelessWidget {
     required this.pendingRegistrationsCount,
     required this.rejectedRegistrationsCount,
     required this.deleteCourse,
+    required this.checkForEistingCourse,
   });
 
   final CourseModel course;
@@ -30,15 +32,66 @@ class CourseDetailWidget extends StatelessWidget {
   final int pendingRegistrationsCount;
   final int rejectedRegistrationsCount;
   final void Function() deleteCourse;
+  final Future<List<Map<String, String>>> Function() checkForEistingCourse;
 
-  void handleDeleteCourse(BuildContext context) {
+  void handleDeleteCourse(BuildContext context) async {
     if (approvedRegistrationsCount == 0 &&
         pendingRegistrationsCount == 0 &&
         rejectedRegistrationsCount == 0) {
       deleteCourse();
     } else {
-      showSnackbar(context, "Cannot delete course with registrations");
+      final response = await checkForEistingCourse();
+      showOptions(context, response);
     }
+  }
+
+  void showOptions(BuildContext context, List<Map<String, String>> courses) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const SVGLoader(
+                      image: icons.Icons.closeRed,
+                      width: 20,
+                      height: 20,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                'Choose an option',
+                style: Theme.of(context).textTheme.titleLargePrimary,
+              )
+            ],
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                if (courses.isNotEmpty)
+                  Column(
+                    children: [
+                      CustomElevatedButton(text: "Migrate", onPressed: () {}),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                CustomElevatedButton(text: "Refund", onPressed: () {}),
+                const SizedBox(height: 10),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -46,7 +99,6 @@ class CourseDetailWidget extends StatelessWidget {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final Size screenSize = MediaQuery.of(context).size;
     final role = authProvider.currentUser!.role;
-    print(authProvider.selectedinstituteCode);
     double screenWidth = MediaQuery.of(context).size.width;
 
     return SingleChildScrollView(

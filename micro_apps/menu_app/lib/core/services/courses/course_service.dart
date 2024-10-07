@@ -34,6 +34,38 @@ class CourseService {
     }
   }
 
+  Future<List<Map<String, String>>> checkExistingCourse(
+    String accessCode,
+    String courseName,
+    String courseId,
+  ) async {
+    try {
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('institutes')
+          .doc(accessCode)
+          .collection('courses')
+          .get();
+
+      List<Map<String, String>> courses = [];
+
+      for (var doc in querySnapshot.docs) {
+        if ((doc.data() as Map<String, dynamic>)['courseTitle'] == courseName &&
+            doc.id != courseId) {
+          Map<String, String> data = {
+            (doc.data() as Map<String, dynamic>)['courseTitle']: doc.id,
+          };
+          courses.add(data);
+        }
+      }
+
+      return courses;
+    } catch (e) {
+      print(e);
+      log.e('Error checking course: $e');
+      throw Exception('Failed to check course');
+    }
+  }
+
   Future<bool> deleteCourse(String accessCode, String courseId) async {
     try {
       DocumentReference courseDocRef = _firestore

@@ -55,6 +55,17 @@ class _CourseDetailContainerState extends State<CourseDetailContainer> {
     });
   }
 
+  Future<List<Map<String, String>>> checkForEistingCourse() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final courseService = CourseService();
+    final response = await courseService.checkExistingCourse(
+      authProvider.currentUser!.institute.first,
+      widget.course.courseTitle,
+      widget.course.courseId,
+    );
+    return response;
+  }
+
   void deleteCourse() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final courseService = CourseService();
@@ -90,6 +101,7 @@ class _CourseDetailContainerState extends State<CourseDetailContainer> {
             pendingRegistrationsCount: _pendingRegistrationsCount,
             rejectedRegistrationsCount: _rejectedRegistrationsCount,
             deleteCourse: deleteCourse,
+            checkForEistingCourse: checkForEistingCourse,
           );
   }
 }
