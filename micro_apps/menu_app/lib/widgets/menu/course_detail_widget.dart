@@ -246,25 +246,26 @@ class CourseDetailWidget extends StatelessWidget {
                 ],
               ),
             const SizedBox(height: 50),
-            Center(
-              child: SizedBox(
-                width: screenSize.width * 0.7,
-                height: 50,
-                child: OutlinedButton(
-                  onPressed: () {},
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: ThemeColors.primary),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
+            if (role == UserRoleEnum.admin.roleName)
+              Center(
+                child: SizedBox(
+                  width: screenSize.width * 0.7,
+                  height: 50,
+                  child: OutlinedButton(
+                    onPressed: () {},
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: ThemeColors.primary),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    'Delete',
-                    style: Theme.of(context).textTheme.bodyMediumPrimary,
+                    child: Text(
+                      'Delete',
+                      style: Theme.of(context).textTheme.bodyMediumPrimary,
+                    ),
                   ),
                 ),
               ),
-            ),
             const SizedBox(height: 50),
           ],
         ),
