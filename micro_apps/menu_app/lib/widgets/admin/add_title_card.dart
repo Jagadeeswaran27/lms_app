@@ -16,14 +16,16 @@ class AddTitleCard extends StatefulWidget {
   final String text;
   final File? image;
   final String? titleError;
-  final Function(String) onTitleChange;
-  final Function() onAddSuggestion;
+  final String? suggestionImage;
+  final Function(String, String?) onTitleChange;
+  final Function(String) onAddSuggestion;
 
   const AddTitleCard({
     super.key,
     required this.onTap,
     required this.image,
     required this.text,
+    this.suggestionImage,
     required this.onTitleChange,
     required this.titleError,
     required this.onAddSuggestion,
@@ -39,6 +41,7 @@ class _AddTitleCardState extends State<AddTitleCard> {
 
   void _handleAutoChange(int value) {
     setState(() {
+      widget.onTitleChange('', null);
       _selectedFieldType = value;
     });
   }
@@ -77,16 +80,25 @@ class _AddTitleCardState extends State<AddTitleCard> {
               height: 100,
               child: CircleAvatar(
                 backgroundColor: Colors.transparent,
-                child: widget.image == null
-                    ? const SVGLoader(image: icons.Icons.profileBackup)
-                    : ClipOval(
+                child: widget.image != null
+                    ? ClipOval(
                         child: Image.file(
                           widget.image!,
                           width: 100,
                           height: 100,
                           fit: BoxFit.cover,
                         ),
-                      ),
+                      )
+                    : widget.suggestionImage != null
+                        ? ClipOval(
+                            child: Image.network(
+                              widget.suggestionImage!,
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : const SVGLoader(image: icons.Icons.profileBackup),
               ),
             ),
           ),
@@ -106,7 +118,7 @@ class _AddTitleCardState extends State<AddTitleCard> {
                     text: '',
                     hintText: widget.text,
                     // initialValue: text,
-                    onChanged: widget.onTitleChange,
+                    onChanged: (value) => widget.onTitleChange(value, null),
                     fillColor: ThemeColors.white,
                     borderColor: ThemeColors.cardBorderColor,
                     borderWidth: 0.4,
@@ -181,7 +193,8 @@ class _AddTitleCardState extends State<AddTitleCard> {
                           text: '',
                           hintText: widget.text,
                           // initialValue: text,
-                          onChanged: widget.onTitleChange,
+                          onChanged: (value) =>
+                              widget.onTitleChange(value, null),
                           fillColor: ThemeColors.white,
                           borderColor: ThemeColors.cardBorderColor,
                           borderWidth: 0.4,
@@ -249,22 +262,27 @@ class _AddTitleCardState extends State<AddTitleCard> {
                         },
                         emptyBuilder: (context) => InkWell(
                           onTap: () {
+                            widget.onAddSuggestion(_typeAheadController.text);
                             _typeAheadController.clear();
-                            widget.onAddSuggestion();
                           },
                           child: Container(
                             margin: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 10),
+                              vertical: 10,
+                              horizontal: 10,
+                            ),
                             child: Text(
                               'Add Suggestion',
                               style: TextStyle(
-                                  fontSize: 14, color: ThemeColors.primary),
+                                fontSize: 14,
+                                color: ThemeColors.primary,
+                              ),
                             ),
                           ),
                         ),
                         onSelected: (suggestion) {
                           widget.onTitleChange(
-                              '${widget.text.isNotEmpty ? '${widget.text},' : ''}${suggestion['name']}');
+                              '${widget.text.isNotEmpty ? '${widget.text},' : ''}${suggestion['name']}',
+                              suggestion['image']);
                           _typeAheadController.clear();
                         },
                       ),

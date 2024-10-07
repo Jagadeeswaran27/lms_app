@@ -72,6 +72,9 @@ class Strings {
   static const String manual = 'Manual';
   static const String auto = 'Auto';
   static const String amountDetails = 'Amount Details';
+  static const String approvedRegistrations = 'Approved Registrations';
+  static const String pendingRegistrations = 'Pending Registrations';
+  static const String rejectedRegistrations = 'Rejected Registrations';
   static const String shortDescription = 'Short Description';
   static const String addBatchOffered = 'Add Batch Offered';
   static const String addItem = 'Add Item';

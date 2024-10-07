@@ -210,4 +210,64 @@ class CourseService {
       throw Exception('Failed to get items');
     }
   }
+
+  Future<int> getApprovedRegistrationsCount(
+    String instituteId,
+    String courseId,
+  ) async {
+    try {
+      final querySnapshot = await _firestore
+          .collection('institutes')
+          .doc(instituteId)
+          .collection('students-registrations')
+          .where('courseId', isEqualTo: courseId)
+          .where('status', isEqualTo: 'Approved')
+          .get();
+
+      return querySnapshot.docs.length;
+    } catch (e) {
+      log.e('Error getting approved registrations count: $e');
+      return 0;
+    }
+  }
+
+  Future<int> getPendingRegistrationsCount(
+    String instituteId,
+    String courseId,
+  ) async {
+    try {
+      final querySnapshot = await _firestore
+          .collection('institutes')
+          .doc(instituteId)
+          .collection('students-registrations')
+          .where('courseId', isEqualTo: courseId)
+          .where('status', isEqualTo: 'Pending')
+          .get();
+
+      return querySnapshot.docs.length;
+    } catch (e) {
+      log.e('Error getting pending registrations count: $e');
+      return 0;
+    }
+  }
+
+  Future<int> getRejectedRegistrationsCount(
+    String instituteId,
+    String courseId,
+  ) async {
+    try {
+      final querySnapshot = await _firestore
+          .collection('institutes')
+          .doc(instituteId)
+          .collection('students-registrations')
+          .where('courseId', isEqualTo: courseId)
+          .where('status', isEqualTo: 'Rejected')
+          .get();
+
+      return querySnapshot.docs.length;
+    } catch (e) {
+      log.e('Error getting rejected registrations count: $e');
+      return 0;
+    }
+  }
 }

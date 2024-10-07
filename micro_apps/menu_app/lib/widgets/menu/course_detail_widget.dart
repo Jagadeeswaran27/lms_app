@@ -14,17 +14,27 @@ import 'package:menu_app/widgets/menu/course_detail_card.dart';
 import 'package:menu_app/resources/icons.dart' as icons;
 
 class CourseDetailWidget extends StatelessWidget {
-  const CourseDetailWidget(
-      {super.key, required this.course, required this.subCategory});
+  const CourseDetailWidget({
+    super.key,
+    required this.course,
+    required this.subCategory,
+    required this.approvedRegistrationsCount,
+    required this.pendingRegistrationsCount,
+    required this.rejectedRegistrationsCount,
+  });
 
   final CourseModel course;
   final String subCategory;
+  final int approvedRegistrationsCount;
+  final int pendingRegistrationsCount;
+  final int rejectedRegistrationsCount;
 
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final Size screenSize = MediaQuery.of(context).size;
     final role = authProvider.currentUser!.role;
-
+    print(authProvider.selectedinstituteCode);
     double screenWidth = MediaQuery.of(context).size.width;
 
     return SingleChildScrollView(
@@ -170,7 +180,92 @@ class CourseDetailWidget extends StatelessWidget {
                   ),
                 ],
               ),
-            const SizedBox(height: 20),
+            if (role == UserRoleEnum.admin.roleName)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        Strings.approvedRegistrations,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMediumPrimary
+                            .copyWith(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    approvedRegistrationsCount.toString(),
+                    maxLines: 2,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          fontSize: 16,
+                        ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Text(
+                        Strings.pendingRegistrations,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMediumPrimary
+                            .copyWith(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    pendingRegistrationsCount.toString(),
+                    maxLines: 2,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          fontSize: 16,
+                        ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Text(
+                        Strings.rejectedRegistrations,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMediumPrimary
+                            .copyWith(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    rejectedRegistrationsCount.toString(),
+                    maxLines: 2,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          fontSize: 16,
+                        ),
+                  ),
+                ],
+              ),
+            const SizedBox(height: 50),
+            Center(
+              child: SizedBox(
+                width: screenSize.width * 0.7,
+                height: 50,
+                child: OutlinedButton(
+                  onPressed: () {},
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: ThemeColors.primary),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                  ),
+                  child: Text(
+                    'Delete',
+                    style: Theme.of(context).textTheme.bodyMediumPrimary,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 50),
           ],
         ),
       ),

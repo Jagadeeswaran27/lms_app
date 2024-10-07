@@ -49,6 +49,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
   List<String> _batchTime = [];
   String _amountDetails = '';
   String _totalHours = '';
+  String? _suggestionImage = '';
 
   final _picker = ImagePicker();
 
@@ -58,11 +59,12 @@ class AddItemWidgetState extends State<AddItemWidget> {
     });
   }
 
-  void _handleTitleChange(String value) {
+  void _handleTitleChange(String value, String? suggestion) {
     setState(() {
       titleController.text = value;
       _itemTitle = value;
       _titleError = null;
+      _suggestionImage = suggestion;
     });
   }
 
@@ -169,9 +171,10 @@ class AddItemWidgetState extends State<AddItemWidget> {
     Navigator.of(context).pop();
   }
 
-  void onAddSuggestion() {
+  void onAddSuggestion(String value) {
     final TextEditingController suggestionNameController =
         TextEditingController();
+    suggestionNameController.text = value;
     File? selectedImage;
     String? nameError;
     String? imageError;
@@ -196,7 +199,8 @@ class AddItemWidgetState extends State<AddItemWidget> {
                   padding: const EdgeInsets.all(30.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Align(
                         alignment: Alignment.topRight,
@@ -220,6 +224,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
                       const SizedBox(height: 20),
                       FormInput(
                         controller: suggestionNameController,
+                        // initialValue: value,
                         text: 'Name',
                       ),
                       // Display error text for the name if it's empty
@@ -242,7 +247,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
                                 if (pickedFile != null) {
                                   setModalState(() {
                                     selectedImage = File(pickedFile.path);
-                                    imageError = null; // Reset image error
+                                    imageError = null;
                                   });
                                 }
                               },
@@ -253,6 +258,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
                                   radius: 20,
                                   backgroundImage:
                                       FileImage(File(selectedImage!.path)),
+                                  backgroundColor: ThemeColors.white,
                                 ),
                                 const SizedBox(width: 10),
                                 Text(
@@ -281,50 +287,57 @@ class AddItemWidgetState extends State<AddItemWidget> {
                               .bodyMediumTitleBrownSemiBold,
                         ),
                       const SizedBox(height: 20),
-                      SizedBox(
-                        width: double.infinity,
-                        child: CustomElevatedButton(
-                          isLoading: isLoading,
-                          text: Strings.save,
-                          onPressed: () async {
-                            setModalState(() {
-                              nameError = suggestionNameController.text.isEmpty
-                                  ? 'Please enter a name'
-                                  : null;
-                              imageError = selectedImage == null
-                                  ? 'Please select an image'
-                                  : null;
-                            });
+                      message == null
+                          ? SizedBox(
+                              width: double.infinity,
+                              child: CustomElevatedButton(
+                                isLoading: isLoading,
+                                text: Strings.save,
+                                onPressed: () async {
+                                  setModalState(() {
+                                    nameError =
+                                        suggestionNameController.text.isEmpty
+                                            ? 'Please enter a name'
+                                            : null;
+                                    imageError = selectedImage == null
+                                        ? 'Please select an image'
+                                        : null;
+                                  });
 
-                            if (nameError == null && imageError == null) {
-                              setModalState(() {
-                                isLoading = true;
-                              });
-                              final response = await widget.onAddSuggestion(
-                                suggestionNameController.text,
-                                selectedImage!,
-                              );
-                              if (response) {
-                                setModalState(() {
-                                  isLoading = false;
-                                  message = Strings.suggestionAddedSuccessfully;
-                                });
-
-                                Future.delayed(
-                                    const Duration(
-                                      milliseconds: 600,
-                                    ), () {
+                                  if (nameError == null && imageError == null) {
+                                    setModalState(() {
+                                      isLoading = true;
+                                    });
+                                    final response =
+                                        await widget.onAddSuggestion(
+                                      suggestionNameController.text,
+                                      selectedImage!,
+                                    );
+                                    if (response) {
+                                      setModalState(() {
+                                        isLoading = false;
+                                        message =
+                                            Strings.suggestionAddedSuccessfully;
+                                      });
+                                    } else {
+                                      setModalState(() {
+                                        message =
+                                            Strings.suggestionAddingFailed;
+                                      });
+                                    }
+                                  }
+                                },
+                              ),
+                            )
+                          : SizedBox(
+                              width: double.infinity,
+                              child: CustomElevatedButton(
+                                text: 'OK',
+                                onPressed: () {
                                   closeModal(context);
-                                });
-                              } else {
-                                setModalState(() {
-                                  message = Strings.suggestionAddingFailed;
-                                });
-                              }
-                            }
-                          },
-                        ),
-                      ),
+                                },
+                              ),
+                            ),
                     ],
                   ),
                 ),
@@ -350,7 +363,9 @@ class AddItemWidgetState extends State<AddItemWidget> {
                 image: _image.isNotEmpty ? _image.first : null,
                 text: titleController.text,
                 titleError: _titleError,
-                onTitleChange: _handleTitleChange,
+                suggestionImage: _suggestionImage,
+                onTitleChange: (String value, String? suggestion) =>
+                    _handleTitleChange(value, suggestion),
                 onTap: _onProfileUpload,
                 onAddSuggestion: onAddSuggestion,
               ),
