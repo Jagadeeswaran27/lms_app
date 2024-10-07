@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:menu_app/constants/enums/user_role_enum.dart';
 import 'package:menu_app/models/courses/course_model.dart';
 import 'package:menu_app/providers/auth_provider.dart';
+import 'package:menu_app/routes/admin_routes.dart';
 import 'package:menu_app/widgets/common/custom_elevated_button.dart';
 import 'package:menu_app/widgets/common/svg_lodder.dart';
 
@@ -32,7 +33,7 @@ class CourseDetailWidget extends StatelessWidget {
   final int pendingRegistrationsCount;
   final int rejectedRegistrationsCount;
   final void Function() deleteCourse;
-  final Future<List<Map<String, String>>> Function() checkForEistingCourse;
+  final Future<List<String>> Function() checkForEistingCourse;
 
   void handleDeleteCourse(BuildContext context) async {
     if (approvedRegistrationsCount == 0 &&
@@ -45,9 +46,9 @@ class CourseDetailWidget extends StatelessWidget {
     }
   }
 
-  void showOptions(BuildContext context, List<Map<String, String>> courses) {
+  void showOptions(BuildContext oldContext, List<String> courses) {
     showDialog(
-      context: context,
+      context: oldContext,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Column(
@@ -80,7 +81,18 @@ class CourseDetailWidget extends StatelessWidget {
                 if (courses.isNotEmpty)
                   Column(
                     children: [
-                      CustomElevatedButton(text: "Migrate", onPressed: () {}),
+                      CustomElevatedButton(
+                          text: "Migrate",
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(oldContext).pushNamed(
+                              AdminRoutes.courseMigration,
+                              arguments: {
+                                'newCourses': courses,
+                                'oldCourse': course.courseId,
+                              },
+                            );
+                          }),
                       const SizedBox(height: 20),
                     ],
                   ),

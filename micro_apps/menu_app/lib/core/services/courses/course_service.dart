@@ -34,7 +34,121 @@ class CourseService {
     }
   }
 
-  Future<List<Map<String, String>>> checkExistingCourse(
+  Future<bool> migrateCourse(
+    String accessCode,
+    String newCourseId,
+    String oldCourseId,
+  ) async {
+    try {
+      final datas = await _firestore
+          .collection('institutes')
+          .doc(accessCode)
+          .collection('courses')
+          .where('courseId', isEqualTo: newCourseId)
+          .get();
+      List<CourseModel> newCourseData = datas.docs.map(
+        (doc) {
+          return CourseModel.fromJson(doc.data());
+        },
+      ).toList();
+
+      final registrations = await _firestore
+          .collection('institutes')
+          .doc(accessCode)
+          .collection('students-registrations')
+          .where('courseId', isEqualTo: oldCourseId)
+          .get();
+
+      List<String> registeredBy = registrations.docs.map<String>(
+        (doc) {
+          return (doc.data())['registeredBy'] as String;
+        },
+      ).toList();
+
+      for (String studentId in registeredBy) {
+        final studentRegistrations = await _firestore
+            .collection('institutes')
+            .doc(accessCode)
+            .collection('students-registrations')
+            .where('registeredBy', isEqualTo: studentId)
+            .get();
+
+        bool hasNewCourse = studentRegistrations.docs.any((doc) {
+          return (doc.data())['courseId'] == newCourseId;
+        });
+        if (hasNewCourse) {
+          // for (var doc in studentRegistrations.docs) {
+          //   if (doc['courseId'] == oldCourseId) {
+          //     await doc.reference.delete();
+          //   }
+          // }
+        }
+        if (!hasNewCourse) {
+          for (var doc in studentRegistrations.docs) {
+            if (doc['courseId'] == oldCourseId) {
+              await doc.reference.update({
+                'batchDay': newCourseData[0].batchDay,
+                'batchTime': newCourseData[0].batchTime,
+                'courseId': newCourseId,
+              });
+
+              final studentDoc =
+                  await _firestore.collection('lms-users').doc(studentId).get();
+
+              if (studentDoc.exists) {
+                await studentDoc.reference.update({
+                  'registeredCourses': FieldValue.arrayRemove([oldCourseId]),
+                });
+                await studentDoc.reference.update({
+                  'registeredCourses': FieldValue.arrayUnion([newCourseId]),
+                });
+              }
+
+              final oldAttendanceCourseDoc = await _firestore
+                  .collection('lms-users')
+                  .doc(studentId)
+                  .collection('courses')
+                  .doc(oldCourseId)
+                  .get();
+
+              if (oldAttendanceCourseDoc.exists) {
+                Map<String, dynamic> data =
+                    oldAttendanceCourseDoc.data() as Map<String, dynamic>;
+
+                DocumentReference newCourseDoc = _firestore
+                    .collection('lms-users')
+                    .doc(studentId)
+                    .collection('courses')
+                    .doc(newCourseId);
+
+                await newCourseDoc.set(data);
+
+                QuerySnapshot attendanceSnapshot = await oldAttendanceCourseDoc
+                    .reference
+                    .collection('attendance')
+                    .get();
+                for (QueryDocumentSnapshot doc in attendanceSnapshot.docs) {
+                  await newCourseDoc
+                      .collection('attendance')
+                      .doc(doc.id)
+                      .set(doc.data() as Map<String, dynamic>);
+                }
+
+                await oldAttendanceCourseDoc.reference.delete();
+              }
+            }
+          }
+        }
+      }
+      await deleteCourse(accessCode, oldCourseId);
+      return true;
+    } catch (e) {
+      log.e("Failed to migrate course");
+      return false;
+    }
+  }
+
+  Future<List<String>> checkExistingCourse(
     String accessCode,
     String courseName,
     String courseId,
@@ -46,15 +160,12 @@ class CourseService {
           .collection('courses')
           .get();
 
-      List<Map<String, String>> courses = [];
+      List<String> courses = [];
 
       for (var doc in querySnapshot.docs) {
         if ((doc.data() as Map<String, dynamic>)['courseTitle'] == courseName &&
             doc.id != courseId) {
-          Map<String, String> data = {
-            (doc.data() as Map<String, dynamic>)['courseTitle']: doc.id,
-          };
-          courses.add(data);
+          courses.add(doc.id);
         }
       }
 
@@ -63,6 +174,33 @@ class CourseService {
       print(e);
       log.e('Error checking course: $e');
       throw Exception('Failed to check course');
+    }
+  }
+
+  Future<List<CourseModel>> fetchListedCourses(
+    String accessCode,
+    List<String> courseIds,
+  ) async {
+    try {
+      List<CourseModel> courses = [];
+      final datas = await _firestore
+          .collection('institutes')
+          .doc(accessCode)
+          .collection('courses')
+          .where('courseId', whereIn: courseIds)
+          .get();
+      for (var doc in datas.docs) {
+        courses.add(
+          CourseModel.fromJson(
+            doc.data(),
+          ),
+        );
+      }
+      return courses;
+    } catch (e) {
+      print(e);
+      log.e('Error fetching courses: $e');
+      throw Exception('Failed to fetch courses');
     }
   }
 
@@ -234,7 +372,9 @@ class CourseService {
   }
 
   Stream<List<CourseModel>> getItems(
-      String accessCode, String subCategory) async* {
+    String accessCode,
+    String subCategory,
+  ) async* {
     try {
       yield* _firestore
           .collection('institutes')

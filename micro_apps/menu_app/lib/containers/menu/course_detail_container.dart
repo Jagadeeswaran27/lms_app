@@ -55,7 +55,7 @@ class _CourseDetailContainerState extends State<CourseDetailContainer> {
     });
   }
 
-  Future<List<Map<String, String>>> checkForEistingCourse() async {
+  Future<List<String>> checkForEistingCourse() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final courseService = CourseService();
     final response = await courseService.checkExistingCourse(

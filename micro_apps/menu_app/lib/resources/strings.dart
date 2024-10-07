@@ -122,4 +122,6 @@ class Strings {
   static const String suggestionAddedSuccessfully =
       'Suggestion Added Successfully';
   static const String suggestionAddingFailed = 'Suggestion Adding Failed';
+  static const String courseMigration = 'Course Migration';
+  static const String selectAnCourse = 'Select an course';
 }
