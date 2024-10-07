@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:menu_app/constants/enums/user_role_enum.dart';
 import 'package:menu_app/core/services/courses/course_service.dart';
-import 'package:menu_app/models/auth/role_model.dart';
 import 'package:menu_app/models/courses/course_model.dart';
 import 'package:menu_app/providers/auth_provider.dart';
+import 'package:menu_app/routes/admin_routes.dart';
+import 'package:menu_app/utils/show_snackbar.dart';
 
 import 'package:menu_app/widgets/menu/course_detail_widget.dart';
 import 'package:provider/provider.dart';
@@ -54,6 +55,24 @@ class _CourseDetailContainerState extends State<CourseDetailContainer> {
     });
   }
 
+  void deleteCourse() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final courseService = CourseService();
+    final courseId = widget.course.courseId;
+    final instituteCode = authProvider.currentUser!.institute.first;
+    final response = await courseService.deleteCourse(instituteCode, courseId);
+    if (response) {
+      showSnackbar(context, "Course deleted successfully");
+      Navigator.of(context).pushReplacementNamed(
+        arguments: {
+          'category': widget.subCategory,
+          'showBack': true,
+        },
+        AdminRoutes.itemList,
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -70,6 +89,7 @@ class _CourseDetailContainerState extends State<CourseDetailContainer> {
             approvedRegistrationsCount: _approvedRegistrationsCount,
             pendingRegistrationsCount: _pendingRegistrationsCount,
             rejectedRegistrationsCount: _rejectedRegistrationsCount,
+            deleteCourse: deleteCourse,
           );
   }
 }

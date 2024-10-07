@@ -34,6 +34,23 @@ class CourseService {
     }
   }
 
+  Future<bool> deleteCourse(String accessCode, String courseId) async {
+    try {
+      DocumentReference courseDocRef = _firestore
+          .collection('institutes')
+          .doc(accessCode)
+          .collection('courses')
+          .doc(courseId);
+
+      await courseDocRef.delete();
+      return true;
+    } catch (e) {
+      print(e);
+      log.e('Error deleting course: $e');
+      throw Exception('Failed to delete course');
+    }
+  }
+
   Future<bool> addSuggestion(String name, File image) async {
     try {
       String url = await _storageService.uploadFile(

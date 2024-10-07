@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:menu_app/constants/enums/user_role_enum.dart';
 import 'package:menu_app/models/courses/course_model.dart';
 import 'package:menu_app/providers/auth_provider.dart';
+import 'package:menu_app/utils/show_snackbar.dart';
 
 import 'package:provider/provider.dart';
 
@@ -9,7 +10,6 @@ import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/themes/colors.dart';
 import 'package:menu_app/themes/fonts.dart';
 import 'package:menu_app/widgets/common/icon_text_button.dart';
-import 'package:menu_app/widgets/menu/batch_card.dart';
 import 'package:menu_app/widgets/menu/course_detail_card.dart';
 import 'package:menu_app/resources/icons.dart' as icons;
 
@@ -21,6 +21,7 @@ class CourseDetailWidget extends StatelessWidget {
     required this.approvedRegistrationsCount,
     required this.pendingRegistrationsCount,
     required this.rejectedRegistrationsCount,
+    required this.deleteCourse,
   });
 
   final CourseModel course;
@@ -28,6 +29,17 @@ class CourseDetailWidget extends StatelessWidget {
   final int approvedRegistrationsCount;
   final int pendingRegistrationsCount;
   final int rejectedRegistrationsCount;
+  final void Function() deleteCourse;
+
+  void handleDeleteCourse(BuildContext context) {
+    if (approvedRegistrationsCount == 0 &&
+        pendingRegistrationsCount == 0 &&
+        rejectedRegistrationsCount == 0) {
+      deleteCourse();
+    } else {
+      showSnackbar(context, "Cannot delete course with registrations");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -252,7 +264,7 @@ class CourseDetailWidget extends StatelessWidget {
                   width: screenSize.width * 0.7,
                   height: 50,
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () => handleDeleteCourse(context),
                     style: OutlinedButton.styleFrom(
                       side: BorderSide(color: ThemeColors.primary),
                       shape: RoundedRectangleBorder(
