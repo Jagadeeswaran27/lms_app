@@ -4,7 +4,7 @@ class UserModel {
   final String email;
   final String phone;
   final String role;
-  final String roleType;
+  final List<String> roleType;
   final List<String> institute;
   final String? address;
   final String? city;
@@ -33,7 +33,7 @@ class UserModel {
       name: data['name'] ?? '',
       email: data['email'] ?? '',
       role: data['role'] ?? '',
-      roleType: data['roleType'] ?? '',
+      roleType: List<String>.from(data['roleType'] ?? []),
       phone: data['phone'] ?? '',
       address: data['address'] ?? '',
       city: data['city'] ?? '',
@@ -50,7 +50,7 @@ class UserModel {
       name: '',
       email: '',
       role: '',
-      roleType: 'Student',
+      roleType: [],
       phone: '',
       city: '',
       state: '',

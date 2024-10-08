@@ -283,9 +283,23 @@ class FirebaseAuthService {
 
   Future<bool> updateUserRoleType(String roleType, String uid) async {
     try {
-      await _firestore.collection('lms-users').doc(uid).update({
-        'roleType': roleType,
-      });
+      DocumentSnapshot doc =
+          await _firestore.collection('lms-users').doc(uid).get();
+
+      if (doc.data() != null) {
+        Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+        List<String> existingRoleTypes =
+            List<String>.from(userData['roleType'] ?? []);
+
+        if (!existingRoleTypes.contains(roleType)) {
+          await _firestore.collection('lms-users').doc(uid).update({
+            'roleType': FieldValue.arrayUnion([roleType]),
+          });
+        }
+      } else {
+        log.w('User document is null for user $uid');
+      }
+
       return true;
     } catch (e) {
       log.e('Error updating user role for user $uid: $e');

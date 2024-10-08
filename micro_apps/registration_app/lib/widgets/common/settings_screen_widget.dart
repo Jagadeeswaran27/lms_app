@@ -14,6 +14,7 @@ class SettingsScreenWidget extends StatelessWidget {
     required this.phone,
     required this.email,
     required this.logout,
+    required this.changeRole,
   });
 
   final bool isInstitute;
@@ -21,6 +22,7 @@ class SettingsScreenWidget extends StatelessWidget {
   final String phone;
   final String email;
   final void Function() logout;
+  final void Function() changeRole;
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +132,22 @@ class SettingsScreenWidget extends StatelessWidget {
                             )
                           ],
                         ),
+                        if (!isInstitute)
+                          Column(
+                            children: [
+                              const SizedBox(height: 30),
+                              SizedBox(
+                                height: 50,
+                                width: screenWidth * 0.8,
+                                child: IconTextButton(
+                                  text: "Change Role",
+                                  onPressed: changeRole,
+                                  color: ThemeColors.primary,
+                                  iconHorizontalPadding: 0,
+                                ),
+                              ),
+                            ],
+                          )
                       ],
                     )
                   ],

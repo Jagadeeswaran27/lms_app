@@ -10,7 +10,7 @@ class UserModel {
   final String? profileUrl;
   final String? state;
   final List<String> registeredCourses;
-  final String roleType;
+  final List<String> roleType;
 
   UserModel({
     required this.uid,
@@ -23,7 +23,7 @@ class UserModel {
     this.address,
     this.state,
     this.city,
-    this.roleType = '',
+    required this.roleType,
     this.registeredCourses = const [],
   });
 
@@ -38,7 +38,7 @@ class UserModel {
       city: data['city'] ?? '',
       state: data['state'] ?? '',
       profileUrl: data['profileUrl'] ?? '',
-      roleType: data['roleType'] ?? '',
+      roleType: List<String>.from(data['roleType'] ?? []),
       institute: List<String>.from(data['institute'] ?? []),
       registeredCourses: List<String>.from(data['registeredCourses'] ?? []),
     );
@@ -55,7 +55,7 @@ class UserModel {
       state: '',
       address: '',
       profileUrl: '',
-      roleType: '',
+      roleType: [],
       institute: [],
       registeredCourses: [],
     );

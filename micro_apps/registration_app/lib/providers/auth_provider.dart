@@ -87,25 +87,25 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setUserRoleType(String roleType) {
-    _currentUser = UserModel(
-      uid: _currentUser!.uid,
-      name: _currentUser!.name,
-      email: _currentUser!.email,
-      role: _currentUser!.role,
-      phone: _currentUser!.phone,
-      institute: _currentUser!.institute,
-      profileUrl: _currentUser!.profileUrl,
-      address: _currentUser!.address,
-      state: _currentUser!.state,
-      city: _currentUser!.city,
-      registeredCourses: _currentUser!.registeredCourses,
-      roleType: roleType,
-      isFaceRecognized: _currentUser!.isFaceRecognized ?? false,
-      isSomeone: _currentUser!.isSomeone,
-    );
-    notifyListeners();
-  }
+  // void setUserRoleType(String roleType) {
+  //   _currentUser = UserModel(
+  //     uid: _currentUser!.uid,
+  //     name: _currentUser!.name,
+  //     email: _currentUser!.email,
+  //     role: _currentUser!.role,
+  //     phone: _currentUser!.phone,
+  //     institute: _currentUser!.institute,
+  //     profileUrl: _currentUser!.profileUrl,
+  //     address: _currentUser!.address,
+  //     state: _currentUser!.state,
+  //     city: _currentUser!.city,
+  //     registeredCourses: _currentUser!.registeredCourses,
+  //     roleType: roleType,
+  //     isFaceRecognized: _currentUser!.isFaceRecognized ?? false,
+  //     isSomeone: _currentUser!.isSomeone,
+  //   );
+  //   notifyListeners();
+  // }
 
   void addToCart(CourseModel course) {
     _cart.add(course);

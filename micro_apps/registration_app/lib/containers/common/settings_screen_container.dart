@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:registration_app/constants/enums/user_role_enum.dart';
 import 'package:registration_app/providers/auth_provider.dart';
 import 'package:registration_app/resources/strings.dart';
+import 'package:registration_app/screens/auth/role_type_selection_screen.dart';
 import 'package:registration_app/screens/auth/welcome_screen.dart';
 import 'package:registration_app/utils/show_snackbar.dart';
 import 'package:registration_app/widgets/common/settings_screen_widget.dart';
@@ -26,6 +27,13 @@ class SettingsScreenContainer extends StatelessWidget {
     }
   }
 
+  void changeRole(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (ctx) => const RoleTypeSelectionScreen()),
+      (Route<dynamic> route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -38,6 +46,7 @@ class SettingsScreenContainer extends StatelessWidget {
       name: authProvider.currentUser!.name,
       phone: authProvider.currentUser!.phone,
       logout: () => logout(context),
+      changeRole: () => changeRole(context),
     );
   }
 }

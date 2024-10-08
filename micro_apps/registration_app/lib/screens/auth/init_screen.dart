@@ -7,8 +7,6 @@ import 'package:registration_app/providers/auth_provider.dart';
 import 'package:registration_app/screens/auth/login_screen.dart';
 import 'package:registration_app/screens/auth/role_type_selection_screen.dart';
 import 'package:registration_app/screens/auth/welcome_screen.dart';
-import 'package:registration_app/screens/student/student_app.dart';
-import 'package:registration_app/screens/teacher/teacher_app.dart';
 import 'package:registration_app/themes/colors.dart';
 import 'package:registration_app/screens/admin/admin_app.dart';
 
@@ -50,14 +48,19 @@ class _InitScreenState extends State<InitScreen> {
             );
             return;
           } else {
-            if (authProvider.currentUser?.roleType == null ||
-                authProvider.currentUser?.roleType == '') {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                    builder: (context) => const RoleTypeSelectionScreen()),
-              );
-              return;
-            }
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => const RoleTypeSelectionScreen(),
+              ),
+            );
+            // if (authProvider.currentUser?.roleType == null ||
+            //     authProvider.currentUser?.roleType == '') {
+            //   Navigator.of(context).pushReplacement(
+            //     MaterialPageRoute(
+            //         builder: (context) => const RoleTypeSelectionScreen()),
+            //   );
+            //   return;
+            // }
             // if (authProvider.currentUser!.isFaceRecognized! == false) {
             //   Navigator.of(context).pushReplacement(
             //     MaterialPageRoute(
@@ -66,21 +69,21 @@ class _InitScreenState extends State<InitScreen> {
             //   );
             //   return;
             // }
-            if (authProvider.currentUser!.roleType ==
-                UserRoleTypeEnum.student.roleName) {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const StudentApp()),
-              );
-              return;
-            }
+            // if (authProvider.currentUser!.roleType ==
+            //     UserRoleTypeEnum.student.roleName) {
+            //   Navigator.of(context).pushReplacement(
+            //     MaterialPageRoute(builder: (context) => const StudentApp()),
+            //   );
+            //   return;
+            // }
 
-            if (authProvider.currentUser!.roleType ==
-                UserRoleTypeEnum.teacher.roleName) {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(builder: (context) => const TeacherApp()),
-              );
-              return;
-            }
+            // if (authProvider.currentUser!.roleType ==
+            //     UserRoleTypeEnum.teacher.roleName) {
+            //   Navigator.of(context).pushReplacement(
+            //     MaterialPageRoute(builder: (context) => const TeacherApp()),
+            //   );
+            //   return;
+            // }
           }
         } else {
           authProvider.removeListener(authListener);
