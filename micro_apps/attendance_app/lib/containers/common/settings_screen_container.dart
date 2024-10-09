@@ -1,3 +1,4 @@
+import 'package:attendance_app/screens/attendance/role_type_selection_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,6 +27,13 @@ class SettingsScreenContainer extends StatelessWidget {
     }
   }
 
+  void changeRole(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (ctx) => const RoleTypeSelectionScreen()),
+      (Route<dynamic> route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -38,6 +46,7 @@ class SettingsScreenContainer extends StatelessWidget {
       name: authProvider.currentUser!.name,
       phone: authProvider.currentUser!.phone,
       logout: () => logout(context),
+      changeRole: () => changeRole(context),
     );
   }
 }

@@ -12,6 +12,7 @@ class SettingsScreen extends StatelessWidget {
     return const ScreenLayout(
       showLogout: false,
       topBarText: Strings.settings,
+      showInstituteName: false,
       child: SettingsScreenContainer(),
     );
   }

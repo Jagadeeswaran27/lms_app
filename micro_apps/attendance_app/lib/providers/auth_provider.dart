@@ -21,6 +21,7 @@ class AuthProvider with ChangeNotifier {
   UserModel? _currentUser;
   bool _loggedInStatus = false;
   String selectedinstituteCode = '';
+  String selectedRoleType = '';
 
   final log = CustomLogger.getLogger('AuthProvider');
   final storageService = FirebaseStorageService();
@@ -106,6 +107,11 @@ class AuthProvider with ChangeNotifier {
       log.e(e);
       return AuthModel.error(message: parseErrorMessage(e.toString()));
     }
+  }
+
+  void setUserRoleType(String roleTpye) {
+    selectedRoleType = roleTpye;
+    notifyListeners();
   }
 
   Future<String> getInstituteName(String accessCode) async {
