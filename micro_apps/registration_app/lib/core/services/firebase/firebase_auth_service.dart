@@ -261,10 +261,10 @@ class FirebaseAuthService {
     String email,
     String role,
     String phone,
-    String roleType,
+    List<String> roleType,
   ) async {
     try {
-      final bool isSomeone = roleType == 'Student';
+      final bool isSomeone = roleType.contains('Student');
       await _firestore.collection('lms-users').doc(uid).set({
         'uid': uid,
         'name': name,

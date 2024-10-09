@@ -474,7 +474,7 @@ class AuthProvider with ChangeNotifier {
     String email,
     String role,
     String phone,
-    String roleType,
+    List<String> roleType,
   ) async {
     return await FirebaseAuthService().createLMSUser(
       uid,
