@@ -101,12 +101,23 @@ class AddItemWidgetState extends State<AddItemWidget> {
       return;
     }
     bool isFormValid = _formKey.currentState!.validate();
-    if (_image.isEmpty || _image.contains(null)) {
-      setState(() {
-        _isUploadValid = _image.isEmpty || _image.contains(null) ? false : true;
-      });
-      showSnackbar(context, 'Please upload all images');
-      return;
+    // if (_suggestionImage == null || _suggestionImage!.isEmpty) {
+    //   setState(() {
+    //     _isUploadValid = false;
+    //   });
+    //   showSnackbar(context, 'Please upload image');
+    //   return;
+    // }
+
+    if (_suggestionImage == null || _suggestionImage!.isEmpty) {
+      if (_image.isEmpty || _image.contains(null)) {
+        setState(() {
+          _isUploadValid =
+              _image.isEmpty || _image.contains(null) ? false : true;
+        });
+        showSnackbar(context, 'Please upload all images');
+        return;
+      }
     }
 
     if (_itemTitle == '') {
@@ -134,6 +145,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
         'amount': _amountDetails,
         'totalHours':
             _totalHours.trim().isNotEmpty ? int.parse(_totalHours) : null,
+        'suggestionImage': _suggestionImage,
       };
 
       widget.addItem({...formData}, _image.whereType<File>().toList());

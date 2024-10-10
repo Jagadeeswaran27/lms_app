@@ -296,8 +296,9 @@ class CourseService {
         List batchDays = formData['batchDay'] ?? [];
         List batchTimes = formData['batchTime'] ?? [];
         int index = itemTitles.indexOf(itemTitle);
-
-//Todo:If no batch days and batch times then different logic
+        print(imageUrls);
+        print(index);
+        //Todo:If no batch days and batch times then different logic
         if (subCategory != 'courses') {
           final itemId = _firestore
               .collection('institutes')
@@ -309,7 +310,7 @@ class CourseService {
           ItemModel newItem = ItemModel(
             courseId: itemId,
             courseTitle: itemTitle,
-            imageUrl: imageUrls[index],
+            imageUrl: formData['suggestionImage'] ?? imageUrls[index],
             shortDescription: formData['shortDescription'],
             aboutDescription: formData['aboutDescription'],
             amount: double.parse(formData['amount']),
@@ -336,7 +337,7 @@ class CourseService {
             CourseModel newCourse = CourseModel(
               courseId: itemId,
               courseTitle: itemTitle,
-              imageUrl: imageUrls[index],
+              imageUrl: formData['suggestionImage'] ?? imageUrls[index],
               shortDescription: formData['shortDescription'],
               aboutDescription: formData['aboutDescription'],
               batchDay: day,

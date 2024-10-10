@@ -89,7 +89,8 @@ class _AddTitleCardState extends State<AddTitleCard> {
                           fit: BoxFit.cover,
                         ),
                       )
-                    : widget.suggestionImage != null
+                    : (widget.suggestionImage != null &&
+                            widget.suggestionImage!.isNotEmpty)
                         ? ClipOval(
                             child: Image.network(
                               widget.suggestionImage!,
@@ -231,9 +232,9 @@ class _AddTitleCardState extends State<AddTitleCard> {
                                     .collection('suggestions')
                                     .where('name',
                                         isGreaterThanOrEqualTo:
-                                            capitalizedSearchTerm)
+                                            search.toLowerCase())
                                     .where('name',
-                                        isLessThan: '${capitalizedSearchTerm}z')
+                                        isLessThan: '${search.toLowerCase()}z')
                                     .where('isApproved', isEqualTo: true)
                                     .get();
                             final listValues =
