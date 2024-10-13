@@ -374,4 +374,36 @@ class AuthProvider with ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> updateUserName(
+      String accessCode, String name, bool isInstitute) async {
+    try {
+      if (isInstitute) {
+        await FirebaseAuthService().updateInstituteName(accessCode, name);
+      }
+      await FirebaseAuthService().updateUserName(
+        _currentUser!.uid,
+        name,
+      );
+      _currentUser = UserModel(
+        uid: _currentUser!.uid,
+        name: name,
+        email: _currentUser!.email,
+        role: _currentUser!.role,
+        phone: _currentUser!.phone,
+        address: _currentUser!.address,
+        institute: _currentUser!.institute,
+        state: _currentUser!.state,
+        city: _currentUser!.city,
+        profileUrl: _currentUser!.profileUrl,
+        registeredCourses: _currentUser!.registeredCourses,
+        roleType: _currentUser!.roleType,
+      );
+      notifyListeners();
+      return true;
+    } catch (e) {
+      log.e('Failed to update user name: $e');
+      return false;
+    }
+  }
 }
