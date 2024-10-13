@@ -253,4 +253,26 @@ class FirebaseAuthService {
       return false;
     }
   }
+
+  Future<void> updateInstituteName(String accessCode, String name) async {
+    try {
+      await _firestore.collection('institutes').doc(accessCode).update({
+        'instituteName': name,
+      });
+    } catch (e) {
+      log.e('Error updating institute name: $e');
+      throw Exception('Error updating institute name: $e');
+    }
+  }
+
+  Future<void> updateUserName(String uid, String name) async {
+    try {
+      await _firestore.collection('lms-users').doc(uid).update({
+        'name': name,
+      });
+    } catch (e) {
+      log.e('Error updating user name: $e');
+      throw Exception('Error updating user name: $e');
+    }
+  }
 }
