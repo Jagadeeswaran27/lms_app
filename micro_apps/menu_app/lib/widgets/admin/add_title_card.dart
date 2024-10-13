@@ -103,6 +103,7 @@ class _AddTitleCardState extends State<AddTitleCard> {
               ),
             ),
           ),
+          const SizedBox(width: 12),
           Flexible(
             child: Column(
               mainAxisSize: MainAxisSize.min,

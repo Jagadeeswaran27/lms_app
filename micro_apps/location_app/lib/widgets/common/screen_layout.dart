@@ -148,7 +148,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
                             children: [
                               const SizedBox(height: 10),
                               Text(
-                                '${authProvider.currentUser!.name.trim()}\'s institute',
+                                authProvider.currentUser!.name.trim(),
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMediumTitleBrown,
