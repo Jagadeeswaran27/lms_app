@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:menu_app/models/courses/search_model.dart';
 
 import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/themes/colors.dart';
@@ -30,13 +32,17 @@ class AddItemWidget extends StatefulWidget {
   final Function(Map<String, dynamic>, List<File> images) addItem;
   final String subCategory;
   final Future<bool> Function(String name, File) onAddSuggestion;
+
   @override
   AddItemWidgetState createState() => AddItemWidgetState();
 }
 
 class AddItemWidgetState extends State<AddItemWidget> {
   final _formKey = GlobalKey<FormState>();
-  final titleController = TextEditingController();
+  // final titleController = TextEditingController();
+  String title = '';
+  List<SearchModel> _manualSearch = [];
+  List<SearchModel> _suggestionSearch = [];
   List<File?> _image = [];
   bool _isUploadValid = true;
   bool _isBatchOfferedSelected = false;
@@ -49,7 +55,9 @@ class AddItemWidgetState extends State<AddItemWidget> {
   List<String> _batchTime = [];
   String _amountDetails = '';
   String _totalHours = '';
-  String? _suggestionImage = '';
+  int _selectedFieldType = -1;
+  bool showInputType = false;
+  bool isFieldEnabled = true;
 
   final _picker = ImagePicker();
 
@@ -59,19 +67,100 @@ class AddItemWidgetState extends State<AddItemWidget> {
     });
   }
 
-  void _handleTitleChange(String value, String? suggestion) {
+  void _handleTitleChange(String value, [String? suggestionImageURL]) {
+    List<String> newItems = value
+        .split(',')
+        .map((e) => e.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
     setState(() {
-      titleController.text = value;
+      title = value;
       _itemTitle = value;
       _titleError = null;
-      _suggestionImage = suggestion;
+      showInputType =
+          value.isEmpty || value[value.length - 1] == ',' ? true : false;
+      _selectedFieldType = -1;
+      isFieldEnabled = true;
+
+      // _manualSearch = items
+      //     .where((item) =>
+      //         !_suggestionSearch.any((suggestion) => suggestion.name == item))
+      //     .map((item) => SearchModel(
+      //           name: item,
+      //           valid: false,
+      //           file: null,
+      //         ))
+      //     .toList();
+      // Create sets for efficient lookup
+      Set<String> oldItems = Set.from(_manualSearch.map((item) => item.name))
+        ..addAll(_suggestionSearch.map((item) => item.name));
+      Set<String> newItemSet = Set.from(newItems);
+
+      // Find items to remove
+      Set<String> itemsToRemove = oldItems.difference(newItemSet);
+
+      // Remove items from _manualSearch and _suggestionSearch
+      _manualSearch.removeWhere((item) => itemsToRemove.contains(item.name));
+      _suggestionSearch
+          .removeWhere((item) => itemsToRemove.contains(item.name));
+
+      // Find items to add
+      Set<String> itemsToAdd = newItemSet.difference(oldItems);
+
+      // Add new items to _manualSearch
+      _manualSearch.addAll(itemsToAdd.map((item) => SearchModel(
+            name: item,
+            valid: false,
+            file: null,
+          )));
+
+      // If a new suggestion was added
+      if (suggestionImageURL != null && newItems.isNotEmpty) {
+        String lastItem = newItems.last;
+        if (!_suggestionSearch
+            .any((suggestion) => suggestion.name == lastItem)) {
+          _suggestionSearch.add(SearchModel(
+            name: lastItem,
+            valid: true,
+            url: suggestionImageURL,
+          ));
+          // Remove the last item from _manualSearch if it was added there
+          _manualSearch.removeWhere((item) => item.name == lastItem);
+        }
+      }
+    });
+  }
+
+  void onSelectSuggestion(QueryDocumentSnapshot suggestion) {
+    final SearchModel _suggestion = SearchModel(
+        name: suggestion['name'], valid: true, url: suggestion['image']);
+    _suggestionSearch.add(_suggestion);
+    _handleTitleChange(
+      '${title.isNotEmpty ? title : ''}${suggestion['name']}',
+      suggestion['image'],
+    );
+  }
+
+  void _handleSelectedFieldType(int value) {
+    setState(() {
+      _selectedFieldType = value;
+      isFieldEnabled = false;
     });
   }
 
   void onSaveMedia(List<File?> files) {
     setState(() {
-      _image = files;
-      _isUploadValid = !files.contains(null);
+      // _image = files;
+      // _isUploadValid = !files.contains(null);
+      _manualSearch = _manualSearch.asMap().entries.map((entry) {
+        int index = entry.key;
+        SearchModel e = entry.value;
+        return SearchModel(
+          name: e.name,
+          valid: true,
+          file: files.length > index ? files[index] : null,
+        );
+      }).toList();
     });
   }
 
@@ -90,8 +179,8 @@ class AddItemWidgetState extends State<AddItemWidget> {
       _isBatchOfferedSelected = false;
       _isBatchOfferedError = null;
       _titleError = null;
-      titleController.text = '';
-      titleController.clear();
+      title = '';
+      // titleController.clear();
     });
   }
 
@@ -101,6 +190,13 @@ class AddItemWidgetState extends State<AddItemWidget> {
       return;
     }
     bool isFormValid = _formKey.currentState!.validate();
+    if (_manualSearch.any((item) => !item.valid)) {
+      setState(() {
+        _isUploadValid = false;
+      });
+      showSnackbar(context, 'Please upload all images');
+      return;
+    }
     // if (_suggestionImage == null || _suggestionImage!.isEmpty) {
     //   setState(() {
     //     _isUploadValid = false;
@@ -109,16 +205,16 @@ class AddItemWidgetState extends State<AddItemWidget> {
     //   return;
     // }
 
-    if (_suggestionImage == null || _suggestionImage!.isEmpty) {
-      if (_image.isEmpty || _image.contains(null)) {
-        setState(() {
-          _isUploadValid =
-              _image.isEmpty || _image.contains(null) ? false : true;
-        });
-        showSnackbar(context, 'Please upload all images');
-        return;
-      }
-    }
+    // if (_suggestionImage == null || _suggestionImage!.isEmpty) {
+    //   if (_image.isEmpty || _image.contains(null)) {
+    //     setState(() {
+    //       _isUploadValid =
+    //           _image.isEmpty || _image.contains(null) ? false : true;
+    //     });
+    //     showSnackbar(context, 'Please upload all images');
+    //     return;
+    //   }
+    // }
 
     if (_itemTitle == '') {
       setState(() {
@@ -133,11 +229,12 @@ class AddItemWidgetState extends State<AddItemWidget> {
       });
       return;
     }
-
     if (isFormValid) {
       _formKey.currentState!.save();
       Map<String, dynamic> formData = {
         'itemTitle': _itemTitle,
+        'manualSearch': _manualSearch,
+        'suggestionSearch': _suggestionSearch,
         'shortDescription': _shortDescription,
         'aboutDescription': _aboutDescription,
         'batchDay': widget.subCategory == 'courses' ? _selectedDays : null,
@@ -145,7 +242,6 @@ class AddItemWidgetState extends State<AddItemWidget> {
         'amount': _amountDetails,
         'totalHours':
             _totalHours.trim().isNotEmpty ? int.parse(_totalHours) : null,
-        'suggestionImage': _suggestionImage,
       };
 
       widget.addItem({...formData}, _image.whereType<File>().toList());
@@ -158,7 +254,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
       context: context,
       builder: (BuildContext context) {
         return RegistrationMediaDialog(
-          itemTitles: _itemTitle.split(',').map((e) => e.trim()).toList(),
+          itemTitles: _manualSearch.map((e) => e.name).toList(),
           mediaHeading: Strings.addImage,
           onSaveMedia: onSaveMedia,
         );
@@ -361,9 +457,17 @@ class AddItemWidgetState extends State<AddItemWidget> {
     );
   }
 
+  void toggleShowInputType(bool value) {
+    setState(() {
+      showInputType = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
+    final finalTitleList = [..._manualSearch, ..._suggestionSearch];
+
     return SingleChildScrollView(
       child: SizedBox(
         width: screenSize.width * 0.95,
@@ -372,14 +476,18 @@ class AddItemWidgetState extends State<AddItemWidget> {
           child: Column(
             children: [
               AddTitleCard(
-                image: _image.isNotEmpty ? _image.first : null,
-                text: titleController.text,
+                image: finalTitleList.isNotEmpty ? finalTitleList.first : null,
+                text: title,
                 titleError: _titleError,
-                suggestionImage: _suggestionImage,
-                onTitleChange: (String value, String? suggestion) =>
-                    _handleTitleChange(value, suggestion),
+                showInputType: showInputType,
+                selectedFieldType: _selectedFieldType,
+                isFieldEnabled: isFieldEnabled,
+                toggleShowInputType: toggleShowInputType,
+                onAutoChange: (int value) => _handleSelectedFieldType(value),
+                onTitleChange: (String value) => _handleTitleChange(value),
                 onTap: _onProfileUpload,
                 onAddSuggestion: onAddSuggestion,
+                onSelectSuggestion: onSelectSuggestion,
               ),
               const SizedBox(height: 20),
               Row(

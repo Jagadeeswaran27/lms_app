@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:menu_app/core/services/firebase/firebase_storage_service.dart';
 import 'package:menu_app/models/courses/course_model.dart';
 import 'package:menu_app/models/courses/item_model.dart';
+import 'package:menu_app/models/courses/search_model.dart';
 import 'package:menu_app/models/courses/suggestion_model.dart';
 import 'package:menu_app/utils/logger/logger.dart';
 
@@ -253,20 +254,28 @@ class CourseService {
     try {
       final itemTitles =
           formData['itemTitle'].split(',').map((e) => e.trim()).toList();
-      // String imageUrl = await _storageService.uploadFile(
-      //   imageFile,
-      //   'institutes/$accessCode',
-      //   '${imageFile.path.split('/').last}',
-      // );
-      List<String> imageUrls = [];
-      for (int i = 0; i < imageFile.length; i++) {
+
+      // List<String> manualImageUrls = [];
+      for (int i = 0; i < formData['manualSearch'].length; i++) {
         String url = await _storageService.uploadFile(
-          imageFile[i],
+          formData['manualSearch'][i].file,
           'institutes/$accessCode',
-          '${imageFile[i].path.split('/').last}',
+          formData['manualSearch'][i].file.path.split('/').last,
         );
-        imageUrls.add(url);
+        print(url);
+        // formData['manualSearch'][i].file = url;
+        formData['manualSearch'][i] = SearchModel(
+          name: formData['manualSearch'][i].name,
+          file: formData['manualSearch'][i].file,
+          valid: true,
+          url: url,
+        );
+        // manualImageUrls.add(url);
       }
+      final List<SearchModel> finalTitleList = [
+        ...formData['manualSearch'],
+        ...formData['suggestionSearch']
+      ];
 
       String? lastAddedItemId;
       // Check if the selectedCategory field exists in the document
@@ -290,15 +299,13 @@ class CourseService {
       }
       WriteBatch batch = _firestore.batch();
 
-      for (String itemTitle in itemTitles) {
+      for (SearchModel search in finalTitleList) {
         print('...................................');
-        print(itemTitle);
+        print(search.name);
         List batchDays = formData['batchDay'] ?? [];
         List batchTimes = formData['batchTime'] ?? [];
-        int index = itemTitles.indexOf(itemTitle);
-        print(imageUrls);
-        print(index);
-        //Todo:If no batch days and batch times then different logic
+        // int index = finalTitleList.indexOf(search);
+        // print(index);
         if (subCategory != 'courses') {
           final itemId = _firestore
               .collection('institutes')
@@ -309,8 +316,8 @@ class CourseService {
 
           ItemModel newItem = ItemModel(
             courseId: itemId,
-            courseTitle: itemTitle,
-            imageUrl: formData['suggestionImage'] ?? imageUrls[index],
+            courseTitle: search.name,
+            imageUrl: search.url ?? '',
             shortDescription: formData['shortDescription'],
             aboutDescription: formData['aboutDescription'],
             amount: double.parse(formData['amount']),
@@ -336,8 +343,8 @@ class CourseService {
                 .id;
             CourseModel newCourse = CourseModel(
               courseId: itemId,
-              courseTitle: itemTitle,
-              imageUrl: formData['suggestionImage'] ?? imageUrls[index],
+              courseTitle: search.name,
+              imageUrl: search.url ?? '',
               shortDescription: formData['shortDescription'],
               aboutDescription: formData['aboutDescription'],
               batchDay: day,
@@ -360,6 +367,77 @@ class CourseService {
           }
         }
       }
+
+      // for (String itemTitle in itemTitles) {
+      //   print('...................................');
+      //   print(itemTitle);
+      //   List batchDays = formData['batchDay'] ?? [];
+      //   List batchTimes = formData['batchTime'] ?? [];
+      //   int index = itemTitles.indexOf(itemTitle);
+      //   print(imageUrls);
+      //   print(index);
+      //   //Todo:If no batch days and batch times then different logic
+      //   if (subCategory != 'courses') {
+      //     final itemId = _firestore
+      //         .collection('institutes')
+      //         .doc(accessCode)
+      //         .collection(subCategory)
+      //         .doc()
+      //         .id;
+
+      //     ItemModel newItem = ItemModel(
+      //       courseId: itemId,
+      //       courseTitle: itemTitle,
+      //       imageUrl: formData['suggestionImage'] ?? imageUrls[index],
+      //       shortDescription: formData['shortDescription'],
+      //       aboutDescription: formData['aboutDescription'],
+      //       amount: double.parse(formData['amount']),
+      //     );
+
+      //     await _firestore
+      //         .collection('institutes')
+      //         .doc(accessCode)
+      //         .collection(subCategory)
+      //         .doc(itemId)
+      //         .set(
+      //           newItem.toJson(),
+      //         );
+      //     lastAddedItemId = itemId;
+      //   }
+      //   for (String day in batchDays) {
+      //     for (String time in batchTimes) {
+      //       final itemId = _firestore
+      //           .collection('institutes')
+      //           .doc(accessCode)
+      //           .collection(subCategory)
+      //           .doc()
+      //           .id;
+      //       CourseModel newCourse = CourseModel(
+      //         courseId: itemId,
+      //         courseTitle: itemTitle,
+      //         imageUrl: formData['suggestionImage'] ?? imageUrls[index],
+      //         shortDescription: formData['shortDescription'],
+      //         aboutDescription: formData['aboutDescription'],
+      //         batchDay: day,
+      //         batchTime: time,
+      //         totalHours: formData['totalHours'],
+      //         amount: double.parse(formData['amount']),
+      //       );
+
+      //       // Add the write operation to the batch
+      //       batch.set(
+      //         _firestore
+      //             .collection('institutes')
+      //             .doc(accessCode)
+      //             .collection(subCategory)
+      //             .doc(itemId),
+      //         newCourse.toJson()
+      //           ..removeWhere((key, value) => value == null || value == ''),
+      //       );
+      //       lastAddedItemId = itemId;
+      //     }
+      //   }
+      // }
 
       await batch.commit();
 
