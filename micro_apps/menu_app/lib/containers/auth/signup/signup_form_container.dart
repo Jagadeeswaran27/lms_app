@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:menu_app/widgets/common/sentence_case.dart';
 
 import 'package:provider/provider.dart';
 
@@ -32,8 +33,14 @@ class _SignupFormContainerState extends State<SignupFormContainer> {
     setState(() {
       _isLoading = true;
     });
-    final response =
-        await authProvider.signUp(userName, email, password, phone, role);
+
+    final response = await authProvider.signUp(
+      sentenceCase(userName),
+      email.trim(),
+      password.trim(),
+      phone.trim(),
+      role.trim(),
+    );
     setState(() {
       _isLoading = false;
     });

@@ -1,5 +1,6 @@
 import 'package:enquiry_app/screens/auth/verification_successfull_screen.dart';
 import 'package:enquiry_app/utils/error/show_snackbar.dart';
+import 'package:enquiry_app/utils/sentence_case.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -32,8 +33,13 @@ class _SignupFormContainerState extends State<SignupFormContainer> {
     setState(() {
       _isLoading = true;
     });
-    final response =
-        await authProvider.signUp(userName, email, password, phone, role);
+    final response = await authProvider.signUp(
+      sentenceCase(userName),
+      email.trim(),
+      password.trim(),
+      phone.trim(),
+      role.trim(),
+    );
     setState(() {
       _isLoading = false;
     });

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_app/models/courses/search_model.dart';
@@ -174,7 +172,7 @@ class _AddTitleCardState extends State<AddTitleCard> {
                             materialTapTargetSize:
                                 MaterialTapTargetSize.shrinkWrap,
                             title: Text(
-                              Strings.manual,
+                              'By Prompt',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMediumTitleBrown,
@@ -188,7 +186,7 @@ class _AddTitleCardState extends State<AddTitleCard> {
                               groupValue: true,
                               onChanged: (value) => widget.onAutoChange(1),
                               title: Text(
-                                Strings.auto,
+                                'All Available',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMediumTitleBrown,
