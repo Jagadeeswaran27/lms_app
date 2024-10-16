@@ -1,3 +1,4 @@
+import 'package:enquiry_app/utils/sentence_case.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,8 +44,12 @@ class _SettingsScreenContainerState extends State<SettingsScreenContainer> {
     final accessCode = isInstitute
         ? authProvider.currentUser?.institute.first
         : authProvider.selectedinstituteCode;
-    final response =
-        await authProvider.updateUserName(accessCode!, name, isInstitute);
+    final instituteName = sentenceCase(name);
+    final response = await authProvider.updateUserName(
+      accessCode!,
+      instituteName,
+      isInstitute,
+    );
     if (response) {
       showSnackbar(context, 'Profile updated successfully');
     } else {

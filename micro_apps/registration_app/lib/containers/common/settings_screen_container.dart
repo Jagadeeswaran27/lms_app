@@ -6,6 +6,7 @@ import 'package:registration_app/providers/auth_provider.dart';
 import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/screens/auth/role_type_selection_screen.dart';
 import 'package:registration_app/screens/auth/welcome_screen.dart';
+import 'package:registration_app/utils/sentence_case.dart';
 import 'package:registration_app/utils/show_snackbar.dart';
 import 'package:registration_app/widgets/common/settings_screen_widget.dart';
 
@@ -44,8 +45,12 @@ class _SettingsScreenContainerState extends State<SettingsScreenContainer> {
     final accessCode = isInstitute
         ? authProvider.currentUser?.institute.first
         : authProvider.selectedinstituteCode;
-    final response =
-        await authProvider.updateUserName(accessCode!, name, isInstitute);
+    final instituteName = sentenceCase(name);
+    final response = await authProvider.updateUserName(
+      accessCode!,
+      instituteName,
+      isInstitute,
+    );
     if (response) {
       showSnackbar(context, 'Profile updated successfully');
     } else {
