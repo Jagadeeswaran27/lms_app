@@ -275,4 +275,50 @@ class FirebaseAuthService {
       throw Exception('Error updating user name: $e');
     }
   }
+
+  Future<void> updateUserPhone(String uid, String phone) async {
+    try {
+      await _firestore.collection('lms-users').doc(uid).update({
+        'phone': phone,
+      });
+    } catch (e) {
+      log.e('Error updating user name: $e');
+      throw Exception('Error updating user name: $e');
+    }
+  }
+
+  Future<bool> updateUserEmail(
+    String uid,
+    String newEmail,
+    String password,
+  ) async {
+    try {
+      User? user = _firebaseAuth.currentUser;
+      final QuerySnapshot result = await FirebaseFirestore.instance
+          .collection('lms-users')
+          .where('email', isEqualTo: newEmail)
+          .limit(1)
+          .get();
+      if (result.docChanges.isNotEmpty) {
+        return false;
+      }
+      if (user != null) {
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: user.email!,
+          password: password,
+        );
+        UserCredential reAuthenticatedCredential =
+            await user.reauthenticateWithCredential(credential);
+        await reAuthenticatedCredential.user!.verifyBeforeUpdateEmail(newEmail);
+        await _firestore.collection('lms-users').doc(uid).update({
+          'changeEmail': newEmail,
+        });
+        return await signOut();
+      }
+      return false;
+    } catch (e) {
+      log.e('Error updating user name: $e');
+      throw Exception('Error updating user name: $e');
+    }
+  }
 }

@@ -5,6 +5,7 @@ class UserModel {
   final String phone;
   final String role;
   final List<String> institute;
+  final String? changeEmail;
   final String? address;
   final String? city;
   final String? profileUrl;
@@ -14,21 +15,23 @@ class UserModel {
   final bool? isFaceRecognized;
   final bool? isSomeone;
 
-  UserModel(
-      {required this.uid,
-      required this.name,
-      required this.email,
-      required this.role,
-      required this.phone,
-      required this.institute,
-      this.isSomeone,
-      this.profileUrl,
-      this.address,
-      this.state,
-      this.city,
-      this.registeredCourses = const [],
-      required this.roleType,
-      this.isFaceRecognized = false});
+  UserModel({
+    required this.uid,
+    required this.name,
+    required this.email,
+    required this.role,
+    required this.phone,
+    required this.institute,
+    this.changeEmail,
+    this.isSomeone,
+    this.profileUrl,
+    this.address,
+    this.state,
+    this.city,
+    this.registeredCourses = const [],
+    required this.roleType,
+    this.isFaceRecognized = false,
+  });
 
   factory UserModel.fromMap(Map<String, dynamic> data) {
     return UserModel(
@@ -37,6 +40,7 @@ class UserModel {
       email: data['email'] ?? '',
       role: data['role'] ?? '',
       phone: data['phone'] ?? '',
+      changeEmail: data['changeEmail'] ?? '',
       address: data['address'] ?? '',
       city: data['city'] ?? '',
       state: data['state'] ?? '',
@@ -59,6 +63,7 @@ class UserModel {
       city: '',
       state: '',
       address: '',
+      changeEmail: '',
       profileUrl: '',
       institute: [],
       registeredCourses: [],
@@ -83,6 +88,7 @@ class UserModel {
       'registeredCourses': registeredCourses,
       'roleType': roleType,
       'isFaceRecognized': isFaceRecognized,
+      'changeEmail': changeEmail,
     };
   }
 }

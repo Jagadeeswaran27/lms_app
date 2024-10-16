@@ -48,6 +48,7 @@ class Strings {
   static const String invalidMobileNumber = 'Invalid mobile number';
   static const String pleaseSelectRole = 'Please select a role';
   static const String errorLoggingOut = 'Error logging out';
+  static const String updateEmailFailed = 'Update email failed';
 
   //app related
   static const String attendance = 'Attendance';

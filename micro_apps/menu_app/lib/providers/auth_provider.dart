@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:menu_app/core/services/auth/auth_service.dart';
 
 import 'package:menu_app/core/services/firebase/firebase_auth_service.dart';
 import 'package:menu_app/core/services/firebase/firebase_storage_service.dart';
@@ -148,6 +149,29 @@ class AuthProvider with ChangeNotifier {
       log.e(e);
       return AuthModel.error(message: parseErrorMessage(e.toString()));
     }
+  }
+
+  Future<bool> changeDBEmail() async {
+    final response = await AuthService().changeDBEmail();
+
+    if (response) {
+      _currentUser = UserModel(
+        uid: _currentUser!.uid,
+        name: _currentUser!.name,
+        email: _currentUser!.changeEmail!,
+        role: _currentUser!.role,
+        phone: _currentUser!.phone,
+        address: _currentUser!.address,
+        institute: _currentUser!.institute,
+        state: _currentUser!.state,
+        city: _currentUser!.city,
+        profileUrl: _currentUser!.profileUrl,
+        registeredCourses: _currentUser!.registeredCourses,
+        changeEmail: '',
+      );
+      // notifyListeners();
+    }
+    return response;
   }
 
   Future<AuthModel> signIn(String email, String password) async {
@@ -436,13 +460,11 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  Future<bool> updateUserEmail(String email) async {
+  Future<bool> updateUserEmail(String email, String password) async {
     try {
-      await FirebaseAuthService().updateUserEmail(
-        _currentUser!.uid,
-        email,
-      );
-      return true;
+      final response = await FirebaseAuthService()
+          .updateUserEmail(_currentUser!.uid, email, password);
+      return response;
     } catch (e) {
       log.e('Failed to update user name: $e');
       return false;

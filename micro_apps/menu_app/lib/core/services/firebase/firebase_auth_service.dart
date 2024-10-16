@@ -287,13 +287,25 @@ class FirebaseAuthService {
     }
   }
 
-  Future<bool> updateUserEmail(String uid, String newEmail) async {
+  Future<bool> updateUserEmail(
+    String uid,
+    String newEmail,
+    String password,
+  ) async {
     try {
       User? user = _firebaseAuth.currentUser;
+      final QuerySnapshot result = await FirebaseFirestore.instance
+          .collection('lms-users')
+          .where('email', isEqualTo: newEmail)
+          .limit(1)
+          .get();
+      if (result.docChanges.isNotEmpty) {
+        return false;
+      }
       if (user != null) {
         AuthCredential credential = EmailAuthProvider.credential(
           email: user.email!,
-          password: '123456',
+          password: password,
         );
         UserCredential reAuthenticatedCredential =
             await user.reauthenticateWithCredential(credential);

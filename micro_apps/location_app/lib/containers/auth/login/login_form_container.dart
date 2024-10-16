@@ -57,6 +57,13 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
       final loggedInStatuses = await SharedPreferencesUtils().getMapPrefs(
         constants.loggedInStatusFlag,
       );
+      if (authProvider.currentUser!.changeEmail!.isNotEmpty) {
+        final response = await authProvider.changeDBEmail();
+        if (!response) {
+          showSnackbar(context, Strings.updateEmailFailed);
+          return;
+        }
+      }
       await SharedPreferencesUtils()
           .addMapPrefs(passwordConstants.passwordFlag, {
         "password": userPassword,

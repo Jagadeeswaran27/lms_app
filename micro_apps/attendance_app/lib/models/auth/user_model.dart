@@ -5,6 +5,7 @@ class UserModel {
   final String phone;
   final String role;
   final List<String> institute;
+  final String? changeEmail;
   final String? address;
   final String? city;
   final String? profileUrl;
@@ -19,6 +20,7 @@ class UserModel {
     required this.role,
     required this.phone,
     required this.institute,
+    this.changeEmail,
     this.profileUrl,
     this.address,
     this.state,
@@ -34,6 +36,7 @@ class UserModel {
       email: data['email'] ?? '',
       role: data['role'] ?? '',
       phone: data['phone'] ?? '',
+      changeEmail: data['changeEmail'] ?? '',
       address: data['address'] ?? '',
       city: data['city'] ?? '',
       state: data['state'] ?? '',
@@ -54,6 +57,7 @@ class UserModel {
       city: '',
       state: '',
       address: '',
+      changeEmail: '',
       profileUrl: '',
       roleType: [],
       institute: [],
@@ -75,6 +79,7 @@ class UserModel {
       'profileUrl': profileUrl,
       'roleType': roleType,
       'registeredCourses': registeredCourses,
+      'changeEmail': changeEmail,
     };
   }
 }

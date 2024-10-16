@@ -19,6 +19,15 @@ class SettingsScreenWidget extends StatefulWidget {
     required this.isEditing,
     required this.saveInstituteName,
     required this.setEditing,
+    required this.isPhoneLoading,
+    required this.isPhoneEditing,
+    required this.isEmailLoading,
+    required this.isEmailEditing,
+    required this.setPhoneEditing,
+    required this.setEmailEditing,
+    required this.saveUserPhone,
+    required this.saveUserEmail,
+    this.changeEmail,
   });
 
   final bool isInstitute;
@@ -27,9 +36,18 @@ class SettingsScreenWidget extends StatefulWidget {
   final String email;
   final bool isLoading;
   final bool isEditing;
+  final bool isPhoneLoading;
+  final bool isPhoneEditing;
+  final bool isEmailLoading;
+  final bool isEmailEditing;
+  final String? changeEmail;
   final void Function() logout;
   final void Function(String, bool) saveInstituteName;
   final void Function(bool) setEditing;
+  final void Function(bool) setPhoneEditing;
+  final void Function(bool) setEmailEditing;
+  final Future<void> Function(String) saveUserPhone;
+  final void Function(BuildContext, String, bool) saveUserEmail;
 
   @override
   State<SettingsScreenWidget> createState() => _SettingsScreenWidgetState();
@@ -37,7 +55,11 @@ class SettingsScreenWidget extends StatefulWidget {
 
 class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
   final FocusNode _nameFocusNode = FocusNode();
+  final FocusNode _phoneFocusNode = FocusNode();
+  final FocusNode _emailFocusNode = FocusNode();
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   void saveName() {
     if (_nameController.text.isEmpty) {
@@ -55,15 +77,58 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
     widget.saveInstituteName(_nameController.text, widget.isInstitute);
   }
 
+  void savePhone() {
+    if (_phoneController.text.isEmpty) {
+      showSnackbar(context, 'Phone cannot be empty');
+      widget.setPhoneEditing(false);
+      return;
+    }
+
+    if (_phoneController.text == widget.phone) {
+      showSnackbar(context, 'No changes made');
+      widget.setPhoneEditing(false);
+      return;
+    }
+
+    widget.saveUserPhone(_phoneController.text);
+  }
+
+  void saveEmail() {
+    if (_emailController.text.isEmpty) {
+      showSnackbar(context, 'Email cannot be empty');
+      widget.setPhoneEditing(false);
+      return;
+    }
+
+    if (_emailController.text == widget.email) {
+      showSnackbar(context, 'No changes made');
+      widget.setPhoneEditing(false);
+      return;
+    }
+    widget.saveUserEmail(context, _emailController.text, widget.isInstitute);
+  }
+
   @override
   void initState() {
     super.initState();
     _nameController.text = widget.name;
+    _phoneController.text = widget.phone;
+    _emailController.text = widget.email;
   }
 
   void onEdit() {
     widget.setEditing(true);
     FocusScope.of(context).requestFocus(_nameFocusNode);
+  }
+
+  void onPhoneEdit() {
+    widget.setPhoneEditing(true);
+    FocusScope.of(context).requestFocus(_phoneFocusNode);
+  }
+
+  void onEmailEdit() {
+    widget.setEmailEditing(true);
+    FocusScope.of(context).requestFocus(_emailFocusNode);
   }
 
   @override
@@ -110,7 +175,7 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
                                 Text(
                                   widget.isInstitute
                                       ? Strings.instituteName
-                                      : Strings.userNameSettings,
+                                      : Strings.userName,
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMediumTitleBrown,
@@ -123,7 +188,7 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SizedBox(
-                                  width: 250,
+                                  width: 240,
                                   child: FormInput(
                                     controller: _nameController,
                                     text: "",
@@ -169,40 +234,112 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
                             ),
                             const SizedBox(height: 20),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Icon(
-                                  Icons.phone,
-                                  color: ThemeColors.primary,
+                                SizedBox(
+                                  width: 240,
+                                  child: FormInput(
+                                    controller: _phoneController,
+                                    text: "",
+                                    readOnly: !widget.isPhoneEditing,
+                                    hintText: "",
+                                    borderColor: widget.isPhoneEditing
+                                        ? ThemeColors.primary
+                                        : ThemeColors.white,
+                                    focusNode: _phoneFocusNode,
+                                  ),
                                 ),
-                                const SizedBox(width: 10),
-                                Text(
-                                  widget.phone,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleSmallTitleBrown,
-                                )
+                                widget.isPhoneLoading
+                                    ? const CircularProgressIndicator(
+                                        strokeWidth: 3,
+                                      )
+                                    : SizedBox(
+                                        child: widget.isPhoneEditing
+                                            ? IconButton(
+                                                icon: const Icon(Icons.check),
+                                                onPressed: savePhone,
+                                              )
+                                            : IconButton(
+                                                onPressed: onPhoneEdit,
+                                                icon: const Icon(Icons.edit),
+                                              ),
+                                      ),
                               ],
                             ),
                             const SizedBox(height: 20),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Icon(
-                                  Icons.mail_rounded,
-                                  color: ThemeColors.primary,
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Text(
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    widget.email,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmallTitleBrown,
+                                SizedBox(
+                                  width: 240,
+                                  child: FormInput(
+                                    controller: _emailController,
+                                    text: "",
+                                    readOnly: !widget.isEmailEditing,
+                                    hintText: "",
+                                    borderColor: widget.isEmailEditing
+                                        ? ThemeColors.primary
+                                        : ThemeColors.white,
+                                    focusNode: _emailFocusNode,
+                                    helperText: widget.changeEmail!.isNotEmpty
+                                        ? 'Verification pending for updated email'
+                                        : null,
                                   ),
-                                )
+                                ),
+                                widget.isEmailLoading
+                                    ? const CircularProgressIndicator(
+                                        strokeWidth: 3,
+                                      )
+                                    : SizedBox(
+                                        child: widget.isEmailEditing
+                                            ? IconButton(
+                                                icon: const Icon(Icons.check),
+                                                onPressed: saveEmail,
+                                              )
+                                            : IconButton(
+                                                onPressed: onEmailEdit,
+                                                icon: const Icon(Icons.edit),
+                                              ),
+                                      ),
                               ],
                             ),
+                            // Row(
+                            //   children: [
+                            //     Icon(
+                            //       Icons.phone,
+                            //       color: ThemeColors.primary,
+                            //     ),
+                            //     const SizedBox(width: 10),
+                            //     Text(
+                            //       widget.phone,
+                            //       style: Theme.of(context)
+                            //           .textTheme
+                            //           .titleSmallTitleBrown,
+                            //     )
+                            //   ],
+                            // ),
+                            // const SizedBox(height: 20),
+                            // Row(
+                            //   children: [
+                            //     Icon(
+                            //       Icons.mail_rounded,
+                            //       color: ThemeColors.primary,
+                            //     ),
+                            //     const SizedBox(width: 10),
+                            //     Expanded(
+                            //       child: Text(
+                            //         overflow: TextOverflow.ellipsis,
+                            //         maxLines: 2,
+                            //         widget.email,
+                            //         style: Theme.of(context)
+                            //             .textTheme
+                            //             .titleSmallTitleBrown,
+                            //       ),
+                            //     )
+                            //   ],
+                            // ),
                           ],
                         )
                       ],

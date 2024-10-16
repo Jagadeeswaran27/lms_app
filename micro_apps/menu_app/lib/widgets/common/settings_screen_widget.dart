@@ -47,7 +47,7 @@ class SettingsScreenWidget extends StatefulWidget {
   final void Function(bool) setPhoneEditing;
   final void Function(bool) setEmailEditing;
   final Future<void> Function(String) saveUserPhone;
-  final Future<void> Function(String, bool) saveUserEmail;
+  final void Function(BuildContext, String, bool) saveUserEmail;
 
   @override
   State<SettingsScreenWidget> createState() => _SettingsScreenWidgetState();
@@ -105,7 +105,7 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
       widget.setPhoneEditing(false);
       return;
     }
-    widget.saveUserEmail(_emailController.text, widget.isInstitute);
+    widget.saveUserEmail(context, _emailController.text, widget.isInstitute);
   }
 
   @override
@@ -188,7 +188,7 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SizedBox(
-                                  width: 250,
+                                  width: 240,
                                   child: FormInput(
                                     controller: _nameController,
                                     text: "",
@@ -238,7 +238,7 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SizedBox(
-                                  width: 250,
+                                  width: 240,
                                   child: FormInput(
                                     controller: _phoneController,
                                     text: "",
@@ -273,7 +273,7 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SizedBox(
-                                  width: 250,
+                                  width: 240,
                                   child: FormInput(
                                     controller: _emailController,
                                     text: "",
