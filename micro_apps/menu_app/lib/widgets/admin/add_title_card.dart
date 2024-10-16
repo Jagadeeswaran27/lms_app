@@ -11,6 +11,12 @@ import 'package:menu_app/widgets/common/special_form_input.dart';
 import 'package:menu_app/widgets/common/svg_lodder.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
+  }
+}
+
 class AddTitleCard extends StatefulWidget {
   final Function() onTap;
   final String text;
@@ -22,8 +28,10 @@ class AddTitleCard extends StatefulWidget {
   final Function(String) onTitleChange;
   final Function(String) onAddSuggestion;
   final Function(int) onAutoChange;
+  final Function(int) resetFieldEnabled;
   final Function(bool) toggleShowInputType;
-  final Function(QueryDocumentSnapshot) onSelectSuggestion;
+  final Function(QueryDocumentSnapshot, bool?) onSelectSuggestion;
+  final Function(QueryDocumentSnapshot, bool?) onDeselectSuggestion;
 
   const AddTitleCard({
     super.key,
@@ -39,6 +47,8 @@ class AddTitleCard extends StatefulWidget {
     required this.onAutoChange,
     required this.toggleShowInputType,
     required this.onSelectSuggestion,
+    required this.resetFieldEnabled,
+    required this.onDeselectSuggestion,
   });
 
   @override
@@ -46,10 +56,13 @@ class AddTitleCard extends StatefulWidget {
 }
 
 class _AddTitleCardState extends State<AddTitleCard> {
+  List<String> selectedSuggestions = [];
+
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
     final TextEditingController _typeAheadController = TextEditingController();
+    FocusNode _titleFocusNode = FocusNode();
 
     void onFocusChange(bool hasFocus) {
       if (hasFocus && widget.text.isEmpty) {
@@ -57,108 +70,128 @@ class _AddTitleCardState extends State<AddTitleCard> {
       }
     }
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15.0),
-        color: ThemeColors.cardColor,
-        border: Border.all(
-          color: ThemeColors.cardBorderColor,
-          width: 0.3,
+    return GestureDetector(
+      onTap: () {
+        widget.toggleShowInputType(false);
+        widget.resetFieldEnabled(-1);
+        FocusScope.of(context).unfocus();
+        // FocusScope.of(context).requestFocus(_titleFocusNode);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.0),
+          color: ThemeColors.cardColor,
+          border: Border.all(
+            color: ThemeColors.cardBorderColor,
+            width: 0.3,
+          ),
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0, 2),
+              blurRadius: 5,
+              spreadRadius: 0,
+              color: ThemeColors.black.withOpacity(0.1),
+            )
+          ],
         ),
-        boxShadow: [
-          BoxShadow(
-            offset: const Offset(0, 2),
-            blurRadius: 5,
-            spreadRadius: 0,
-            color: ThemeColors.black.withOpacity(0.1),
-          )
-        ],
-      ),
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.only(top: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GestureDetector(
-            onTap: widget.onTap,
-            child: SizedBox(
-              width: 100,
-              height: 100,
-              child: CircleAvatar(
-                backgroundColor: Colors.transparent,
-                child: widget.image == null
-                    ? const SVGLoader(image: icons.Icons.profileBackup)
-                    : ClipOval(
-                        child: widget.image!.url != null
-                            ? Image.network(
-                                widget.image!.url!,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                              )
-                            : widget.image!.file != null
-                                ? Image.file(
-                                    widget.image!.file!,
-                                    width: 100,
-                                    height: 100,
-                                    fit: BoxFit.cover,
-                                  )
-                                : const SVGLoader(
-                                    image: icons.Icons.profileBackup,
-                                  ),
-                      ),
+        padding: const EdgeInsets.all(16),
+        margin: const EdgeInsets.only(top: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GestureDetector(
+              onTap: widget.onTap,
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: widget.image == null
+                      ? const SVGLoader(image: icons.Icons.profileBackup)
+                      : ClipOval(
+                          child: widget.image!.url != null
+                              ? Image.network(
+                                  widget.image!.url!,
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                )
+                              : widget.image!.file != null
+                                  ? Image.file(
+                                      widget.image!.file!,
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : const SVGLoader(
+                                      image: icons.Icons.profileBackup,
+                                    ),
+                        ),
+                ),
               ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Flexible(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  Strings.addTitle,
-                  style: Theme.of(context).textTheme.bodyMediumTitleBrown,
-                ),
-                const SizedBox(height: 8.0),
-                SizedBox(
-                  width: screenSize.width * 0.60,
-                  child: SpecialFormInput(
-                    text: widget.text,
-                    hintText: widget.text,
-                    onChanged: (value) => widget.onTitleChange(value),
-                    fillColor: ThemeColors.white,
-                    borderColor: ThemeColors.cardBorderColor,
-                    borderWidth: 0.4,
-                    hasShadow: true,
-                    onFocusChange: onFocusChange,
-                    readOnly: !widget.isFieldEnabled,
-                  ),
-                ),
-                if (widget.titleError != null)
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 10,
-                      top: 5,
-                    ),
-                    child: Text(
-                      widget.titleError!,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(color: ThemeColors.primary),
-                    ),
-                  ),
-                const SizedBox(height: 18.0),
-                Visibility(
-                  visible: widget.showInputType,
-                  child: Text(
-                    Strings.inputType,
+            const SizedBox(width: 12),
+            Flexible(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    Strings.addTitle,
                     style: Theme.of(context).textTheme.bodyMediumTitleBrown,
                   ),
-                ),
-                Visibility(
+                  const SizedBox(height: 8.0),
+                  SizedBox(
+                    width: screenSize.width * 0.60,
+                    child: SpecialFormInput(
+                      text: widget.text,
+                      hintText: widget.text,
+                      focusNode: _titleFocusNode,
+                      onChanged: (value) => widget.onTitleChange(value),
+                      fillColor: ThemeColors.white,
+                      borderColor: ThemeColors.cardBorderColor,
+                      borderWidth: 0.4,
+                      hasShadow: true,
+                      onFocusChange: onFocusChange,
+                      readOnly: !widget.isFieldEnabled,
+                      suffixIcon: widget.showInputType
+                          ? GestureDetector(
+                              onTap: () {},
+                              child: IconButton(
+                                icon: const Icon(Icons.cancel),
+                                onPressed: () {
+                                  widget.toggleShowInputType(false);
+                                  widget.resetFieldEnabled(-1);
+                                },
+                              ),
+                            )
+                          : null,
+                    ),
+                  ),
+                  if (widget.titleError != null)
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 10,
+                        top: 5,
+                      ),
+                      child: Text(
+                        widget.titleError!,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(color: ThemeColors.primary),
+                      ),
+                    ),
+                  const SizedBox(height: 18.0),
+                  Visibility(
+                    visible: widget.showInputType,
+                    child: Text(
+                      Strings.inputType,
+                      style: Theme.of(context).textTheme.bodyMediumTitleBrown,
+                    ),
+                  ),
+                  Visibility(
                     visible: widget.showInputType,
                     child: Transform.translate(
                       offset: const Offset(-10, 0),
@@ -195,41 +228,75 @@ class _AddTitleCardState extends State<AddTitleCard> {
                           ),
                         ],
                       ),
-                    )),
-                Visibility(
+                    ),
+                  ),
+                  Visibility(
                     visible: widget.selectedFieldType >= 0,
                     child: Transform.translate(
                       offset: const Offset(0, -10),
                       child: Text(
-                        '${widget.selectedFieldType == 0 ? Strings.manual : Strings.auto} Field',
+                        '${widget.selectedFieldType == 0 ? 'By Prompt' : 'All Available'} Field',
                         style: Theme.of(context).textTheme.bodyMediumTitleBrown,
                       ),
-                    )),
-                Visibility(
-                  visible: widget.selectedFieldType >= 0,
-                  child: TypeAheadField<QueryDocumentSnapshot>(
-                    controller: _typeAheadController,
-                    builder: (context, controller, focusNode) {
-                      return FormInput(
-                        text: '',
-                        focusNode: focusNode,
-                        controller: controller,
-                        hintText: '',
-                        borderColor: ThemeColors.cardBorderColor,
-                        fillColor: ThemeColors.white,
-                        borderWidth: 0.4,
-                        hasShadow: true,
-                      );
-                    },
-                    loadingBuilder: (context) =>
-                        const CircularProgressIndicator(),
-                    suggestionsCallback: (search) async {
-                      // Auto Field
-                      if (widget.selectedFieldType == 1) {
+                    ),
+                  ),
+                  Visibility(
+                    visible: widget.selectedFieldType == 0,
+                    child: TypeAheadField<QueryDocumentSnapshot>(
+                      controller: _typeAheadController,
+                      builder: (context, controller, focusNode) {
+                        return FormInput(
+                          text: '',
+                          focusNode: focusNode,
+                          controller: controller,
+                          hintText: '',
+                          borderColor: ThemeColors.cardBorderColor,
+                          fillColor: ThemeColors.white,
+                          borderWidth: 0.4,
+                          hasShadow: true,
+                        );
+                      },
+                      loadingBuilder: (context) =>
+                          const CircularProgressIndicator(),
+                      suggestionsCallback: (search) async {
+                        if (search.isEmpty) {
+                          return null;
+                        }
+
                         try {
+                          final lowercaseSearch = search.toLowerCase();
+                          final uppercaseSearch = search.toUpperCase();
+                          final capitalizedSearch = search.capitalize();
                           final QuerySnapshot querySnapshot =
                               await FirebaseFirestore.instance
                                   .collection('suggestions')
+                                  .where('isApproved', isEqualTo: true)
+                                  .where(Filter.or(
+                                    Filter.and(
+                                      Filter('name',
+                                          isGreaterThanOrEqualTo:
+                                              lowercaseSearch),
+                                      Filter('name',
+                                          isLessThanOrEqualTo:
+                                              lowercaseSearch + '\uf8ff'),
+                                    ),
+                                    Filter.and(
+                                      Filter('name',
+                                          isGreaterThanOrEqualTo:
+                                              uppercaseSearch),
+                                      Filter('name',
+                                          isLessThanOrEqualTo:
+                                              uppercaseSearch + '\uf8ff'),
+                                    ),
+                                    Filter.and(
+                                      Filter('name',
+                                          isGreaterThanOrEqualTo:
+                                              capitalizedSearch),
+                                      Filter('name',
+                                          isLessThanOrEqualTo:
+                                              capitalizedSearch + '\uf8ff'),
+                                    ),
+                                  ))
                                   .get();
                           final listValues =
                               querySnapshot.docs.map((ele) => ele).toList();
@@ -238,74 +305,123 @@ class _AddTitleCardState extends State<AddTitleCard> {
                           print('Error fetching suggestions: $e');
                           return [];
                         }
-                      }
-
-                      // Manual Field
-                      if (search.isEmpty) {
-                        return null;
-                      }
-
-                      try {
-                        final QuerySnapshot querySnapshot =
-                            await FirebaseFirestore.instance
-                                .collection('suggestions')
-                                .where('name',
-                                    isGreaterThanOrEqualTo:
-                                        search.toLowerCase())
-                                .where('name',
-                                    isLessThan: '${search.toLowerCase()}z')
-                                .where('isApproved', isEqualTo: true)
-                                .get();
-                        final listValues =
-                            querySnapshot.docs.map((ele) => ele).toList();
-                        return Future.value(listValues);
-                      } catch (e) {
-                        print('Error fetching suggestions: $e');
-                        return [];
-                      }
-                    },
-                    debounceDuration: const Duration(milliseconds: 500),
-                    itemBuilder: (context, suggestion) {
-                      return ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.white,
-                          backgroundImage: suggestion['image'] != null
-                              ? NetworkImage(suggestion['image'])
-                                  as ImageProvider
-                              : null,
+                      },
+                      debounceDuration: const Duration(milliseconds: 500),
+                      itemBuilder: (context, suggestion) {
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.white,
+                            backgroundImage: suggestion['image'] != null
+                                ? NetworkImage(suggestion['image'])
+                                    as ImageProvider
+                                : null,
+                          ),
+                          title: Text(
+                            suggestion['name'] as String,
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        );
+                      },
+                      emptyBuilder: (context) => Container(
+                        margin: const EdgeInsets.symmetric(
+                          vertical: 10,
+                          horizontal: 10,
                         ),
-                        title: Text(
-                          suggestion['name'] as String,
-                          style: const TextStyle(fontSize: 14),
-                        ),
-                      );
-                    },
-                    emptyBuilder: (context) => Container(
-                      margin: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 10,
-                      ),
-                      child: Text(
-                        'No Suggestion Found',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: ThemeColors.primary,
+                        child: Text(
+                          'No Suggestion Found',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: ThemeColors.primary,
+                          ),
                         ),
                       ),
+                      onSelected: (suggestion) {
+                        widget.onSelectSuggestion(suggestion, false);
+                        _typeAheadController.clear();
+                      },
                     ),
-                    onSelected: (suggestion) {
-                      // widget.onTitleChange(
-                      //   '${widget.text.isNotEmpty ? widget.text : ''}${suggestion['name']}',
-                      // );
-                      widget.onSelectSuggestion(suggestion);
-                      _typeAheadController.clear();
-                    },
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
+                  Visibility(
+                    visible: widget.selectedFieldType == 1,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TypeAheadField<QueryDocumentSnapshot>(
+                            controller: _typeAheadController,
+                            hideOnUnfocus: true,
+                            hideWithKeyboard: false,
+                            hideOnSelect: false,
+                            debounceDuration: const Duration(milliseconds: 500),
+                            builder: (context, controller, focusNode) {
+                              return FormInput(
+                                text: '',
+                                focusNode: focusNode,
+                                controller: controller,
+                                hintText: '',
+                                borderColor: ThemeColors.cardBorderColor,
+                                fillColor: ThemeColors.white,
+                                borderWidth: 0.4,
+                                hasShadow: true,
+                              );
+                            },
+                            loadingBuilder: (context) =>
+                                const CircularProgressIndicator(),
+                            suggestionsCallback: (search) async {
+                              try {
+                                final QuerySnapshot querySnapshot =
+                                    await FirebaseFirestore.instance
+                                        .collection('suggestions')
+                                        .get();
+                                final listValues = querySnapshot.docs
+                                    .map((ele) => ele)
+                                    .toList();
+                                return Future.value(listValues);
+                              } catch (e) {
+                                print('Error fetching suggestions: $e');
+                                return [];
+                              }
+                            },
+                            itemBuilder: (context, suggestion) {
+                              return IgnorePointer(
+                                child: CheckboxListTile(
+                                  key: ValueKey(suggestion['id']),
+                                  title: Text(
+                                    suggestion['name'] as String,
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                  value: selectedSuggestions
+                                      .contains(suggestion['id']),
+                                  onChanged: (value) {},
+                                ),
+                              );
+                            },
+                            onSelected: (suggestion) {
+                              setState(() {
+                                if (selectedSuggestions
+                                    .contains(suggestion['id'])) {
+                                  selectedSuggestions = selectedSuggestions
+                                      .where((id) => id != suggestion['id'])
+                                      .toList();
+                                  widget.onDeselectSuggestion(suggestion, true);
+                                } else {
+                                  selectedSuggestions = [
+                                    ...selectedSuggestions,
+                                    suggestion['id']
+                                  ];
+                                  widget.onSelectSuggestion(suggestion, true);
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

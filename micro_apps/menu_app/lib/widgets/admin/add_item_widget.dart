@@ -67,7 +67,8 @@ class AddItemWidgetState extends State<AddItemWidget> {
     });
   }
 
-  void _handleTitleChange(String value, [String? suggestionImageURL]) {
+  void _handleTitleChange(String value,
+      [String? suggestionImageURL, bool? skip]) {
     List<String> newItems = value
         .split(',')
         .map((e) => e.trim())
@@ -77,24 +78,15 @@ class AddItemWidgetState extends State<AddItemWidget> {
       title = value;
       _itemTitle = value;
       _titleError = null;
-      showInputType = value.isEmpty ||
-              value[value.length - 1] == ',' ||
-              value[value.length - 1] == ' '
-          ? true
-          : false;
-      _selectedFieldType = -1;
-      isFieldEnabled = true;
-
-      // _manualSearch = items
-      //     .where((item) =>
-      //         !_suggestionSearch.any((suggestion) => suggestion.name == item))
-      //     .map((item) => SearchModel(
-      //           name: item,
-      //           valid: false,
-      //           file: null,
-      //         ))
-      //     .toList();
-      // Create sets for efficient lookup
+      if (skip == null || skip == false) {
+        showInputType = value.isEmpty ||
+                value[value.length - 1] == ',' ||
+                value[value.length - 1] == ' '
+            ? true
+            : false;
+        _selectedFieldType = -1;
+        isFieldEnabled = true;
+      }
       Set<String> oldItems = Set.from(_manualSearch.map((item) => item.name))
         ..addAll(_suggestionSearch.map((item) => item.name));
       Set<String> newItemSet = Set.from(newItems);
@@ -134,14 +126,43 @@ class AddItemWidgetState extends State<AddItemWidget> {
     });
   }
 
-  void onSelectSuggestion(QueryDocumentSnapshot suggestion) {
+  void onSelectSuggestion(QueryDocumentSnapshot suggestion, bool? skip) {
     final SearchModel _suggestion = SearchModel(
         name: suggestion['name'], valid: true, url: suggestion['image']);
     _suggestionSearch.add(_suggestion);
-    _handleTitleChange(
-      '${title.isNotEmpty ? title : ''}${suggestion['name']}',
-      suggestion['image'],
-    );
+    if (skip == false || skip == null) {
+      _handleTitleChange(
+        '${title.isNotEmpty ? title : ''}${suggestion['name']}',
+        suggestion['image'],
+        skip,
+      );
+    } else {
+      _handleTitleChange(
+        '${title.isNotEmpty ? title : ''}${title[title.length - 1] == ',' ? '' : ','}${suggestion['name']}',
+        suggestion['image'],
+        skip,
+      );
+    }
+  }
+
+  void onDeselectSuggestion(QueryDocumentSnapshot suggestion, bool? skip) {
+    _suggestionSearch
+        .removeWhere((search) => search.name == suggestion['name']);
+    final inputValue =
+        title.split(',').where((val) => val != suggestion['name']).join(',');
+    if (skip == false || skip == null) {
+      _handleTitleChange(
+        inputValue,
+        null,
+        skip,
+      );
+    } else {
+      _handleTitleChange(
+        inputValue,
+        null,
+        skip,
+      );
+    }
   }
 
   void _handleSelectedFieldType(int value) {
@@ -151,10 +172,15 @@ class AddItemWidgetState extends State<AddItemWidget> {
     });
   }
 
+  void resetFieldEnabled(int value) {
+    setState(() {
+      _selectedFieldType = value;
+      isFieldEnabled = true;
+    });
+  }
+
   void onSaveMedia(List<File?> files) {
     setState(() {
-      // _image = files;
-      // _isUploadValid = !files.contains(null);
       _manualSearch = _manualSearch.asMap().entries.map((entry) {
         int index = entry.key;
         SearchModel e = entry.value;
@@ -200,24 +226,6 @@ class AddItemWidgetState extends State<AddItemWidget> {
       showSnackbar(context, 'Please upload all images');
       return;
     }
-    // if (_suggestionImage == null || _suggestionImage!.isEmpty) {
-    //   setState(() {
-    //     _isUploadValid = false;
-    //   });
-    //   showSnackbar(context, 'Please upload image');
-    //   return;
-    // }
-
-    // if (_suggestionImage == null || _suggestionImage!.isEmpty) {
-    //   if (_image.isEmpty || _image.contains(null)) {
-    //     setState(() {
-    //       _isUploadValid =
-    //           _image.isEmpty || _image.contains(null) ? false : true;
-    //     });
-    //     showSnackbar(context, 'Please upload all images');
-    //     return;
-    //   }
-    // }
 
     if (_itemTitle == '') {
       setState(() {
@@ -491,6 +499,8 @@ class AddItemWidgetState extends State<AddItemWidget> {
                 onTap: _onProfileUpload,
                 onAddSuggestion: onAddSuggestion,
                 onSelectSuggestion: onSelectSuggestion,
+                onDeselectSuggestion: onDeselectSuggestion,
+                resetFieldEnabled: resetFieldEnabled,
               ),
               const SizedBox(height: 20),
               Row(
