@@ -77,8 +77,11 @@ class AddItemWidgetState extends State<AddItemWidget> {
       title = value;
       _itemTitle = value;
       _titleError = null;
-      showInputType =
-          value.isEmpty || value[value.length - 1] == ',' ? true : false;
+      showInputType = value.isEmpty ||
+              value[value.length - 1] == ',' ||
+              value[value.length - 1] == ' '
+          ? true
+          : false;
       _selectedFieldType = -1;
       isFieldEnabled = true;
 
