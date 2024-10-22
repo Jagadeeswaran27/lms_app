@@ -62,19 +62,20 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
   final TextEditingController _emailController = TextEditingController();
 
   void saveName() {
+    _nameController.text = _nameController.text.trim();
     if (_nameController.text.isEmpty) {
       showSnackbar(context, 'Name cannot be empty');
       widget.setEditing(false);
       return;
     }
 
-    if (_nameController.text == widget.name) {
+    if (_nameController.text.trim() == widget.name) {
       showSnackbar(context, 'No changes made');
       widget.setEditing(false);
       return;
     }
 
-    widget.saveInstituteName(_nameController.text, widget.isInstitute);
+    widget.saveInstituteName(_nameController.text.trim(), widget.isInstitute);
   }
 
   void savePhone() {
@@ -118,6 +119,7 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
 
   void onEdit() {
     widget.setEditing(true);
+    _nameController.text = _nameController.text.trim();
     FocusScope.of(context).requestFocus(_nameFocusNode);
   }
 
