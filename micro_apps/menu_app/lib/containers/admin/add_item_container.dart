@@ -24,8 +24,6 @@ class _AddItemContainerState extends State<AddItemContainer> {
   final CourseService _courseService = CourseService();
 
   Future<void> addItem(Map<String, dynamic> formData, List<File> image) async {
-    print(formData['manualSearch']);
-    print(formData['suggestionSearch']);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     setState(() {
       _isLoading = true;

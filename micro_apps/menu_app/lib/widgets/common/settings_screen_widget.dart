@@ -27,6 +27,10 @@ class SettingsScreenWidget extends StatefulWidget {
     required this.setEmailEditing,
     required this.saveUserPhone,
     required this.saveUserEmail,
+    required this.addPartnerEmailLoading,
+    required this.partnerEmails,
+    required this.addPartnerEmail,
+    required this.removePartnerEmail,
     this.changeEmail,
   });
 
@@ -41,6 +45,8 @@ class SettingsScreenWidget extends StatefulWidget {
   final bool isEmailLoading;
   final bool isEmailEditing;
   final String? changeEmail;
+  final List<String> partnerEmails;
+  final bool addPartnerEmailLoading;
   final void Function() logout;
   final void Function(String, bool) saveInstituteName;
   final void Function(bool) setEditing;
@@ -48,6 +54,8 @@ class SettingsScreenWidget extends StatefulWidget {
   final void Function(bool) setEmailEditing;
   final Future<void> Function(String) saveUserPhone;
   final void Function(BuildContext, String, bool) saveUserEmail;
+  final void Function(String) addPartnerEmail;
+  final void Function(String) removePartnerEmail;
 
   @override
   State<SettingsScreenWidget> createState() => _SettingsScreenWidgetState();
@@ -60,6 +68,7 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _partnerEmailController = TextEditingController();
 
   void saveName() {
     _nameController.text = _nameController.text.trim();
@@ -270,6 +279,17 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
                             ),
                             const SizedBox(height: 20),
                             Row(
+                              children: [
+                                Text(
+                                  'Primary Email',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMediumTitleBrown,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
@@ -306,6 +326,100 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
                                       ),
                               ],
                             ),
+                            ...[
+                              const SizedBox(height: 20),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Partner Email',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMediumTitleBrown,
+                                  ),
+                                ],
+                              ),
+                              // const SizedBox(height: 20),
+                              // Row(
+                              //   mainAxisAlignment:
+                              //       MainAxisAlignment.spaceBetween,
+                              //   crossAxisAlignment: CrossAxisAlignment.center,
+                              //   children: [
+                              //     SizedBox(
+                              //       width: 240,
+                              //       child: FormInput(
+                              //         controller: _partnerEmailController,
+                              //         text: "",
+                              //         hintText: "",
+                              //         borderColor: ThemeColors.white,
+                              //       ),
+                              //     ),
+                              //     widget.addPartnerEmailLoading
+                              //         ? const CircularProgressIndicator(
+                              //             strokeWidth: 3,
+                              //           )
+                              //         : SizedBox(
+                              //             child: IconButton(
+                              //               icon: const Icon(Icons.add),
+                              //               onPressed: () =>
+                              //                   widget.addPartnerEmail(
+                              //                       _partnerEmailController
+                              //                           .text),
+                              //             ),
+                              //           ),
+                              //   ],
+                              // ),
+                              SizedBox(
+                                height: 90, // Adjust this height as needed
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: widget.partnerEmails.length,
+                                        itemBuilder: (context, index) {
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 4.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    widget.partnerEmails[index],
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyMedium!
+                                                        .copyWith(
+                                                            color:
+                                                                Colors.black),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                                // IconButton(
+                                                //   icon: Icon(Icons.close,
+                                                //       color:
+                                                //           ThemeColors.primary),
+                                                //   onPressed: () {
+                                                //     widget.removePartnerEmail(
+                                                //         widget.partnerEmails[
+                                                //             index]);
+                                                //   },
+                                                // ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                             // Row(
                             //   children: [
                             //     Icon(

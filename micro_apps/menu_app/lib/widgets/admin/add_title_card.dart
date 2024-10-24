@@ -25,6 +25,8 @@ class AddTitleCard extends StatefulWidget {
   final bool showInputType;
   final int selectedFieldType;
   final bool isFieldEnabled;
+  final List<SearchModel> manualSearch;
+  final List<SearchModel> suggestionSearch;
   final Function(String) onTitleChange;
   final Function(String) onAddSuggestion;
   final Function(int) onAutoChange;
@@ -40,6 +42,8 @@ class AddTitleCard extends StatefulWidget {
     required this.text,
     required this.showInputType,
     required this.selectedFieldType,
+    required this.manualSearch,
+    required this.suggestionSearch,
     required this.isFieldEnabled,
     required this.onTitleChange,
     required this.titleError,
@@ -57,6 +61,13 @@ class AddTitleCard extends StatefulWidget {
 
 class _AddTitleCardState extends State<AddTitleCard> {
   List<String> selectedSuggestions = [];
+  late FocusNode _allAvailableFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _allAvailableFocusNode = FocusNode();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -217,7 +228,16 @@ class _AddTitleCardState extends State<AddTitleCard> {
                               contentPadding: EdgeInsets.zero,
                               value: widget.selectedFieldType == 1,
                               groupValue: true,
-                              onChanged: (value) => widget.onAutoChange(1),
+                              onChanged: (value) {
+                                widget.onAutoChange(1);
+                                if (_allAvailableFocusNode != null) {
+                                  Future.delayed(const Duration(seconds: 1),
+                                      () {
+                                    FocusScope.of(context)
+                                        .requestFocus(_allAvailableFocusNode);
+                                  });
+                                }
+                              },
                               title: Text(
                                 'All Available',
                                 style: Theme.of(context)
@@ -299,7 +319,10 @@ class _AddTitleCardState extends State<AddTitleCard> {
                                   ))
                                   .get();
                           final listValues =
-                              querySnapshot.docs.map((ele) => ele).toList();
+                              querySnapshot.docs.map((ele) => ele).where((ele) {
+                            return !widget.suggestionSearch.any((searchModel) =>
+                                searchModel.name == ele['name']);
+                          }).toList();
                           return Future.value(listValues);
                         } catch (e) {
                           print('Error fetching suggestions: $e');
@@ -353,6 +376,7 @@ class _AddTitleCardState extends State<AddTitleCard> {
                             hideOnSelect: false,
                             debounceDuration: const Duration(milliseconds: 500),
                             builder: (context, controller, focusNode) {
+                              _allAvailableFocusNode = focusNode;
                               return FormInput(
                                 text: '',
                                 focusNode: focusNode,
@@ -374,7 +398,13 @@ class _AddTitleCardState extends State<AddTitleCard> {
                                         .get();
                                 final listValues = querySnapshot.docs
                                     .map((ele) => ele)
-                                    .toList();
+                                    .where((ele) {
+                                  // return !widget.manualSearch
+                                  //     .contains(ele['name']);
+                                  return !widget.manualSearch.any(
+                                      (searchModel) =>
+                                          searchModel.name == ele['name']);
+                                }).toList();
                                 return Future.value(listValues);
                               } catch (e) {
                                 print('Error fetching suggestions: $e');

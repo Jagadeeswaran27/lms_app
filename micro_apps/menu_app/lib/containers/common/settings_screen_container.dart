@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:menu_app/constants/enums/user_role_enum.dart';
+import 'package:menu_app/core/services/auth/auth_service.dart';
+import 'package:menu_app/core/services/firebase/firebase_auth_service.dart';
 import 'package:menu_app/providers/auth_provider.dart';
 import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/screens/common/welcome_screen.dart';
@@ -23,6 +25,8 @@ class _SettingsScreenContainerState extends State<SettingsScreenContainer> {
   bool _isPhoneEditing = false;
   bool _isEmailLoading = false;
   bool _isEmailEditing = false;
+  bool _addPartnerEmailLoading = false;
+  final FirebaseAuthService firebaseAuthService = FirebaseAuthService();
 
   void logout(BuildContext context) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -164,6 +168,33 @@ class _SettingsScreenContainerState extends State<SettingsScreenContainer> {
     });
   }
 
+  Future<void> addPartnerEmail(String email) async {
+    if (email.length != 10 || email.isEmpty) {
+      showSnackbar(context, 'Invalid email');
+      return;
+    }
+
+    final isEmailExist = await firebaseAuthService.doesUserExist(email);
+    if (isEmailExist) {
+      showSnackbar(context, 'Email already Exists');
+      return;
+    }
+
+    // final response = await firebaseAuthService.signUpWithEmailAndPassword(
+    //   userName,
+    //   email,
+    //   password,
+    //   phone,
+    //   role,
+    //   accessCodeId,
+    //   emails,
+    // );
+
+    // Check if the user exists. If exist show message as 'Email already Exist'
+  }
+
+  Future<void> removePartnerEmail(String email) async {}
+
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -178,6 +209,8 @@ class _SettingsScreenContainerState extends State<SettingsScreenContainer> {
       isPhoneEditing: _isPhoneEditing,
       isEmailLoading: _isEmailLoading,
       isEmailEditing: _isEmailEditing,
+      partnerEmails: authProvider.currentUser!.partnerEmails,
+      addPartnerEmailLoading: _addPartnerEmailLoading,
       email: authProvider.currentUser!.email,
       name: authProvider.currentUser!.name,
       phone: authProvider.currentUser!.phone,
@@ -188,6 +221,8 @@ class _SettingsScreenContainerState extends State<SettingsScreenContainer> {
       setEditing: setEditing,
       setPhoneEditing: setPhoneEditing,
       setEmailEditing: setEmailEditing,
+      addPartnerEmail: addPartnerEmail,
+      removePartnerEmail: removePartnerEmail,
       logout: () => logout(context),
     );
   }

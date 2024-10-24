@@ -120,7 +120,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
             url: suggestionImageURL,
           ));
           // Remove the last item from _manualSearch if it was added there
-          _manualSearch.removeWhere((item) => item.name == lastItem);
+          // _manualSearch.removeWhere((item) => item.name == lastItem);
         }
       }
     });
@@ -129,7 +129,11 @@ class AddItemWidgetState extends State<AddItemWidget> {
   void onSelectSuggestion(QueryDocumentSnapshot suggestion, bool? skip) {
     final SearchModel _suggestion = SearchModel(
         name: suggestion['name'], valid: true, url: suggestion['image']);
-    _suggestionSearch.add(_suggestion);
+    if (skip == false || skip == null) {
+      _manualSearch.add(_suggestion);
+    } else {
+      _suggestionSearch.add(_suggestion);
+    }
     if (skip == false || skip == null) {
       _handleTitleChange(
         '${title.isNotEmpty ? title : ''}${suggestion['name']}',
@@ -138,7 +142,7 @@ class AddItemWidgetState extends State<AddItemWidget> {
       );
     } else {
       _handleTitleChange(
-        '${title.isNotEmpty ? title : ''}${title[title.length - 1] == ',' ? '' : ','}${suggestion['name']}',
+        '${title.isNotEmpty ? (title[title.length - 1] == ',' ? title : '$title,') : ''}${suggestion['name']}',
         suggestion['image'],
         skip,
       );
@@ -146,8 +150,14 @@ class AddItemWidgetState extends State<AddItemWidget> {
   }
 
   void onDeselectSuggestion(QueryDocumentSnapshot suggestion, bool? skip) {
-    _suggestionSearch
-        .removeWhere((search) => search.name == suggestion['name']);
+    if (skip == false || skip == null) {
+      _manualSearch.removeWhere((search) => search.name == suggestion['name']);
+    } else {
+      _suggestionSearch
+          .removeWhere((search) => search.name == suggestion['name']);
+    }
+    // _suggestionSearch
+    //     .removeWhere((search) => search.name == suggestion['name']);
     final inputValue =
         title.split(',').where((val) => val != suggestion['name']).join(',');
     if (skip == false || skip == null) {
@@ -493,6 +503,8 @@ class AddItemWidgetState extends State<AddItemWidget> {
                 showInputType: showInputType,
                 selectedFieldType: _selectedFieldType,
                 isFieldEnabled: isFieldEnabled,
+                manualSearch: _manualSearch,
+                suggestionSearch: _suggestionSearch,
                 toggleShowInputType: toggleShowInputType,
                 onAutoChange: (int value) => _handleSelectedFieldType(value),
                 onTitleChange: (String value) => _handleTitleChange(value),
