@@ -13,7 +13,6 @@ import 'package:menu_app/models/auth/auth_model.dart';
 import 'package:menu_app/models/auth/user_model.dart';
 import 'package:menu_app/utils/logger/logger.dart';
 import 'package:menu_app/utils/shared_preference/shared_preference.dart';
-import 'package:menu_app/utils/get_institute_id.dart';
 import 'package:menu_app/utils/error/parse_exception.dart';
 import 'package:menu_app/constants/constants.dart';
 
@@ -66,6 +65,7 @@ class AuthProvider with ChangeNotifier {
           state: loggedUser.state,
           city: loggedUser.city,
           address: loggedUser.address,
+          partnerEmails: loggedUser.partnerEmails,
         );
       }
       _loggedInStatus = loggedInStatus;
@@ -104,6 +104,7 @@ class AuthProvider with ChangeNotifier {
           city: currentUser!.city,
           institute: [instituteCode, ...currentUser!.institute],
           profileUrl: user!.photoURL,
+          partnerEmails: currentUser!.partnerEmails,
         );
         notifyListeners();
         return true;
@@ -122,9 +123,11 @@ class AuthProvider with ChangeNotifier {
     String password,
     String phone,
     String role,
+    String instituteId,
+    List<String> emails,
   ) async {
     try {
-      final instituteId = createInstituteID();
+      // final instituteId = createInstituteID();
       final credential = await FirebaseAuthService().signUpWithEmailAndPassword(
         userName,
         email,
@@ -132,6 +135,7 @@ class AuthProvider with ChangeNotifier {
         phone,
         role,
         instituteId,
+        emails,
       );
       await credential.user!.sendEmailVerification();
       return AuthModel.success(
@@ -168,6 +172,7 @@ class AuthProvider with ChangeNotifier {
         profileUrl: _currentUser!.profileUrl,
         registeredCourses: _currentUser!.registeredCourses,
         changeEmail: '',
+        partnerEmails: _currentUser!.partnerEmails,
       );
       // notifyListeners();
     }
@@ -196,6 +201,7 @@ class AuthProvider with ChangeNotifier {
           city: loggedUser.city,
           profileUrl: userCredential.user!.photoURL,
           changeEmail: loggedUser.changeEmail,
+          partnerEmails: loggedUser.partnerEmails,
         );
         if (loggedUser.uid != '') {
           return AuthModel.success(
@@ -274,6 +280,7 @@ class AuthProvider with ChangeNotifier {
           city: loggedUser.city,
           profileUrl: url,
           changeEmail: loggedUser.changeEmail,
+          partnerEmails: loggedUser.partnerEmails,
         );
 
         notifyListeners();
@@ -316,6 +323,7 @@ class AuthProvider with ChangeNotifier {
           city: loggedUser.city,
           profileUrl: user.photoURL,
           changeEmail: loggedUser.changeEmail,
+          partnerEmails: loggedUser.partnerEmails,
         );
         _user = user;
         _loggedInStatus = true;
@@ -423,6 +431,7 @@ class AuthProvider with ChangeNotifier {
         profileUrl: _currentUser!.profileUrl,
         registeredCourses: _currentUser!.registeredCourses,
         changeEmail: _currentUser!.changeEmail,
+        partnerEmails: _currentUser!.partnerEmails,
       );
       notifyListeners();
       return true;
@@ -451,6 +460,7 @@ class AuthProvider with ChangeNotifier {
         profileUrl: _currentUser!.profileUrl,
         registeredCourses: _currentUser!.registeredCourses,
         changeEmail: _currentUser!.changeEmail,
+        partnerEmails: _currentUser!.partnerEmails,
       );
       notifyListeners();
       return true;

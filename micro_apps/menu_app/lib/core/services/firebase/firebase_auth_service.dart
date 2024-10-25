@@ -60,6 +60,7 @@ class FirebaseAuthService {
     String phone,
     String role,
     String accessCodeId,
+    List<String> emails,
   ) async {
     try {
       UserCredential userCredential = await _firebaseAuth
@@ -78,10 +79,15 @@ class FirebaseAuthService {
         'role': role,
         'phone': phone,
         'institute': isAdmin ? [accessCodeId] : [],
+        'partnerEmails': emails.where((e) => e != email).toList(),
       });
 
+      // Check if the accessCodeId already exists in the institutes collection
+      final instituteDoc =
+          await _firestore.collection('institutes').doc(accessCodeId).get();
+
       // If the role is admin, create institute document and add default categories
-      if (isAdmin) {
+      if (isAdmin && !instituteDoc.exists) {
         await _firestore.collection('institutes').doc(accessCodeId).set({
           'uid': accessCodeId,
           'email': email,
@@ -319,6 +325,20 @@ class FirebaseAuthService {
     } catch (e) {
       log.e('Error updating user name: $e');
       throw Exception('Error updating user name: $e');
+    }
+  }
+
+  Future<bool> doesUserExist(String email) async {
+    try {
+      final QuerySnapshot result = await _firestore
+          .collection('lms-users')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
+      return result.docs.isNotEmpty;
+    } catch (e) {
+      log.e('Error checking user existence: $e');
+      return false;
     }
   }
 }
