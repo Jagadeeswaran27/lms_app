@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:menu_app/models/courses/search_model.dart';
+import 'package:menu_app/models/courses/suggestion_category_model.dart';
 
 import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/themes/colors.dart';
@@ -34,6 +37,9 @@ class AddTitleCard extends StatefulWidget {
   final Function(bool) toggleShowInputType;
   final Function(QueryDocumentSnapshot, bool?) onSelectSuggestion;
   final Function(QueryDocumentSnapshot, bool?) onDeselectSuggestion;
+  final List<String> superCategories;
+  final List<String> categories;
+  final List<SuggestionCategoriesModel> suggestionHierarchy;
 
   const AddTitleCard({
     super.key,
@@ -53,6 +59,9 @@ class AddTitleCard extends StatefulWidget {
     required this.onSelectSuggestion,
     required this.resetFieldEnabled,
     required this.onDeselectSuggestion,
+    required this.superCategories,
+    required this.categories,
+    required this.suggestionHierarchy,
   });
 
   @override
@@ -62,6 +71,9 @@ class AddTitleCard extends StatefulWidget {
 class _AddTitleCardState extends State<AddTitleCard> {
   List<String> selectedSuggestions = [];
   late FocusNode _allAvailableFocusNode;
+  List<String> matchingCategories = [];
+  String? selectedSuperCategory;
+  String? selectedCategory;
 
   @override
   void initState() {
@@ -197,6 +209,143 @@ class _AddTitleCardState extends State<AddTitleCard> {
                   const SizedBox(height: 18.0),
                   Visibility(
                     visible: widget.showInputType,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Super Category',
+                          style:
+                              Theme.of(context).textTheme.bodyMediumTitleBrown,
+                        ),
+                        const SizedBox(height: 18.0),
+                        Container(
+                          width: double.infinity,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: ThemeColors.white,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 2),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: DropdownButton<String>(
+                              value: selectedSuperCategory,
+                              elevation: 16,
+                              alignment: Alignment.center,
+                              underline: Container(
+                                height: 2,
+                                color: Colors.transparent,
+                              ),
+                              onChanged: (String? value) {
+                                setState(() {
+                                  selectedSuperCategory = value;
+                                  matchingCategories = widget
+                                      .suggestionHierarchy
+                                      .firstWhere((suggestion) =>
+                                          suggestion.superCategory.name ==
+                                          selectedSuperCategory)
+                                      .superCategory
+                                      .secondLevelCategories;
+                                });
+                              },
+                              items: widget.superCategories
+                                  .map<DropdownMenuItem<String>>(
+                                (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMediumPrimary
+                                          .copyWith(
+                                            fontFamily: ThemeFonts.poppins,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    ),
+                                  );
+                                },
+                              ).toList(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 18.0),
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                    visible: widget.showInputType,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Category',
+                          style:
+                              Theme.of(context).textTheme.bodyMediumTitleBrown,
+                        ),
+                        const SizedBox(height: 18.0),
+                        Container(
+                          width: double.infinity,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: ThemeColors.white,
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 2),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15),
+                            child: DropdownButton<String>(
+                              value: selectedCategory,
+                              elevation: 16,
+                              alignment: Alignment.center,
+                              underline: Container(
+                                height: 2,
+                                color: Colors.transparent,
+                              ),
+                              onChanged: (String? value) {
+                                setState(() {
+                                  selectedCategory = value;
+                                });
+                              },
+                              isExpanded: true,
+                              menuMaxHeight: 300,
+                              items: matchingCategories
+                                  .map<DropdownMenuItem<String>>(
+                                (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Container(
+                                      constraints:
+                                          const BoxConstraints(maxWidth: 200),
+                                      child: Text(
+                                        value,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMediumPrimary
+                                            .copyWith(
+                                              fontFamily: ThemeFonts.poppins,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ).toList(),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 18.0),
+                      ],
+                    ),
+                  ),
+                  Visibility(
+                    visible: widget.showInputType,
                     child: Text(
                       Strings.inputType,
                       style: Theme.of(context).textTheme.bodyMediumTitleBrown,
@@ -290,33 +439,36 @@ class _AddTitleCardState extends State<AddTitleCard> {
                           final QuerySnapshot querySnapshot =
                               await FirebaseFirestore.instance
                                   .collection('suggestions')
-                                  .where('isApproved', isEqualTo: true)
-                                  .where(Filter.or(
-                                    Filter.and(
-                                      Filter('name',
-                                          isGreaterThanOrEqualTo:
-                                              lowercaseSearch),
-                                      Filter('name',
-                                          isLessThanOrEqualTo:
-                                              lowercaseSearch + '\uf8ff'),
+                                  .where('tag',
+                                      arrayContains: selectedCategory?.trim())
+                                  .where(
+                                    Filter.or(
+                                      Filter.and(
+                                        Filter('name',
+                                            isGreaterThanOrEqualTo:
+                                                lowercaseSearch),
+                                        Filter('name',
+                                            isLessThanOrEqualTo:
+                                                '$lowercaseSearch\uf8ff'),
+                                      ),
+                                      Filter.and(
+                                        Filter('name',
+                                            isGreaterThanOrEqualTo:
+                                                uppercaseSearch),
+                                        Filter('name',
+                                            isLessThanOrEqualTo:
+                                                '$uppercaseSearch\uf8ff'),
+                                      ),
+                                      Filter.and(
+                                        Filter('name',
+                                            isGreaterThanOrEqualTo:
+                                                capitalizedSearch),
+                                        Filter('name',
+                                            isLessThanOrEqualTo:
+                                                '$capitalizedSearch\uf8ff'),
+                                      ),
                                     ),
-                                    Filter.and(
-                                      Filter('name',
-                                          isGreaterThanOrEqualTo:
-                                              uppercaseSearch),
-                                      Filter('name',
-                                          isLessThanOrEqualTo:
-                                              uppercaseSearch + '\uf8ff'),
-                                    ),
-                                    Filter.and(
-                                      Filter('name',
-                                          isGreaterThanOrEqualTo:
-                                              capitalizedSearch),
-                                      Filter('name',
-                                          isLessThanOrEqualTo:
-                                              capitalizedSearch + '\uf8ff'),
-                                    ),
-                                  ))
+                                  )
                                   .get();
                           final listValues =
                               querySnapshot.docs.map((ele) => ele).where((ele) {
@@ -325,7 +477,7 @@ class _AddTitleCardState extends State<AddTitleCard> {
                           }).toList();
                           return Future.value(listValues);
                         } catch (e) {
-                          print('Error fetching suggestions: $e');
+                          print(e);
                           return [];
                         }
                       },
@@ -395,6 +547,9 @@ class _AddTitleCardState extends State<AddTitleCard> {
                                 final QuerySnapshot querySnapshot =
                                     await FirebaseFirestore.instance
                                         .collection('suggestions')
+                                        .where('tag',
+                                            arrayContains:
+                                                selectedCategory?.trim())
                                         .get();
                                 final listValues = querySnapshot.docs
                                     .map((ele) => ele)
@@ -407,7 +562,7 @@ class _AddTitleCardState extends State<AddTitleCard> {
                                 }).toList();
                                 return Future.value(listValues);
                               } catch (e) {
-                                print('Error fetching suggestions: $e');
+                                print('e');
                                 return [];
                               }
                             },

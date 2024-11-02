@@ -369,52 +369,65 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
                               //   ],
                               // ),
                               SizedBox(
-                                height: 90, // Adjust this height as needed
+                                height: 90,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Expanded(
-                                      child: ListView.builder(
-                                        shrinkWrap: true,
-                                        itemCount: widget.partnerEmails.length,
-                                        itemBuilder: (context, index) {
-                                          return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 4.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Expanded(
-                                                  child: Text(
-                                                    widget.partnerEmails[index],
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodyMedium!
-                                                        .copyWith(
-                                                            color:
-                                                                Colors.black),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                      child: widget.partnerEmails.isEmpty
+                                          ? Text(
+                                              'No Partner Emails',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium!
+                                                  .copyWith(
+                                                      color:
+                                                          ThemeColors.primary),
+                                            )
+                                          : ListView.builder(
+                                              shrinkWrap: true,
+                                              itemCount:
+                                                  widget.partnerEmails.length,
+                                              itemBuilder: (context, index) {
+                                                return Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(vertical: 4.0),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text(
+                                                          widget.partnerEmails[
+                                                              index],
+                                                          style: Theme.of(
+                                                                  context)
+                                                              .textTheme
+                                                              .bodyMedium!
+                                                              .copyWith(
+                                                                  color: Colors
+                                                                      .black),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ),
+                                                      // IconButton(
+                                                      //   icon: Icon(Icons.close,
+                                                      //       color:
+                                                      //           ThemeColors.primary),
+                                                      //   onPressed: () {
+                                                      //     widget.removePartnerEmail(
+                                                      //         widget.partnerEmails[
+                                                      //             index]);
+                                                      //   },
+                                                      // ),
+                                                    ],
                                                   ),
-                                                ),
-                                                // IconButton(
-                                                //   icon: Icon(Icons.close,
-                                                //       color:
-                                                //           ThemeColors.primary),
-                                                //   onPressed: () {
-                                                //     widget.removePartnerEmail(
-                                                //         widget.partnerEmails[
-                                                //             index]);
-                                                //   },
-                                                // ),
-                                              ],
+                                                );
+                                              },
                                             ),
-                                          );
-                                        },
-                                      ),
                                     ),
                                   ],
                                 ),

@@ -5,6 +5,7 @@ import 'package:menu_app/core/services/firebase/firebase_storage_service.dart';
 import 'package:menu_app/models/courses/course_model.dart';
 import 'package:menu_app/models/courses/item_model.dart';
 import 'package:menu_app/models/courses/search_model.dart';
+import 'package:menu_app/models/courses/suggestion_category_model.dart';
 import 'package:menu_app/models/courses/suggestion_model.dart';
 import 'package:menu_app/utils/logger/logger.dart';
 
@@ -536,6 +537,45 @@ class CourseService {
     } catch (e) {
       log.e('Error getting rejected registrations count: $e');
       return 0;
+    }
+  }
+
+  Future<List<SuggestionCategoriesModel>> getSuggestionCategories() async {
+    try {
+      final suggestionCategoriesRef =
+          _firestore.collection('suggestion-hierarchy');
+      final querySnapshot = await suggestionCategoriesRef.get();
+
+      if (querySnapshot.docs.isEmpty) {
+        return [];
+      }
+
+      List<SuggestionCategoriesModel> suggestionCategories = [];
+
+      for (var docSnapshot in querySnapshot.docs) {
+        final secondLevelCollectionRef = _firestore
+            .collection('suggestion-hierarchy')
+            .doc(docSnapshot.id)
+            .collection('2nd Level');
+
+        final secondLevelSnapshot = await secondLevelCollectionRef.get();
+        List<String> secondLevelCategories =
+            secondLevelSnapshot.docs.map((doc) => doc.id).toList();
+
+        suggestionCategories.add(
+          SuggestionCategoriesModel(
+            superCategory: SuperCategory(
+              name: docSnapshot.id,
+              secondLevelCategories: secondLevelCategories,
+            ),
+          ),
+        );
+      }
+
+      return suggestionCategories;
+    } catch (e) {
+      log.e('Error fetching suggestion categories: $e');
+      return [];
     }
   }
 }

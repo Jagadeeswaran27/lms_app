@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:menu_app/models/courses/search_model.dart';
+import 'package:menu_app/models/courses/suggestion_category_model.dart';
 
 import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/themes/colors.dart';
@@ -26,12 +27,18 @@ class AddItemWidget extends StatefulWidget {
     required this.addItem,
     required this.subCategory,
     required this.onAddSuggestion,
+    required this.superCategories,
+    required this.categories,
+    required this.suggestionHierarchy,
   });
 
   final bool isLoading;
   final Function(Map<String, dynamic>, List<File> images) addItem;
   final String subCategory;
+  final List<String> superCategories;
+  final List<String> categories;
   final Future<bool> Function(String name, File) onAddSuggestion;
+  final List<SuggestionCategoriesModel> suggestionHierarchy;
 
   @override
   AddItemWidgetState createState() => AddItemWidgetState();
@@ -513,6 +520,9 @@ class AddItemWidgetState extends State<AddItemWidget> {
                 onSelectSuggestion: onSelectSuggestion,
                 onDeselectSuggestion: onDeselectSuggestion,
                 resetFieldEnabled: resetFieldEnabled,
+                superCategories: widget.superCategories,
+                categories: widget.categories,
+                suggestionHierarchy: widget.suggestionHierarchy,
               ),
               const SizedBox(height: 20),
               Row(

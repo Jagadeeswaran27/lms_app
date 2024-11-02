@@ -1,9 +1,10 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:menu_app/core/services/courses/course_service.dart';
+import 'package:menu_app/models/courses/suggestion_category_model.dart';
 import 'package:menu_app/providers/auth_provider.dart';
-import 'package:menu_app/resources/strings.dart';
 import 'package:menu_app/routes/admin_routes.dart';
 import 'package:menu_app/utils/show_snackbar.dart';
 
@@ -21,7 +22,30 @@ class AddItemContainer extends StatefulWidget {
 
 class _AddItemContainerState extends State<AddItemContainer> {
   bool _isLoading = false;
+  bool _initialLoading = true;
+  List<String> superCategories = [];
+  List<String> categories = [];
+  List<SuggestionCategoriesModel> suggestionHierarchy = [];
   final CourseService _courseService = CourseService();
+
+  @override
+  void initState() {
+    super.initState();
+    getSuggestions();
+  }
+
+  Future<void> getSuggestions() async {
+    final service = CourseService();
+    final response = await service.getSuggestionCategories();
+    setState(() {
+      superCategories = response.map((cat) => cat.superCategory.name).toList();
+      categories = response
+          .expand((category) => category.superCategory.secondLevelCategories)
+          .toList();
+      suggestionHierarchy = response;
+      _initialLoading = false;
+    });
+  }
 
   Future<void> addItem(Map<String, dynamic> formData, List<File> image) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -63,11 +87,20 @@ class _AddItemContainerState extends State<AddItemContainer> {
 
   @override
   Widget build(BuildContext context) {
+    if (_initialLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
     return AddItemWidget(
       isLoading: _isLoading,
       addItem: addItem,
       subCategory: widget.subCategory,
       onAddSuggestion: onAddSuggestion,
+      superCategories: superCategories,
+      categories: categories,
+      suggestionHierarchy: suggestionHierarchy,
     );
   }
 }
