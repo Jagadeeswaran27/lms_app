@@ -5,6 +5,7 @@ import 'package:registration_app/constants/constants.dart';
 import 'package:registration_app/models/auth/auth_model.dart';
 import 'package:registration_app/providers/auth_provider.dart';
 import 'package:registration_app/screens/auth/verification_successful_screen.dart';
+import 'package:registration_app/utils/sentence_case.dart';
 import 'package:registration_app/utils/shared_preference/shared_preference.dart';
 import 'package:registration_app/utils/show_snackbar.dart';
 import 'package:registration_app/widgets/signup/signup_form_widget.dart';
@@ -31,8 +32,13 @@ class _SignupFormContainerState extends State<SignupFormContainer> {
     setState(() {
       _isLoading = true;
     });
-    final response =
-        await authProvider.signUp(userName, email, password, phone, role);
+    final response = await authProvider.signUp(
+      sentenceCase(userName),
+      email.trim(),
+      password.trim(),
+      phone.trim(),
+      role.trim(),
+    );
     setState(() {
       _isLoading = false;
     });

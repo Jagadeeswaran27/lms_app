@@ -54,6 +54,15 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
         });
         return;
       }
+      if (authProvider.currentUser!.changeEmail!.isNotEmpty) {
+        print("Change email");
+        print(authProvider.currentUser!.changeEmail);
+        final response = await authProvider.changeDBEmail();
+        if (!response) {
+          showSnackbar(context, Strings.updateEmailFailed);
+          return;
+        }
+      }
       final loggedInStatuses = await SharedPreferencesUtils().getMapPrefs(
         constants.loggedInStatusFlag,
       );

@@ -144,14 +144,25 @@ class AttendanceService {
         // Convert the model to a map
         Map<String, dynamic> attendanceData = attendanceModel.toJson();
 
-        // Define the path to the document
-        DocumentReference attendanceDocRef = firestore
+        // Step 1: Set the timestamp in the course document
+        DocumentReference courseDocRef = _firestore
             .collection('lms-users')
             .doc(studentId)
             .collection('courses')
-            .doc(courseId)
-            .collection('attendance')
-            .doc(date);
+            .doc(courseId);
+
+        await courseDocRef.set(
+            {
+              'lastUpdated':
+                  FieldValue.serverTimestamp(), // Set the timestamp field
+            },
+            SetOptions(
+              merge: true,
+            )); // Use merge to avoid overwriting other fields
+
+        // Step 2: Set the attendance document with the same timestamp
+        DocumentReference attendanceDocRef =
+            courseDocRef.collection('attendance').doc(date);
 
         // Add or update the document with the attendance data
         await attendanceDocRef.set(attendanceData);

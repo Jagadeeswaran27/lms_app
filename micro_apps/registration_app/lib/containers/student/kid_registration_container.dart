@@ -86,14 +86,14 @@ class _KidRegistrationContainerState extends State<KidRegistrationContainer> {
           userEmail,
           'User',
           phone,
-          'Student',
+          ['Student'],
         );
-        final userCredential =
-            await FirebaseAuthService().signInWithEmailAndPassword(
-          userEmail,
-          userPassword,
-        );
-        await userCredential.user!.sendEmailVerification();
+        // final userCredential =
+        //     await FirebaseAuthService().signInWithEmailAndPassword(
+        //   userEmail,
+        //   userPassword,
+        // );
+        // await userCredential.user!.sendEmailVerification();
       }
 
       final registrationIds = await registrationService.registerKid(

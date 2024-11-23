@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:registration_app/constants/constants.dart';
+import 'package:registration_app/core/services/auth/auth_service.dart';
 import 'package:registration_app/core/services/firebase/firebase_auth_service.dart';
 import 'package:registration_app/core/services/firebase/firebase_storage_service.dart';
 import 'package:registration_app/models/auth/auth_model.dart';
@@ -82,29 +83,84 @@ class AuthProvider with ChangeNotifier {
         roleType: _currentUser!.roleType,
         isFaceRecognized: _currentUser!.isFaceRecognized ?? false,
         isSomeone: _currentUser!.isSomeone,
+        changeEmail: _currentUser!.changeEmail,
       );
     }
     notifyListeners();
   }
 
-  void setUserRoleType(String roleType) {
-    _currentUser = UserModel(
-      uid: _currentUser!.uid,
-      name: _currentUser!.name,
-      email: _currentUser!.email,
-      role: _currentUser!.role,
-      phone: _currentUser!.phone,
-      institute: _currentUser!.institute,
-      profileUrl: _currentUser!.profileUrl,
-      address: _currentUser!.address,
-      state: _currentUser!.state,
-      city: _currentUser!.city,
-      registeredCourses: _currentUser!.registeredCourses,
-      roleType: roleType,
-      isFaceRecognized: _currentUser!.isFaceRecognized ?? false,
-      isSomeone: _currentUser!.isSomeone,
-    );
+  void saveFaceRecognitionFlag() {
+    if (_currentUser != null) {
+      _currentUser = UserModel(
+        uid: _currentUser!.uid,
+        name: _currentUser!.name,
+        email: _currentUser!.email,
+        role: _currentUser!.role,
+        phone: _currentUser!.phone,
+        institute: _currentUser!.institute,
+        profileUrl: _currentUser!.profileUrl,
+        address: _currentUser!.address,
+        state: _currentUser!.state,
+        city: _currentUser!.city,
+        registeredCourses: _currentUser!.registeredCourses,
+        roleType: _currentUser!.roleType,
+        isFaceRecognized: true,
+        isSomeone: _currentUser!.isSomeone,
+        changeEmail: _currentUser!.changeEmail,
+      );
+    }
     notifyListeners();
+  }
+
+  // void setUserRoleType(String roleType) {
+  //   _currentUser = UserModel(
+  //     uid: _currentUser!.uid,
+  //     name: _currentUser!.name,
+  //     email: _currentUser!.email,
+  //     role: _currentUser!.role,
+  //     phone: _currentUser!.phone,
+  //     institute: _currentUser!.institute,
+  //     profileUrl: _currentUser!.profileUrl,
+  //     address: _currentUser!.address,
+  //     state: _currentUser!.state,
+  //     city: _currentUser!.city,
+  //     registeredCourses: _currentUser!.registeredCourses,
+  //     roleType: roleType,
+  //     isFaceRecognized: _currentUser!.isFaceRecognized ?? false,
+  //     isSomeone: _currentUser!.isSomeone,
+  //   );
+  //   notifyListeners();
+  // }
+
+  Future<bool> updateUserPhone(String phone) async {
+    try {
+      await FirebaseAuthService().updateUserPhone(
+        _currentUser!.uid,
+        phone,
+      );
+      _currentUser = UserModel(
+        uid: _currentUser!.uid,
+        name: _currentUser!.name,
+        email: _currentUser!.email,
+        role: _currentUser!.role,
+        phone: phone,
+        address: _currentUser!.address,
+        institute: _currentUser!.institute,
+        state: _currentUser!.state,
+        city: _currentUser!.city,
+        profileUrl: _currentUser!.profileUrl,
+        registeredCourses: _currentUser!.registeredCourses,
+        changeEmail: _currentUser!.changeEmail,
+        roleType: _currentUser!.roleType,
+        isFaceRecognized: _currentUser!.isFaceRecognized ?? false,
+        isSomeone: _currentUser!.isSomeone ?? false,
+      );
+      notifyListeners();
+      return true;
+    } catch (e) {
+      log.e('Failed to update user name: $e');
+      return false;
+    }
   }
 
   void addToCart(CourseModel course) {
@@ -145,6 +201,7 @@ class AuthProvider with ChangeNotifier {
           roleType: loggedUser.roleType,
           isFaceRecognized: loggedUser.isFaceRecognized ?? false,
           isSomeone: loggedUser.isSomeone ?? false,
+          changeEmail: loggedUser.changeEmail,
         );
       }
       _loggedInStatus = loggedInStatus;
@@ -214,6 +271,7 @@ class AuthProvider with ChangeNotifier {
           roleType: loggedUser.roleType,
           isFaceRecognized: loggedUser.isFaceRecognized ?? false,
           isSomeone: loggedUser.isSomeone ?? false,
+          changeEmail: loggedUser.changeEmail,
         );
         if (loggedUser.uid != '') {
           return AuthModel.success(
@@ -281,6 +339,7 @@ class AuthProvider with ChangeNotifier {
           roleType: loggedUser.roleType,
           isFaceRecognized: loggedUser.isFaceRecognized ?? false,
           isSomeone: loggedUser.isSomeone ?? false,
+          changeEmail: loggedUser.changeEmail,
         );
 
         notifyListeners();
@@ -326,6 +385,7 @@ class AuthProvider with ChangeNotifier {
           roleType: loggedUser.roleType,
           isFaceRecognized: loggedUser.isFaceRecognized ?? false,
           isSomeone: loggedUser.isSomeone ?? false,
+          changeEmail: loggedUser.changeEmail,
         );
         _user = user;
         _loggedInStatus = true;
@@ -441,6 +501,7 @@ class AuthProvider with ChangeNotifier {
           roleType: currentUser!.roleType,
           isFaceRecognized: currentUser!.isFaceRecognized ?? false,
           isSomeone: currentUser!.isSomeone ?? false,
+          changeEmail: currentUser!.changeEmail,
         );
         notifyListeners();
         return true;
@@ -474,7 +535,7 @@ class AuthProvider with ChangeNotifier {
     String email,
     String role,
     String phone,
-    String roleType,
+    List<String> roleType,
   ) async {
     return await FirebaseAuthService().createLMSUser(
       uid,
@@ -488,5 +549,75 @@ class AuthProvider with ChangeNotifier {
 
   Future<bool> updateUserRoleType(String roleType, String uid) async {
     return await FirebaseAuthService().updateUserRoleType(roleType, uid);
+  }
+
+  Future<bool> updateUserName(
+      String accessCode, String name, bool isInstitute) async {
+    try {
+      if (isInstitute) {
+        await FirebaseAuthService().updateInstituteName(accessCode, name);
+      }
+      await FirebaseAuthService().updateUserName(
+        _currentUser!.uid,
+        name,
+      );
+      _currentUser = UserModel(
+        uid: _currentUser!.uid,
+        name: name,
+        email: _currentUser!.email,
+        role: _currentUser!.role,
+        phone: _currentUser!.phone,
+        address: _currentUser!.address,
+        institute: _currentUser!.institute,
+        state: _currentUser!.state,
+        city: _currentUser!.city,
+        profileUrl: _currentUser!.profileUrl,
+        registeredCourses: _currentUser!.registeredCourses,
+        roleType: _currentUser!.roleType,
+        isFaceRecognized: _currentUser!.isFaceRecognized,
+        isSomeone: _currentUser!.isSomeone,
+        changeEmail: _currentUser!.changeEmail,
+      );
+      notifyListeners();
+      return true;
+    } catch (e) {
+      log.e('Failed to update user name: $e');
+      return false;
+    }
+  }
+
+  Future<bool> updateUserEmail(String email, String password) async {
+    try {
+      final response = await FirebaseAuthService()
+          .updateUserEmail(_currentUser!.uid, email, password);
+      return response;
+    } catch (e) {
+      log.e('Failed to update user name: $e');
+      return false;
+    }
+  }
+
+  Future<bool> changeDBEmail() async {
+    final response = await AuthService().changeDBEmail();
+
+    if (response) {
+      _currentUser = UserModel(
+        uid: _currentUser!.uid,
+        name: _currentUser!.name,
+        email: _currentUser!.changeEmail!,
+        role: _currentUser!.role,
+        phone: _currentUser!.phone,
+        address: _currentUser!.address,
+        institute: _currentUser!.institute,
+        state: _currentUser!.state,
+        city: _currentUser!.city,
+        profileUrl: _currentUser!.profileUrl,
+        registeredCourses: _currentUser!.registeredCourses,
+        roleType: _currentUser!.roleType,
+        changeEmail: '',
+      );
+      // notifyListeners();
+    }
+    return response;
   }
 }

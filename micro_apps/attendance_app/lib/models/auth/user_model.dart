@@ -5,12 +5,13 @@ class UserModel {
   final String phone;
   final String role;
   final List<String> institute;
+  final String? changeEmail;
   final String? address;
   final String? city;
   final String? profileUrl;
   final String? state;
   final List<String> registeredCourses;
-  final String roleType;
+  final List<String> roleType;
 
   UserModel({
     required this.uid,
@@ -19,11 +20,12 @@ class UserModel {
     required this.role,
     required this.phone,
     required this.institute,
+    this.changeEmail,
     this.profileUrl,
     this.address,
     this.state,
     this.city,
-    this.roleType = '',
+    required this.roleType,
     this.registeredCourses = const [],
   });
 
@@ -34,11 +36,12 @@ class UserModel {
       email: data['email'] ?? '',
       role: data['role'] ?? '',
       phone: data['phone'] ?? '',
+      changeEmail: data['changeEmail'] ?? '',
       address: data['address'] ?? '',
       city: data['city'] ?? '',
       state: data['state'] ?? '',
       profileUrl: data['profileUrl'] ?? '',
-      roleType: data['roleType'] ?? '',
+      roleType: List<String>.from(data['roleType'] ?? []),
       institute: List<String>.from(data['institute'] ?? []),
       registeredCourses: List<String>.from(data['registeredCourses'] ?? []),
     );
@@ -54,8 +57,9 @@ class UserModel {
       city: '',
       state: '',
       address: '',
+      changeEmail: '',
       profileUrl: '',
-      roleType: '',
+      roleType: [],
       institute: [],
       registeredCourses: [],
     );
@@ -75,6 +79,7 @@ class UserModel {
       'profileUrl': profileUrl,
       'roleType': roleType,
       'registeredCourses': registeredCourses,
+      'changeEmail': changeEmail,
     };
   }
 }

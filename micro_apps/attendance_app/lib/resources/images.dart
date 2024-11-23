@@ -10,4 +10,6 @@ class Images {
   static const String welcomeBackground =
       'assets/images/welcome_background.png';
   static const cartIcon = 'assets/images/cart_icon.png';
+  static const String student = 'assets/images/student.png';
+  static const String teacher = 'assets/images/teacher.png';
 }

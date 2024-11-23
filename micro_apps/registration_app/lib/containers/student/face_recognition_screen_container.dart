@@ -38,6 +38,7 @@ class _FaceRecignitionScreenContainerState
     if (response) {
       await faceRecignitionFirebaseService
           .saveFaceRecognitionFlag(authProvider.currentUser!.uid);
+      authProvider.saveFaceRecognitionFlag();
     }
     setState(() {
       _isLoading = false;

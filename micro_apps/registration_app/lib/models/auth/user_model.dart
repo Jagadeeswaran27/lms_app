@@ -5,30 +5,33 @@ class UserModel {
   final String phone;
   final String role;
   final List<String> institute;
+  final String? changeEmail;
   final String? address;
   final String? city;
   final String? profileUrl;
   final String? state;
   final List<String> registeredCourses;
-  final String roleType;
+  final List<String> roleType;
   final bool? isFaceRecognized;
   final bool? isSomeone;
 
-  UserModel(
-      {required this.uid,
-      required this.name,
-      required this.email,
-      required this.role,
-      required this.phone,
-      required this.institute,
-      this.isSomeone,
-      this.profileUrl,
-      this.address,
-      this.state,
-      this.city,
-      this.registeredCourses = const [],
-      this.roleType = '',
-      this.isFaceRecognized = false});
+  UserModel({
+    required this.uid,
+    required this.name,
+    required this.email,
+    required this.role,
+    required this.phone,
+    required this.institute,
+    this.changeEmail,
+    this.isSomeone,
+    this.profileUrl,
+    this.address,
+    this.state,
+    this.city,
+    this.registeredCourses = const [],
+    required this.roleType,
+    this.isFaceRecognized = false,
+  });
 
   factory UserModel.fromMap(Map<String, dynamic> data) {
     return UserModel(
@@ -37,13 +40,14 @@ class UserModel {
       email: data['email'] ?? '',
       role: data['role'] ?? '',
       phone: data['phone'] ?? '',
+      changeEmail: data['changeEmail'] ?? '',
       address: data['address'] ?? '',
       city: data['city'] ?? '',
       state: data['state'] ?? '',
       profileUrl: data['profileUrl'] ?? '',
       institute: List<String>.from(data['institute'] ?? []),
       registeredCourses: List<String>.from(data['registeredCourses'] ?? []),
-      roleType: data['roleType'] ?? '',
+      roleType: List<String>.from(data['roleType'] ?? []),
       isFaceRecognized: data['isFaceRecognized'] ?? false,
       isSomeone: data['isSomeone'] ?? false,
     );
@@ -59,10 +63,11 @@ class UserModel {
       city: '',
       state: '',
       address: '',
+      changeEmail: '',
       profileUrl: '',
       institute: [],
       registeredCourses: [],
-      roleType: '',
+      roleType: [],
       isFaceRecognized: false,
       isSomeone: false,
     );
@@ -83,6 +88,7 @@ class UserModel {
       'registeredCourses': registeredCourses,
       'roleType': roleType,
       'isFaceRecognized': isFaceRecognized,
+      'changeEmail': changeEmail,
     };
   }
 }

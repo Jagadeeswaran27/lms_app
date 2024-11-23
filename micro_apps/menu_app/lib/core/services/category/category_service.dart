@@ -84,7 +84,6 @@ class CategoryService {
           .map((doc) =>
               CategoryModel.fromJson(doc.data() as Map<String, dynamic>))
           .toList();
-      print(categories);
 
       log.i('Fetched ${categories.length} categories.');
       return categories;

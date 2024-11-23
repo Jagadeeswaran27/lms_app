@@ -46,6 +46,7 @@ class Strings {
   static const String invalidMobileNumber = 'Invalid mobile number';
   static const String pleaseSelectRole = 'Please select a role';
   static const String errorLoggingOut = 'Error logging out';
+  static const String updateEmailFailed = 'Update email failed';
 
   //app related
   static const String attendance = 'Attendance';
@@ -68,7 +69,13 @@ class Strings {
   static const String receptionEnquiry = 'Reception Enquiry';
   static const String item = 'Item';
   static const String addTitle = 'Add Title(s)';
+  static const String inputType = 'Input Type';
+  static const String manual = 'Manual';
+  static const String auto = 'Auto';
   static const String amountDetails = 'Amount Details';
+  static const String approvedRegistrations = 'Approved Registrations';
+  static const String pendingRegistrations = 'Pending Registrations';
+  static const String rejectedRegistrations = 'Rejected Registrations';
   static const String shortDescription = 'Short Description';
   static const String addBatchOffered = 'Add Batch Offered';
   static const String addItem = 'Add Item';
@@ -109,8 +116,13 @@ class Strings {
   static const String submit = 'Submit';
   static const String addCategory = 'Add Category';
   static const String settings = 'Settings';
-  static const String instituteName = 'Institute Name : ';
+  static const String instituteName = 'Institute Name';
   static const String contactInfo = 'Contact Info : ';
-  static const String userName = 'User Name : ';
+  static const String userName = 'User Name';
   static const String logout = 'Logout';
+  static const String suggestionAddedSuccessfully =
+      'Suggestion Added Successfully';
+  static const String suggestionAddingFailed = 'Suggestion Adding Failed';
+  static const String courseMigration = 'Course Migration';
+  static const String selectAnCourse = 'Select an course';
 }

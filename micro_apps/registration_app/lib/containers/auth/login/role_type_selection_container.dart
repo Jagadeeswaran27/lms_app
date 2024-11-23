@@ -29,7 +29,7 @@ class _RoleTypeSelectionContainerState
     );
 
     if (result) {
-      authProvider.setUserRoleType(roleType);
+      // authProvider.setUserRoleType(roleType);
       if (roleType == 'Student') {
         Navigator.pushAndRemoveUntil(
           context,

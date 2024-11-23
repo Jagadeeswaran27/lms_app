@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:menu_app/screens/admin/add_item_screen.dart';
+import 'package:menu_app/screens/admin/course_migration_screen.dart';
 import 'package:menu_app/screens/admin/item_category_screen.dart';
 import 'package:menu_app/screens/admin/item_list_screen.dart';
 import 'package:menu_app/screens/admin/reception_enquiry_detail_screen.dart';
@@ -18,6 +19,7 @@ class AdminRoutes {
   static const String receptionEnquiryDetail = '/reception-enquiry-detail';
   static const String courseDetail = '/course-detail';
   static const String resolvedEnquiry = '/resolved-enquiry';
+  static const String courseMigration = '/course-migration';
 
   static Map<String, WidgetBuilder> get buildAdminRoutes {
     return {
@@ -28,6 +30,7 @@ class AdminRoutes {
       courseDetail: (context) => const CourseDetailScreen(),
       itemCategory: (context) => const ItemCategoryScreen(),
       resolvedEnquiry: (context) => const ResolvedEnquiryScreen(),
+      courseMigration: (context) => const CourseMigrationScreen(),
     };
   }
 

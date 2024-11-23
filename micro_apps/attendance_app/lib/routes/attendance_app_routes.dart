@@ -1,4 +1,5 @@
 import 'package:attendance_app/screens/attendance/face_recognition_screen.dart';
+import 'package:attendance_app/screens/attendance/role_type_selection_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:attendance_app/screens/attendance/access_code_screen.dart';
@@ -16,6 +17,7 @@ class AttendanceAppRoutes {
   static const studentCourseDashboard = '/student-course-dashboard';
   static const studentDetailViewStudent = '/student-detail-view-student';
   static const faceRecognition = '/face-recognition';
+  static const selectUserRoleType = '/select-user-role-type';
 
   static Map<String, WidgetBuilder> get buildAttendanceAppRoutes {
     return {
@@ -26,10 +28,11 @@ class AttendanceAppRoutes {
       studentDetailViewStudent: (context) =>
           const StudentDetailViewScreenStudent(),
       faceRecognition: (context) => const FaceRecognitionScreen(),
+      selectUserRoleType: (context) => const RoleTypeSelectionScreen(),
     };
   }
 
   static String get initialRoute {
-    return AttendanceAppRoutes.faceRecognition;
+    return AttendanceAppRoutes.selectUserRoleType;
   }
 }

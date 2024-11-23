@@ -9,6 +9,7 @@ class FormInput extends StatelessWidget {
     required this.text,
     this.obscureText = false,
     this.readOnly,
+    this.focusNode,
     this.keyboardType,
     this.onSaved,
     this.borderColor,
@@ -27,6 +28,7 @@ class FormInput extends StatelessWidget {
     this.hasShadow = false,
     this.isDescription = false,
     this.autofillHints,
+    this.helperText,
   });
 
   final String text;
@@ -50,6 +52,8 @@ class FormInput extends StatelessWidget {
   final bool hasShadow;
   final bool isDescription;
   final Iterable<String>? autofillHints;
+  final FocusNode? focusNode;
+  final String? helperText;
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +73,7 @@ class FormInput extends StatelessWidget {
             )
           : null, // No shadow if hasShadow is false
       child: TextFormField(
+        focusNode: focusNode,
         autofillHints: autofillHints,
         expands: isDescription ? true : false,
         minLines: isDescription ? null : 1,
@@ -84,6 +89,12 @@ class FormInput extends StatelessWidget {
         decoration: InputDecoration(
           fillColor: fillColor,
           filled: true,
+          helperText: helperText,
+          helperStyle: TextStyle(
+            color: ThemeColors.primary,
+            fontSize: 12,
+          ),
+          helperMaxLines: 3,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(50.0),
           ),
