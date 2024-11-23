@@ -8,8 +8,6 @@ import 'package:registration_app/providers/auth_provider.dart';
 import 'package:registration_app/resources/strings.dart';
 import 'package:registration_app/screens/admin/admin_app.dart';
 import 'package:registration_app/screens/auth/role_type_selection_screen.dart';
-import 'package:registration_app/screens/student/student_app.dart';
-import 'package:registration_app/screens/teacher/teacher_app.dart';
 import 'package:registration_app/utils/shared_preference/shared_preference.dart';
 import 'package:registration_app/utils/show_snackbar.dart';
 import 'package:registration_app/widgets/login/login_form_widget.dart';
@@ -56,6 +54,13 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
         });
         return;
       }
+      if (authProvider.currentUser!.changeEmail!.isNotEmpty) {
+        final response = await authProvider.changeDBEmail();
+        if (!response) {
+          showSnackbar(context, Strings.updateEmailFailed);
+          return;
+        }
+      }
       final loggedInStatuses = await SharedPreferencesUtils().getMapPrefs(
         constants.loggedInStatusFlag,
       );
@@ -86,32 +91,36 @@ class _LoginFormContainerState extends State<LoginFormContainer> {
           );
           return;
         } else {
-          if (authProvider.currentUser?.roleType == null ||
-              authProvider.currentUser?.roleType == '') {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                  builder: (context) => const RoleTypeSelectionScreen()),
-            );
-            return;
-          }
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+                builder: (context) => const RoleTypeSelectionScreen()),
+          );
+          // if (authProvider.currentUser?.roleType == null ||
+          //     authProvider.currentUser?.roleType == '') {
+          //   Navigator.of(context).pushReplacement(
+          //     MaterialPageRoute(
+          //         builder: (context) => const RoleTypeSelectionScreen()),
+          //   );
+          //   return;
+          // }
 
-          if (authProvider.currentUser!.roleType ==
-              UserRoleTypeEnum.student.roleName) {
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const StudentApp()),
-              (Route<dynamic> route) => false,
-            );
-            return;
-          }
+          // if (authProvider.currentUser!.roleType ==
+          //     UserRoleTypeEnum.student.roleName) {
+          //   Navigator.of(context).pushAndRemoveUntil(
+          //     MaterialPageRoute(builder: (context) => const StudentApp()),
+          //     (Route<dynamic> route) => false,
+          //   );
+          //   return;
+          // }
 
-          if (authProvider.currentUser!.roleType ==
-              UserRoleTypeEnum.teacher.roleName) {
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const TeacherApp()),
-              (Route<dynamic> route) => false,
-            );
-            return;
-          }
+          // if (authProvider.currentUser!.roleType ==
+          //     UserRoleTypeEnum.teacher.roleName) {
+          //   Navigator.of(context).pushAndRemoveUntil(
+          //     MaterialPageRoute(builder: (context) => const TeacherApp()),
+          //     (Route<dynamic> route) => false,
+          //   );
+          //   return;
+          // }
         }
       }
     }

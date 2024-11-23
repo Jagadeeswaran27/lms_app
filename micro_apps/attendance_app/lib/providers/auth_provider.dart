@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:attendance_app/constants/constants.dart';
+import 'package:attendance_app/core/services/auth/auth_service.dart';
 import 'package:attendance_app/core/services/firebase/firebase_auth_service.dart';
 import 'package:attendance_app/core/services/firebase/firebase_storage_service.dart';
 import 'package:attendance_app/models/auth/auth_model.dart';
@@ -21,6 +22,7 @@ class AuthProvider with ChangeNotifier {
   UserModel? _currentUser;
   bool _loggedInStatus = false;
   String selectedinstituteCode = '';
+  String selectedRoleType = '';
 
   final log = CustomLogger.getLogger('AuthProvider');
   final storageService = FirebaseStorageService();
@@ -64,6 +66,7 @@ class AuthProvider with ChangeNotifier {
           roleType: loggedUser.roleType,
           city: loggedUser.city,
           address: loggedUser.address,
+          changeEmail: loggedUser.changeEmail,
         );
       }
       _loggedInStatus = loggedInStatus;
@@ -108,6 +111,11 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  void setUserRoleType(String roleTpye) {
+    selectedRoleType = roleTpye;
+    notifyListeners();
+  }
+
   Future<String> getInstituteName(String accessCode) async {
     try {
       final instituteRef =
@@ -119,6 +127,35 @@ class AuthProvider with ChangeNotifier {
       return data!['instituteName'];
     } catch (e) {
       return "";
+    }
+  }
+
+  Future<bool> updateUserPhone(String phone) async {
+    try {
+      await FirebaseAuthService().updateUserPhone(
+        _currentUser!.uid,
+        phone,
+      );
+      _currentUser = UserModel(
+        uid: _currentUser!.uid,
+        name: _currentUser!.name,
+        email: _currentUser!.email,
+        role: _currentUser!.role,
+        phone: phone,
+        address: _currentUser!.address,
+        institute: _currentUser!.institute,
+        state: _currentUser!.state,
+        city: _currentUser!.city,
+        profileUrl: _currentUser!.profileUrl,
+        registeredCourses: _currentUser!.registeredCourses,
+        changeEmail: _currentUser!.changeEmail,
+        roleType: _currentUser!.roleType,
+      );
+      notifyListeners();
+      return true;
+    } catch (e) {
+      log.e('Failed to update user name: $e');
+      return false;
     }
   }
 
@@ -141,6 +178,7 @@ class AuthProvider with ChangeNotifier {
           address: loggedUser.address,
           institute: loggedUser.institute,
           state: loggedUser.state,
+          changeEmail: loggedUser.changeEmail,
           city: loggedUser.city,
           roleType: loggedUser.roleType,
           profileUrl: userCredential.user!.photoURL,
@@ -208,6 +246,7 @@ class AuthProvider with ChangeNotifier {
           roleType: loggedUser.roleType,
           city: loggedUser.city,
           profileUrl: url,
+          changeEmail: loggedUser.changeEmail,
         );
 
         notifyListeners();
@@ -249,6 +288,7 @@ class AuthProvider with ChangeNotifier {
           roleType: currentUser!.roleType,
           institute: [instituteCode, ...currentUser!.institute],
           profileUrl: user!.photoURL,
+          changeEmail: currentUser!.changeEmail,
         );
         notifyListeners();
         return true;
@@ -291,6 +331,7 @@ class AuthProvider with ChangeNotifier {
           city: loggedUser.city,
           roleType: loggedUser.roleType,
           profileUrl: user.photoURL,
+          changeEmail: loggedUser.changeEmail,
         );
         _user = user;
         _loggedInStatus = true;
@@ -371,6 +412,74 @@ class AuthProvider with ChangeNotifier {
       return false;
     } catch (e) {
       log.e('Failed to reset password: $e');
+      return false;
+    }
+  }
+
+  Future<bool> updateUserName(
+      String accessCode, String name, bool isInstitute) async {
+    try {
+      if (isInstitute) {
+        await FirebaseAuthService().updateInstituteName(accessCode, name);
+      }
+      await FirebaseAuthService().updateUserName(
+        _currentUser!.uid,
+        name,
+      );
+      _currentUser = UserModel(
+        uid: _currentUser!.uid,
+        name: name,
+        email: _currentUser!.email,
+        role: _currentUser!.role,
+        phone: _currentUser!.phone,
+        address: _currentUser!.address,
+        institute: _currentUser!.institute,
+        state: _currentUser!.state,
+        city: _currentUser!.city,
+        profileUrl: _currentUser!.profileUrl,
+        registeredCourses: _currentUser!.registeredCourses,
+        roleType: _currentUser!.roleType,
+        changeEmail: _currentUser!.changeEmail,
+      );
+      notifyListeners();
+      return true;
+    } catch (e) {
+      log.e('Failed to update user name: $e');
+      return false;
+    }
+  }
+
+  Future<bool> changeDBEmail() async {
+    final response = await AuthService().changeDBEmail();
+
+    if (response) {
+      _currentUser = UserModel(
+        uid: _currentUser!.uid,
+        name: _currentUser!.name,
+        email: _currentUser!.changeEmail!,
+        role: _currentUser!.role,
+        phone: _currentUser!.phone,
+        address: _currentUser!.address,
+        institute: _currentUser!.institute,
+        state: _currentUser!.state,
+        city: _currentUser!.city,
+        profileUrl: _currentUser!.profileUrl,
+        registeredCourses: _currentUser!.registeredCourses,
+        roleType: _currentUser!.roleType,
+        changeEmail: '',
+      );
+      // notifyListeners();
+    }
+    return response;
+  }
+
+  Future<bool> updateUserEmail(String email, String password) async {
+    try {
+      final response = await FirebaseAuthService()
+          .updateUserEmail(_currentUser!.uid, email, password);
+      return response;
+    } catch (e) {
+      log.e('Failed to update user name: $e');
       return false;
     }
   }

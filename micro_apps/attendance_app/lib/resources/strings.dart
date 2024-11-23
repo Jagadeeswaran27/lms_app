@@ -48,6 +48,7 @@ class Strings {
   static const String invalidMobileNumber = 'Invalid mobile number';
   static const String pleaseSelectRole = 'Please select a role';
   static const String errorLoggingOut = 'Error logging out';
+  static const String updateEmailFailed = 'Update email failed';
 
   //app related
   static const String attendance = 'Attendance';
@@ -154,7 +155,7 @@ class Strings {
       'An error occurred. Please try again later';
   static const String submit = 'Submit';
   static const String settings = 'Settings';
-  static const String instituteName = 'Institute Name : ';
-  static const String userNameSettings = 'User Name : ';
+  static const String instituteName = 'Institute Name';
+  static const String userNameSettings = 'User Name';
   static const String logout = 'Logout';
 }

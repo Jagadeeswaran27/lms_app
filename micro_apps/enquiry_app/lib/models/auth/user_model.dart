@@ -10,6 +10,7 @@ class UserModel {
   final String? profileUrl;
   final String? state;
   final List<String> registeredCourses;
+  final String? changeEmail;
 
   UserModel({
     required this.uid,
@@ -22,6 +23,7 @@ class UserModel {
     this.address,
     this.state,
     this.city,
+    this.changeEmail,
     this.registeredCourses = const [],
   });
 
@@ -33,6 +35,7 @@ class UserModel {
       role: data['role'] ?? '',
       phone: data['phone'] ?? '',
       address: data['address'] ?? '',
+      changeEmail: data['changeEmail'] ?? '',
       city: data['city'] ?? '',
       state: data['state'] ?? '',
       profileUrl: data['profileUrl'] ?? '',
@@ -51,6 +54,7 @@ class UserModel {
       city: '',
       state: '',
       address: '',
+      changeEmail: '',
       profileUrl: '',
       institute: [],
       registeredCourses: [],
@@ -70,6 +74,7 @@ class UserModel {
       'state': state,
       'profileUrl': profileUrl,
       'registeredCourses': registeredCourses,
+      'changeEmail': changeEmail,
     };
   }
 }

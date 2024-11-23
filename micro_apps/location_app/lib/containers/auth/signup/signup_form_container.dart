@@ -32,8 +32,13 @@ class _SignupFormContainerState extends State<SignupFormContainer> {
     setState(() {
       _isLoading = true;
     });
-    final response =
-        await authProvider.signUp(userName, email, password, phone, role);
+    final response = await authProvider.signUp(
+      userName.trim(),
+      email.trim(),
+      password.trim(),
+      phone.trim(),
+      role.trim(),
+    );
     setState(() {
       _isLoading = false;
     });

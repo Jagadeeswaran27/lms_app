@@ -81,6 +81,34 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
         _role != null &&
         _isTermsAccepted) {
       _formKey.currentState?.save();
+      final names = _userName.split(',').map((e) => e.trim()).toList();
+      final emails = _userEmail.split(',').map((e) => e.trim()).toList();
+      final phones = _phone.split(',').map((e) => e.trim()).toList();
+      if (names.length != emails.length ||
+          names.length != phones.length ||
+          emails.length != phones.length) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Invalid form'),
+              content: Text(
+                'Name, Email and Phone should be of same length',
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+        return;
+      }
       widget.onSignup(
         context: context,
         userName: _userName,
@@ -118,6 +146,12 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
                 if (value == null || value.isEmpty) {
                   return Strings.invalidFullName;
                 }
+                final names = value.split(',').map((e) => e.trim()).toList();
+                for (final name in names) {
+                  if (name.isEmpty) {
+                    return Strings.invalidFullName;
+                  }
+                }
                 return null;
               },
               onSaved: (value) => {_userName = value!},
@@ -128,12 +162,17 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
               keyboardType: TextInputType.emailAddress,
               onSaved: (value) => {_userEmail = value!},
               validator: (value) {
-                final emailPattern = RegExp(Regex.emailRegEx);
-                if (value == null ||
-                    value.isEmpty ||
-                    !emailPattern.hasMatch(value)) {
+                if (value == null || value.isEmpty) {
                   return Strings.invalidEmail;
                 }
+                final emails = value.split(',').map((e) => e.trim()).toList();
+                final emailPattern = RegExp(Regex.emailRegEx);
+                for (final email in emails) {
+                  if (!emailPattern.hasMatch(email)) {
+                    return Strings.invalidEmail;
+                  }
+                }
+
                 return null;
               },
             ),
@@ -143,8 +182,14 @@ class _SignupFormWidgetState extends State<SignupFormWidget> {
               keyboardType: TextInputType.phone,
               onSaved: (value) => {_phone = value!},
               validator: (value) {
-                if (value == null || value.isEmpty || value.length < 10) {
+                if (value == null || value.isEmpty) {
                   return Strings.invalidMobileNumber;
+                }
+                final phones = value.split(',').map((e) => e.trim()).toList();
+                for (final phone in phones) {
+                  if (phone.length < 10) {
+                    return Strings.invalidMobileNumber;
+                  }
                 }
                 return null;
               },

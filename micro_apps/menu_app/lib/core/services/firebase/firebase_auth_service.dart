@@ -60,6 +60,7 @@ class FirebaseAuthService {
     String phone,
     String role,
     String accessCodeId,
+    List<String> emails,
   ) async {
     try {
       UserCredential userCredential = await _firebaseAuth
@@ -78,10 +79,15 @@ class FirebaseAuthService {
         'role': role,
         'phone': phone,
         'institute': isAdmin ? [accessCodeId] : [],
+        'partnerEmails': emails.where((e) => e != email).toList(),
       });
 
+      // Check if the accessCodeId already exists in the institutes collection
+      final instituteDoc =
+          await _firestore.collection('institutes').doc(accessCodeId).get();
+
       // If the role is admin, create institute document and add default categories
-      if (isAdmin) {
+      if (isAdmin && !instituteDoc.exists) {
         await _firestore.collection('institutes').doc(accessCodeId).set({
           'uid': accessCodeId,
           'email': email,
@@ -250,6 +256,88 @@ class FirebaseAuthService {
       return instituteDoc.exists;
     } catch (e) {
       log.e('Error checking institute existence: $e');
+      return false;
+    }
+  }
+
+  Future<void> updateInstituteName(String accessCode, String name) async {
+    try {
+      await _firestore.collection('institutes').doc(accessCode).update({
+        'instituteName': name,
+      });
+    } catch (e) {
+      log.e('Error updating institute name: $e');
+      throw Exception('Error updating institute name: $e');
+    }
+  }
+
+  Future<void> updateUserName(String uid, String name) async {
+    try {
+      await _firestore.collection('lms-users').doc(uid).update({
+        'name': name,
+      });
+    } catch (e) {
+      log.e('Error updating user name: $e');
+      throw Exception('Error updating user name: $e');
+    }
+  }
+
+  Future<void> updateUserPhone(String uid, String phone) async {
+    try {
+      await _firestore.collection('lms-users').doc(uid).update({
+        'phone': phone,
+      });
+    } catch (e) {
+      log.e('Error updating user name: $e');
+      throw Exception('Error updating user name: $e');
+    }
+  }
+
+  Future<bool> updateUserEmail(
+    String uid,
+    String newEmail,
+    String password,
+  ) async {
+    try {
+      User? user = _firebaseAuth.currentUser;
+      final QuerySnapshot result = await FirebaseFirestore.instance
+          .collection('lms-users')
+          .where('email', isEqualTo: newEmail)
+          .limit(1)
+          .get();
+      if (result.docChanges.isNotEmpty) {
+        return false;
+      }
+      if (user != null) {
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: user.email!,
+          password: password,
+        );
+        UserCredential reAuthenticatedCredential =
+            await user.reauthenticateWithCredential(credential);
+        await reAuthenticatedCredential.user!.verifyBeforeUpdateEmail(newEmail);
+        await _firestore.collection('lms-users').doc(uid).update({
+          'changeEmail': newEmail,
+        });
+        return await signOut();
+      }
+      return false;
+    } catch (e) {
+      log.e('Error updating user name: $e');
+      throw Exception('Error updating user name: $e');
+    }
+  }
+
+  Future<bool> doesUserExist(String email) async {
+    try {
+      final QuerySnapshot result = await _firestore
+          .collection('lms-users')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
+      return result.docs.isNotEmpty;
+    } catch (e) {
+      log.e('Error checking user existence: $e');
       return false;
     }
   }

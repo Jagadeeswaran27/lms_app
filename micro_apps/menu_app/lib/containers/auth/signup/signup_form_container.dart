@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:menu_app/utils/get_institute_id.dart';
+import 'package:menu_app/widgets/common/sentence_case.dart';
 
 import 'package:provider/provider.dart';
 
@@ -32,42 +34,66 @@ class _SignupFormContainerState extends State<SignupFormContainer> {
     setState(() {
       _isLoading = true;
     });
-    final response =
-        await authProvider.signUp(userName, email, password, phone, role);
+
+    final names = userName.split(',').map((e) => e.trim()).toList();
+    final emails = email.split(',').map((e) => e.trim()).toList();
+    final phones = phone.split(',').map((e) => e.trim()).toList();
+
+    bool allSignupsSuccessful = true;
+    List<String> errorMessages = [];
+
+    final instituteId = createInstituteID();
+    for (int i = 0; i < emails.length; i++) {
+      final response = await authProvider.signUp(
+        sentenceCase(names[i]),
+        emails[i].trim(),
+        password.trim(),
+        phones[i].trim(),
+        role.trim(),
+        instituteId,
+        emails,
+      );
+
+      if (!response.error) {
+        final loggedInStatuses = await SharedPreferencesUtils().getMapPrefs(
+          constants.loggedInStatusFlag,
+        );
+        if (loggedInStatuses.status) {
+          final Map<String, dynamic> newLoggedStatus = {
+            ...loggedInStatuses.value,
+            response.userId: false,
+          };
+          await SharedPreferencesUtils().addMapPrefs(
+            constants.loggedInStatusFlag,
+            newLoggedStatus,
+          );
+        } else {
+          final Map<String, dynamic> newLoggedStatus = {
+            response.userId: false,
+          };
+          await SharedPreferencesUtils().addMapPrefs(
+            constants.loggedInStatusFlag,
+            newLoggedStatus,
+          );
+        }
+      } else {
+        allSignupsSuccessful = false;
+        errorMessages.add("Error for ${emails[i]}: ${response.message}");
+      }
+    }
+
     setState(() {
       _isLoading = false;
     });
-    if (!response.error) {
-      final loggedInStatuses = await SharedPreferencesUtils().getMapPrefs(
-        constants.loggedInStatusFlag,
-      );
-      // 1. If exist, the add the user flag to false in existing object
-      if (loggedInStatuses.status) {
-        final Map<String, dynamic> newLoggedStatus = {
-          ...loggedInStatuses.value,
-          response.userId: false,
-        };
-        await SharedPreferencesUtils().addMapPrefs(
-          constants.loggedInStatusFlag,
-          newLoggedStatus,
-        );
-        // 2. If not, then create a new object and add the flag as false for the user
-      } else {
-        final Map<String, dynamic> newLoggedStatus = {
-          response.userId: false,
-        };
-        await SharedPreferencesUtils().addMapPrefs(
-          constants.loggedInStatusFlag,
-          newLoggedStatus,
-        );
-      }
+
+    if (allSignupsSuccessful) {
       if (context.mounted) {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => const VerificationSuccessfulScreen(),
         ));
       }
     } else {
-      showSnackbar(context, response.message);
+      showSnackbar(context, errorMessages.join("\n"));
     }
   }
 
